@@ -1,0 +1,62 @@
+﻿﻿﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：权限管理</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title">权限列表
+                <a href="#/addResource" style="position: relative" class="combo_btn action-button">添加权限</a>
+                <a href="#/uploadResource" style="position: relative" class="combo_btn action-button">上传权限</a>
+                <a href="#/exportResource" style="position: relative" class="combo_btn action-button">权限导出</a>
+            </h2>
+            <div class="main_filter clr">
+                <!-- 关键字搜索 -->
+                <div class="combo_key">
+                    权限名称 <input ng-model="criteria.nameLike" type="text" name="key" id="key"/>
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.isEnabled" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}">
+                        <option value="">状态</option>
+                        <option value="true">启用</option>
+                        <option value="false">停用</option>
+                    </select>
+                </div>
+                <div class="combo_key">
+                    <a class="combo_btn" ng-click="searchResource()">查询</a>
+                </div>
+            </div>
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell">
+                        <div class="c-node">
+                            <div id="gridTree" class="gridtree-container">
+                                <div class="gridtree-group">
+                                    <table class="top-table">
+                                        <thead>
+                                        <tr>
+                                            <!--<th style="width:3%;"><input type="checkbox" name=""></th>-->
+                                            <th style="width:5%;">权限名称</th>
+                                            <th style="width:30%; text-align: center;">URI</th>
+                                            <th style="width:5%;">类型</th>
+                                            <!--<th style="width:10%;">菜单描述</th>-->
+                                            <!--<th style="width:10%;">创建时间</th>-->
+                                            <th style="width:30%;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="top-tbody">
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,499 @@
+<style type="text/css">
+    .part-title{
+        color:#666;
+        background-color:#f5f5f5;
+        border:1px solid #ccc;
+        height:31px;
+        padding-left: 10px;
+        line-height:30px;
+        text-align: left;
+        margin:20px 0;
+    }
+    .part-1 , .part-2{
+        width:100%;
+        overflow: hidden;
+    }
+    .part-1 .part-1-right , .part-1 .part-1-left{
+        float:left;
+        width:48%;
+        margin-left:13px;
+    }
+    .body-table{
+        border-width: 0px 1px 1px 1px;
+        border-color: #ccc;
+        color:#666;
+        font-family: verdana,"宋体";
+        position:relative;
+        width:100%;
+    }
+    .data-grid-title{
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        z-index:10
+    }
+    .data-grid-body{
+        position: relative;
+        z-index:1;
+        height:200px;
+        overflow-y: auto;
+    }
+    .part-2{
+    }
+    .clear-bborder-width{
+        border-bottom-width: 0px;
+    }
+
+
+    .gridtree-container{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+    .gridtree-group{
+        height: auto;
+        position: relative;
+        width:100%;
+        margin-top: 7px;
+    }
+    .gridtree-row-bg{
+        background-color:rgb(242,242,242);
+    }
+    .treegrid-head{
+        border:1px solid #cccccc;
+        background-color:#ececec;
+        color: #343434;
+        margin: 5px 0;
+    }
+    .treegrid-cell{
+        height:auto;
+        width:300px;
+        text-align:left;
+        font-size: 12px;
+        line-height: 18px;
+        margin: 0;
+        overflow: hidden;
+        padding: 0 4px;
+        white-space: nowrap;
+        word-wrap: normal;
+    }
+    .treegrid-expanded , .treegrid-indent ,
+    .treegrid-noleaf , .treegrid-leaf ,
+    .treegrid-collapsed{
+        display: inline-block;
+        height: 18px;
+        width:16px;
+        vertical-align: top;
+    }
+    .treegrid-title{
+        display: inline-block;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        padding: 0 2px;
+        text-decoration: none;
+        vertical-align: top;
+        white-space: nowrap;
+    }
+    .treegrid-collapsed{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-expanded{
+    background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -18px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-noleaf{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -208px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-leaf{
+     background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -240px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-hit{
+        cursor: pointer;
+    }
+</style>
+<div class="mainbar">
+    <div class="main r">
+<div class="c-node">
+    <table class="top-table">
+        <thead>
+        <tr>
+            <th class="txtLeft"><div>角色授权 <a class="closeBtn" data-title="tab02" href="javascript:void(0);"></a></div></th>
+        </tr>
+        </thead>
+        <tbody title="tab02">
+        <tr>
+            <td>
+               <div class="S_form">
+                   <h2 class="main_title" style="padding-left: 20px">当前用户：Admin</h2>
+               </div>
+            </td>
+        </tr>
+        </tbody>
+        <thead>
+        <tr>
+            <th class="txtLeft"><div>角色列表 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+        </tr>
+        </thead>
+        <tbody title="tab01">
+        <tr>
+            <td>
+                <div class="S_form" style="padding: 20px 0">
+                    <div class="part-1">
+
+                        <!--未选角色列表开始-->
+                        <div class="part-1-left">
+                            <div class="c-node">
+                                <div class="data-grid-title" style="position: absolute;top:0;left:0;width:100%">
+                                    <table class="top-table">
+                                        <thead>
+                                        <tr>
+                                            <th style="width:10%;">角色名称</th>
+                                            <th style="width:10%;">创建时间</th>
+                                            <th style="width:10%;">操作</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="data-grid-body">
+                                    <table class="top-table" style="border-top-width: 0px;">
+                                        <thead style="visibility: hidden">
+                                        <tr>
+                                            <th style="width:10%;">角色名称</th>
+                                            <th style="width:10%;">创建时间</th>
+                                            <th style="width:10%;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="txtCenter">张si</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">赋权</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">赋权</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">赋权</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">赋权</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">赋权</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--未选角色列表结束-->
+
+                        <!--已选角色列表开始-->
+                        <div class="part-1-right">
+                            <div class="c-node">
+                                <div class="data-grid-title" style="position: absolute;top:0;left:0;width:100%">
+                                    <table class="top-table">
+                                        <thead>
+                                        <tr>
+                                            <th style="width:10%;">角色名称</th>
+                                            <th style="width:10%;">创建时间</th>
+                                            <th style="width:10%;">操作</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="data-grid-body">
+                                    <table class="top-table" style="border-top-width: 0px;">
+                                        <thead style="visibility: hidden">
+                                        <tr>
+                                            <th style="width:10%;">角色名称</th>
+                                            <th style="width:10%;">赋权时间</th>
+                                            <th style="width:10%;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="txtCenter">张si</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">取消</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">取消</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">取消</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">取消</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="txtCenter">张三</td>
+                                            <td class="txtCenter">2014-07-16</td>
+                                            <td class="txtCenter"><a href="javascript:void(0)">取消</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--已选角色列表结束-->
+
+                    </div>
+                    <div class="part-2">
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+        <thead>
+        <tr>
+            <th class="txtLeft"><div>已选角色功能列表 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+        </tr>
+        </thead>
+        <tbody title="tab01">
+        <tr>
+            <td>
+                <div class="S_form" style="padding: 20px 0">
+                    <div class="gridtree-container">
+                    <div class="gridtree-group">
+                        <table width="100%">
+                            <!--<thead class="treegrid-head">-->
+                            <tr id="1" class="treegrid-head">
+                                <td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-collapsed treegrid-hit"></span>
+                                        <span class="treegrid-noleaf"></span>
+                                        <span class="treegrid-title">尚品CMS</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <!--</thead>-->
+                            <!--<tbody style="display: none">-->
+                            <tr id="2" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                <div class="treegrid-cell">
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-leaf"></span>
+                                    <span class="treegrid-title">用户管理</span>
+                                </div>
+
+                            </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <tr id="3" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                <div class="treegrid-cell">
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-leaf"></span>
+                                    <span class="treegrid-title">角色管理</span>
+                                </div>
+                            </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <tr  id="4" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                <div class="treegrid-cell">
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-collapsed treegrid-hit"></span>
+                                    <span class="treegrid-noleaf"></span>
+                                    <span class="treegrid-title">权限管理</span>
+                                </div>
+                            </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <tr  id="5" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                <div class="treegrid-cell">
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-leaf"></span>
+                                    <span class="treegrid-title">添加权限</span>
+                                </div>
+                            </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <tr  id="6" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                <div class="treegrid-cell">
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-indent"></span>
+                                    <span class="treegrid-leaf"></span>
+                                    <span class="treegrid-title">修改权限</span>
+                                </div>
+                            </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                            <!--</tbody>-->
+    </table>
+                    </div>
+                        <div class="gridtree-group">
+                            <table width="100%">
+                                <!--<thead class="treegrid-head">-->
+                                <tr id="1" class="treegrid-head">
+                                    <td style="border-bottom-width: 0px">
+                                        <div class="treegrid-cell">
+                                            <span class="treegrid-collapsed treegrid-hit"></span>
+                                            <span class="treegrid-noleaf"></span>
+                                            <span class="treegrid-title">尚品CMS</span>
+                                        </div>
+                                    </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <!--</thead>-->
+                                <!--<tbody style="display: none">-->
+                                <tr id="2" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">用户管理</span>
+                                    </div>
+
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr id="3" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">角色管理</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="4" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-collapsed treegrid-hit"></span>
+                                        <span class="treegrid-noleaf"></span>
+                                        <span class="treegrid-title">权限管理</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="5" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">添加权限</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="6" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">修改权限</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <!--</tbody>-->
+                            </table>
+                        </div>
+                        <div class="gridtree-group">
+                            <table width="100%">
+                                <!--<thead class="treegrid-head">-->
+                                <tr id="1" class="treegrid-head">
+                                    <td style="border-bottom-width: 0px">
+                                        <div class="treegrid-cell">
+                                            <span class="treegrid-collapsed treegrid-hit"></span>
+                                            <span class="treegrid-noleaf"></span>
+                                            <span class="treegrid-title">尚品CMS</span>
+                                        </div>
+                                    </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <!--</thead>
+                                <tbody style="display: none">-->
+                                <tr id="2" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">用户管理</span>
+                                    </div>
+
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr id="3" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">角色管理</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="4" pid="1" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-collapsed treegrid-hit"></span>
+                                        <span class="treegrid-noleaf"></span>
+                                        <span class="treegrid-title">权限管理</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="5" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">添加权限</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <tr  id="6" pid="4" style="display:none"><td style="border-bottom-width: 0px">
+                                    <div class="treegrid-cell">
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-indent"></span>
+                                        <span class="treegrid-leaf"></span>
+                                        <span class="treegrid-title">修改权限</span>
+                                    </div>
+                                </td><td style="border-bottom-width: 0px">浏览</td></tr>
+                                <!--</tbody>-->
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form_submit">
+        <input type="submit" value="确 定" class="button submit"> <input type="button" value="预 览" class="button">
+    </div>
+</div>
+
+        </div></div>
+<script type="text/javascript">
+    jQuery(function(){
+        function recHide(that , pid){
+            var trs = that.siblings("tr[pid='" + pid + "']");
+            console.log(trs);
+            trs.each(function(){
+                if($(this).find("span.treegrid-leaf").size() <= 0){
+                    recHide($(this) , $(this).attr("id"));
+                }
+                $(this).hide();
+            });
+        }
+
+        function recShow(that , pid){
+            var trs = that.siblings("tr[pid='" + pid + "']");
+            trs.each(function(){
+                if($(this).find("span.treegrid-expanded").size() > 0){
+                    recShow($(this) , $(this).attr("id"));
+                }
+                $(this).show();
+            });
+        }
+
+        var $container = jQuery(".gridtree-container");
+
+                $container.find(".treegrid-collapsed").live("click" , function(){
+                    var that = $(this).parents("tr");
+                    var pid = that.attr("id");
+                    recShow(that , pid);
+                    $(this).removeClass("treegrid-collapsed").addClass("treegrid-expanded")
+                });
+                $container.find(".treegrid-expanded").live("click" , function(){
+                    var that = $(this).parents("tr");
+                    var pid = that.attr("id");
+                    recHide(that , pid);
+                    $(this).removeClass("treegrid-expanded").addClass("treegrid-collapsed");
+                });
+                $container.find(".gridtree-group").each(function(){
+                    $(this).find("tr:not(.treegrid-head)").each(function(i){
+                        $(this).hide();
+                        if(i%2 != 0){
+                            $(this).addClass("gridtree-row-bg");
+                        }
+                    });
+                });
+    });
+</script>

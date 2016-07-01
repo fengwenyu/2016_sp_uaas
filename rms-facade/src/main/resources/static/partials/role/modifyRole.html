@@ -1,0 +1,56 @@
+﻿﻿﻿<div class="mainbar">
+<div class="main r">
+    <h2 class="maintit l"><span class="l maintitbj">您所在的位置：角色管理</span><span class="r"><a target="_blank" title="" href="">[帮助]</a></span></h2>
+    <div class="gyslistbotmbar l">
+        <h2 style="padding:10px 0 0;" class="main_title">角色修改 <a class="combo_btn" href="#/roleManager">角色列表</a></h2>
+
+        <div class="main_tabs">
+            <dl>
+                <dd class="tabsCell" style="display: block;">
+                    <form method="post" ng-submit="submitEditRole()">
+                    <div class="c-node">
+                        <table class="top-table">
+                            <thead>
+                            <tr>
+                                <th class="txtLeft"><div>角色信息 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+                            </tr>
+                            </thead>
+                            <tbody title="tab01">
+                            <tr>
+                                <td>
+
+                                        <div class="S_form">
+                                            <dl class="clr">
+                                                <dt>角色名称：<em>*</em></dt>
+                                                <dd><input required ng-model="result.code" type="text" id="TemplateNO" name="TemplateNO" class="txt"></dd>
+                                            </dl>
+                                            <!--dl class="clr">
+                                                <dt>类型：<em>*</em></dt>
+                                                <dd>
+                                                    <input required ng-model="user.type" type="radio" value="普通"> <label>普通</label>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input required ng-model="user.type" type="radio" value="用户组" checked><label>用户组</label></dd>
+                                            </dl-->
+                                            <dl class="clr">
+                                                <dt>角色描述：&nbsp;&nbsp;</dt>
+                                                <dd>
+                                                    <textarea maxlength="200" ng-model="result.description"></textarea>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form_submit">
+                            <input type="submit" value="确 定" class="button submit"> <input type="button" value="取  消" onclick="history.go(-1)" class="button">
+                        </div>
+                    </div>
+                    </form>
+                </dd>
+            </dl>
+        </div>
+        </div>
+
+    </div>
+</div>

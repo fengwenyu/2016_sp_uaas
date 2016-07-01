@@ -1,0 +1,75 @@
+﻿<div style="margin-left:9px;">
+    <script type="text/javascript" language="javascript">
+
+    </script>
+    角色赋权
+    <hr/>
+    角色名称：{{code}}
+
+    <hr/>
+    功能列表
+    <hr/>
+    <div>
+        <!-- 带复选框和图标-->
+        <div style="width:300px; height:200px; border:1px solid #ccc; overflow:auto; clear:both;float:left">
+            <ul class="l-tree" id="tree1" style="width: 200px;" ng-init="manager"></ul>
+            <div class="l-tree-loading"></div>
+        </div>
+
+        <div id="nodeMessage" style="display: none">
+            <form method="post" novalidate name="resource_form" ng-click="editForm()">
+                <dl>
+                    <dt>
+                        菜单名称:
+                    </dt>
+                    <dd>
+                        <input id="resourceNodeName" ng-model="resourceNodeName" readonly="readonly" type="text"/>
+
+                        <div class="form_validation" id="name_div"></div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        URI:
+                    </dt>
+                    <dd>
+                        <input id="resourceUri" ng-model="resourceUri" readonly="readonly" type="text"/>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        类型:
+                    </dt>
+                    <dd>
+                        <input id="resourceTypePage" name="resourceType" type="radio" disabled/> 页面
+                        <input id="resourceTypeBtn" name="resourceType" type="radio" disabled> 按钮
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        状态:
+                    </dt>
+                    <dd>
+                        <input id="resourceStateEnabled" name="resourceState" type="radio" value="true" disabled/> 可用
+                        <input id="resourceStateDisabled" name="resourceState" type="radio" value="false" disabled/> 停用
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        资源描述:
+                    </dt>
+                    <dd>
+                        <textarea id="resourceDescription" ng-model="resourceDescription" readonly="readonly"></textarea>
+                    </dd>
+                </dl>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div>
+    <a class="button" ng-click="bindingRoleWithPermission()">绑定权限</a>
+</div>
+
+

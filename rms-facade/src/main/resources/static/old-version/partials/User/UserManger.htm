@@ -1,0 +1,156 @@
+﻿<div style="margin-left:9px;">
+    <h4>用户查询：</h4>
+
+    <p/>
+
+    <form>
+        <table>
+            <tr>
+                <td>
+                    <input type="text" placeholder="用户姓名" ng-model="criteria.realNameLike"
+                           style="width: 160px; color: #666; font-size: 12px;height:17px;"/>
+                    <select ng-model="criteria.gender">
+                        <option value=''>性别</option>
+                        <option value='MALE'>男</option>
+                        <option value='FEMALE'>女</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="hidden" id="searchOrgName" >
+                    <input type="text" id="txt2" readonly="" class="l-text-field" style="width: 160px; float: left">
+                    <ul id="tree1"></ul>
+                </td>
+                <td>
+                    选择部门
+                </td>
+                <td>
+                    <select id="workPlaceId" ng-model="criteria.workLocation">
+                        <option value=''>办公区</option>
+                        <option value='北京'>
+                            北京区
+                        </option>
+                        <option value='上海'>
+                            上海区
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <select ng-model="criteria.status" id="statusId">
+                        <option value=''>状态</option>
+                        <option value='ENABLED'>启用</option>
+                        <option value='DISABLED'>停用</option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" ng-click="search()">
+                        查询
+                    </button>
+                    <button type="reset">
+                        重置
+                    </button>
+                </td>
+                <td style="float:right">
+                    <a href="#/AddUser" >
+                        <span style="font-size:14px;color:blue">添加用户</span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+
+    </form>
+    <div style="overflow-x:scroll;">
+        <table class="mx-table">
+            <thead>
+            <tr>
+                <th width="8%">
+                    用户编号
+                </th>
+                <th width="8%">
+                    用户名
+                </th>
+                <th width="8%">
+                    姓名
+                </th>
+                <th width="4%">
+                    性别
+                </th>
+                <th width="8%">
+                    职务级别
+                </th>
+                <th width="8%">
+                    部门
+                </th>
+                <th width="10%">
+                    办公区
+                </th>
+                <th width="6%">
+                    状态
+                </th>
+                <th width="12%">
+                    添加时间
+                </th>
+                <th width="50%">
+                    操作
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="" ng-repeat="item in userList">
+                <td>
+                    {{item.userCode}}
+                </td>
+                <td>
+                    {{item.username}}
+                </td>
+                <td>
+                    {{item.realName}}
+                </td>
+                <td>
+                    {{item.gender}}
+                </td>
+                <td>
+                    {{item.jobLevel}}
+                </td>
+                <td>
+                    {{item.organizationName}}
+                </td>
+                <td>
+                    {{item.workPlace}}
+                </td>
+                <td>
+                    {{item.status}}
+                </td>
+                <td>{{item.createdTime}}</td>
+                <td>
+                    <a class="button" href="#/ModifyUser?id={{item.id}}"> 编辑</a>
+                    <a class="button" href="#/AddUserRoles?id={{item.id}}&username={{item.username}}"> 赋权</a>
+                    <a class="button" ng-click="modifyUserState(item)"> 启用/停用</a>
+                    <!--<a class="button" ng-click="delUser(item)"> 删除</a>-->
+
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div id="spPage" class="spPage">
+        共56页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首页 上一页&nbsp;&nbsp;<font style="color:#600;font-weight:bold"
+                                                                        color="#ff0000">1</font>&nbsp;&nbsp;<a
+            href="/shangpin/brand/aiibrandsselect?
+
+pageindex=2">2</a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?pageindex=3">3</a>&nbsp;&nbsp;<a
+            href="/shangpin/brand/aiibrandsselect?pageindex=4">4</a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?
+
+pageindex=5">5</a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?pageindex=6">6</a>&nbsp;&nbsp;<a
+            href="/shangpin/brand/aiibrandsselect?pageindex=7">7</a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?
+
+pageindex=8">8</a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?pageindex=9">9</a>&nbsp;&nbsp;<a
+            href="/shangpin/brand/aiibrandsselect?pageindex=10">10</a>&nbsp;&nbsp;<a
+            href="/shangpin/brand/aiibrandsselect?pageindex=2">
+        下一页
+
+    </a>&nbsp;&nbsp;<a href="/shangpin/brand/aiibrandsselect?pageindex=56">末页</a>
+    </div>
+</div>

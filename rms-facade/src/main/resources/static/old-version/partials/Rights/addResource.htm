@@ -1,0 +1,77 @@
+﻿
+<div id="mx-body">
+    <!--内容--->
+    <span style="font-size:17px;"> &nbsp;&nbsp;&nbsp;添加权限：</span>
+    <div class="mx-brandcontent-msgbox" name="resource_form11" novalidate ng-submit="addResource()">
+        <form method="post">
+            <dl>
+                <dt>
+                    模块名称:
+                </dt>
+                <dd>
+                    <input id="resourceName" name="resourceName" ng-model="resourceName" type="text" required /><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    状态:
+                </dt>
+                <dd>
+                    <input id="resourceStateEnabled" name="resourceState" type="radio" value="true" checked/>启用
+                    <input id="resourceStateDisabled" name="resourceState" type="radio" value="false" />停用
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    类型:
+                </dt>
+                <dd>
+                    <input id="resourceTypePage" name="resourceType" type="radio" value="PAGE" checked/>页面
+                    <input id="resourceTypeButton" name="resourceType" type="radio" value="BUTTON"/>功能
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    选择父资源:
+                </dt>
+                <dd>
+                    <div id="parent_div"></div>
+                </dd>
+            </dl>
+
+            <dl>
+
+                <dt>
+                    URI:
+                </dt>
+                <dd>
+                    <input id="resourceUri" required name="resourceUri" ng-model="resourceUri" type="text" /><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+
+            </dl>
+
+            <dl>
+                <dt>
+                    备注:
+                </dt>
+                <dd>
+                    <textarea style="height:200px;width:400px;" name="description" ng-model="description"></textarea>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="submit" value="保存" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" />
+                    <input type="button" value="取消" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" onclick="javascript:history.go(-1)" />
+                </dd>
+
+            </dl>
+        </form>
+    </div>
+
+</div>

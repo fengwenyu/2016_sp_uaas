@@ -1,0 +1,104 @@
+﻿﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：角色管理</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title">角色列表 <a href="#/addRole" class="combo_btn">添加角色</a></h2>
+
+            <div class="main_filter clr">
+                <!-- 关键字搜索 -->
+                <div class="combo_key">
+                    角色名称 <input ng-model="criteria.nameLike" type="text" name="key" id="key"/>
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.isEnabled" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}">
+                        <option value="">状态</option>
+                        <option value="true">启用</option>
+                        <option value="false">停用</option>
+                    </select>
+                </div>
+                <!-- 关键字搜索结束 -->
+
+                <!-- 高级查询 -->
+                <div class="combo_key">
+                    <a class="combo_btn" ng-click="criteriaSearch()">查询</a>
+                </div>
+            </div>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell">
+                        <div class="c-node">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th style="width:10%;">角色名称</th>
+                                    <th style="width:5%;">角色描述</th>
+                                    <th style="width:5%;">状态</th>
+                                    <th style="width:5%;">类型</th>
+                                    <th style="width:10%;">创建时间</th>
+                                    <th style="width:8%;">操作</th>
+                                </thead>
+                                <tbody>
+
+                                <tr class="" ng-repeat="role in roleList">
+                                    <td>
+                                        {{role.code}}
+                                    </td>
+                                    <td>
+                                        {{role.description}}
+                                    </td>
+                                    <td>
+                                        {{role.isEnabled | isEnabled}}
+                                    </td>
+                                    <td>
+                                        {{role.type}}
+                                    </td>
+                                    <td>
+                                        {{role.createdTime}}
+                                    </td>
+                                    <td >
+                                        <a href="#/editRole/{{role.id}}">编辑</a>
+                                        <a href="#/roleManager/bindPermissionWithRole/{{role.id}}">赋权</a>
+                                        <a href="#/role/{{role.id}}/user">用户管理</a>
+                                        <a href="javascript:void(0);" ng-if="role.isEnabled" ng-click="changeRoleState(role)">
+                                            停用
+                                        </a>
+                                        <a href="javascript:void(0);" ng-if="!role.isEnabled" ng-click="changeRoleState(role)">
+                                            启用
+                                        </a>
+                                        <a href="javascript:void(0);" ng-click="deleteRole(role)">删除</a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                            <div class="table-page-border">
+                                <div class="pager-selector" id="pager_selector_COM0_16">
+                                    <div class="page-size-selector">
+                                        每页显示<select ng-model="paginator.pageSize" ng-options="i as i for i in pageSizeOptions" ng-change="pageChanged()"></select>条&nbsp;&nbsp;
+                                        <span class="page-size-selector-num">{{(paginator.page-1)*paginator.pageSize+1}}-{{((paginator.page-1)*paginator.pageSize+paginator.pageSize)<=totalItems?((paginator.page-1)*paginator.pageSize+paginator.pageSize):totalItems}}</span>&nbsp;&nbsp;/&nbsp;&nbsp;
+                                        <span class="page-size-selector-total">{{totalItems}}</span>&nbsp;&nbsp;条
+                                    </div>
+                                </div>
+                                <div class="pager" id="pager_COM0_16">
+                                    <div class="page-control">
+                                        <pagination ng-change="pageChanged()" total-items="totalItems" ng-model="paginator.page" items-per-page="paginator.pageSize" rotate="false" max-size="5" boundary-links="false" directionLinks="false" previous-text="上一页" next-text="下一页" first-text="首页" last-text="末页"></pagination>
+                                        共<span class="page-total">{{totalPage}}</span>页，
+                                        到第<input type="number" class="page-jump-to" ng-model="paginator.page">页
+                                        <input type="button" class="page-jump-btn" value="确定" ng-click="pageChanged()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

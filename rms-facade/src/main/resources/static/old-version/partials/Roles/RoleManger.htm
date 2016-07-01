@@ -1,0 +1,75 @@
+﻿<div id="mx-body">
+    <div>
+        <h4>&nbsp;&nbsp;&nbsp;角色查询</h4>
+
+        <p/>
+
+        <div>
+            &nbsp;&nbsp;
+            <form ng-submit="searchRole()">
+                &nbsp;&nbsp;
+                <input type="text" name="BrandCnName" placeholder="角色名称" ng-model="roleName"
+                       style="width: 160px; color: #666; font-size: 12px;height:17px;"/>
+                <select id="roleStatus" name="Status">
+                    <option value='' selected="selected">状态</option>
+                    <option value='true' ng-model="state">启用</option>
+                    <option value='false'ng-model="state">禁用</option>
+                </select>
+
+                <button type="submit">
+                    查询
+                </button>
+                <button type="reset">
+                    重置
+                </button>
+            </form>
+            <span style="float:right">
+            <a href="#/AddRoles"> <span style="font-size:14px;color:blue"> 添加角色</span></a>
+            <a href="#/BindingPermissionWithRoles"> <span
+                    style="font-size:14px;color:blue"> 批量赋权</span></a>
+            </span>
+
+        </div>
+        <br/><br/>&nbsp;&nbsp;&nbsp;角色列表：
+        <hr/>
+        <table class="mx-table">
+            <thead>
+            <tr>
+                <th width="15%">
+                    角色名称
+                </th>
+                <th width="15%">
+                    创建时间
+                </th>
+                <th width="10%">
+                    状态
+                </th>
+                <th width="25%">角色描述</th>
+                <th width="35%">
+                    操作
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="" ng-repeat="item in roleList">
+                <td>
+                    {{item.code}}
+                </td>
+                <td>
+                    {{item.createdTime}}
+                </td>
+                <td>
+                    {{item.isEnabled}}
+                </td>
+                <th>{{item.description}}</th>
+                <td>
+                    <a class="button" href="#/EditRoles?id={{item.id}}"> 编辑</a>
+                    <a class="button" ng-click="changeRoleState(item)"> 启用/停用</a>
+                    <a class="button" href="#/AddRolesRig?id={{item.id}}&code={{item.code}}"> 赋权</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

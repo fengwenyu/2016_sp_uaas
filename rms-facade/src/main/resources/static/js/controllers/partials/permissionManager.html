@@ -1,0 +1,116 @@
+<style type="text/css">
+  .gridtree-container{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+    .gridtree-group{
+        height: auto;
+        position: relative;
+        width:100%;
+        margin-top: 7px;
+    }
+    .gridtree-row-bg{
+        background-color:rgb(242,242,242);
+    }
+    .treegrid-head{
+        border:1px solid #cccccc;
+        background-color:#ececec;
+        color: #343434;
+        margin: 5px 0;
+    }
+    .treegrid-cell{
+        height:auto;
+        width:300px;
+        text-align:left;
+        font-size: 12px;
+        line-height: 18px;
+        margin: 0;
+        overflow: hidden;
+        padding: 0 4px;
+        white-space: nowrap;
+        word-wrap: normal;
+    }
+    .treegrid-expanded , .treegrid-indent ,
+    .treegrid-noleaf , .treegrid-leaf ,
+    .treegrid-collapsed{
+        display: inline-block;
+        height: 18px;
+        width:16px;
+        vertical-align: top;
+    }
+    .treegrid-title{
+        display: inline-block;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        padding: 0 2px;
+        text-decoration: none;
+        vertical-align: top;
+        white-space: nowrap;
+    }
+    .treegrid-collapsed{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-expanded{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -18px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-noleaf{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -208px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-leaf{
+        background: url("http://www.jeasyui.com/easyui/themes/default/images/tree_icons.png") no-repeat scroll -240px 0 rgba(0, 0, 0, 0);
+    }
+    .treegrid-hit{
+        cursor: pointer;
+    }
+    .action-button{
+        display: block;
+        float:right;
+        margin-right: 0px;
+        position:relative;
+    }
+</style>
+<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：菜单管理</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title">菜单列表
+                <a href="#/addMenu" style="position: relative" class="combo_btn action-button">添加菜单</a>
+            </h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell">
+                        <div class="c-node">
+                            <div id="gridTree" class="gridtree-container">
+                                <div class="gridtree-group">
+                                    <table class="top-table">
+                                        <thead>
+                                        <tr>
+                                            <!--<th style="width:3%;"><input type="checkbox" name=""></th>-->
+                                            <th style="width:10%;">菜单名称</th>
+                                            <th style="width:10%;">URI</th>
+                                            <th style="width:10%;">菜单描述</th>
+                                            <th style="width:10%;">创建时间</th>
+                                            <th style="width:10%;">操作</th>
+                                        </thead>
+                                        <tbody class="top-tbody">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

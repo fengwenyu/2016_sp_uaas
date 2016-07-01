@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html ng-app="login">
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+
+<!--<html ng-app="login">-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/login.css" rel="stylesheet" />
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="facade/jsonWsdl"></script>
+
+    <script type="text/javascript" src="js/controllers/login.js"></script>
+    <title>权限系统</title>
+
+</head>
+<body>
+<form name="LoginFrom" ng-controller="loginController" ng-submit="login()">
+    <h1>权限系统</h1>
+    <div class="lgcontenbar">
+        <table>
+            <tr><td class="greyWord">用户名/USERNAME:</td></tr>
+            <tr><td><input class="input" type="text" ng-model="username" required=required /></td></tr>
+
+            <tr><td class="greyWord">密码/PASSWORD:</td></tr>
+            <tr><td><input class="input" ng-model="password" type="password" required=required /></td></tr>
+
+            <!--<tr><td class="greyWord"><input type="checkbox" value="0" name="RemberOCSUser" id="RemberOCSUser" /><label for="RemberOCSUser">记住用户名</label></td></tr>-->
+            <tr>
+                <td class="greyWord" align="center">
+
+                    <input type="submit" value="登录" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="reset"  value="重置" />
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

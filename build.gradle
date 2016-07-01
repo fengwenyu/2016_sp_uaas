@@ -1,0 +1,239 @@
+buildscript {
+	repositories {
+	mavenCentral()
+		mavenLocal()
+		maven {
+			url "http://192.168.1.212:8081/nexus/content/groups/public/"
+		}
+		maven {
+			url "http://maven.oschina.net/content/groups/public/"
+		}
+		maven {
+			url "http://repo1.maven.org/maven2/"
+		}
+		maven{
+			url "http://repo.spring.io/release/"
+		}
+		maven{
+			url "https://repo.spring.io/snapshot/"
+		}
+	}
+	dependencies {
+		classpath(
+				"org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE",
+				"io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE"
+				)
+	}
+}
+/*allprojects {
+	configurations {
+		//provided
+		provided {
+			dependencies.all { dep ->
+				configurations.default.exclude group: dep.group, module: dep.name
+			}
+		}
+		compile.extendsFrom provided
+	}
+}*/
+/*configure(subprojects.findAll { it.name != 'fashion-sdk' }) {
+	dependencies {
+		compile(
+			     "ch.qos.logback:logback-core:${logback}",		
+			     "ch.qos.logback:logback-classic:${logback}",		
+			     "org.slf4j:slf4j-api:${log4j}",
+			     "org.slf4j:jcl-over-slf4j:${log4j}",
+			    )
+	}
+}*/
+subprojects {
+	apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'spring-boot'
+    apply plugin: "io.spring.dependency-management"
+    version = '1.0'
+
+    ext{
+    	//运行时加程序参数：-Pprofile=dev
+		if (project.hasProperty('profile')) {
+	        profile = project['profile']
+	    }else{
+	    	profile = ""	    	
+	    }
+		boot ="1.3.1.RELEASE"
+		javassist="3.20.0-GA"
+		hibernate="4.3.11.Final"
+		mybatis="3.3.0"
+		mysql="5.1.38"
+		mongo="3.2.1"
+		hikariCP="2.4.5"
+		joda="1.3"
+		fileUpload='1.3.1'
+		spring="4.2.4.RELEASE"
+		dubbo="2.8.4"
+		zookeeper="3.4.6"
+		zkclient="0.1"
+		hessian="4.0.7"
+		log4j="1.7.13"
+		logback="1.1.3"
+		jodaTime="2.9.1"
+		netty="3.10.5.Final"
+		lombok="1.16.6"
+		codec="1.10"
+		lang="3.4"
+		mail="1.4.7"
+		xstream="1.4.8"
+		yaml="1.16"
+		servlet="3.1.0"
+		fastJson="1.2.7"
+		jackson="2.6.4"
+		gson="2.5"
+		httpclient="4.3.1"
+		freemarker="2.3.23"
+		junit="4.12"
+		querydsl="3.7.0"
+		spring_data_solr="2.0.0.RELEASE"
+		solr="5.3.1"
+		pinyin="2.5.0"
+		jedis="2.8.1"
+		spymemcached="2.12.1"
+		springCache="3.6.0"
+	}
+    repositories {
+   	    mavenCentral()
+    	mavenLocal()
+    	maven {
+			url "http://192.168.1.212:8081/nexus/content/groups/public/"
+		}
+		maven {
+			url "http://maven.oschina.net/content/groups/public/"
+		}
+		maven {
+			url "http://repo1.maven.org/maven2/"
+		}
+		maven{
+			url "http://repo.spring.io/release/"
+		}
+		maven{
+			url "http://repo.spring.io/libs-snapshot"
+		}
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        compile('org.projectlombok:lombok:1.16.6')
+    }
+    eclipse.project {
+		natures 'org.springsource.ide.eclipse.gradle.core.nature'
+	}
+    dependencyManagement {
+		dependencies {
+			//spring boot
+			dependency "org.springframework.boot:spring-boot:${boot}"
+			dependency "org.springframework.boot:spring-boot-autoconfigure:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-web:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-tomcat:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-undertow:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-data-jpa:${boot}"
+			dependency "org.springframework.data:spring-data-mongodb:1.8.2.RELEASE"
+			dependency "org.springframework.data:spring-data-redis:1.6.2.RELEASE"
+			dependency "org.springframework.boot:spring-boot-configuration-processor:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-thymeleaf:${boot}"
+			dependency "org.springframework.boot:spring-boot-starter-freemarker:${boot}"
+			dependency "org.springframework:spring-core:${spring}"
+			dependency "org.springframework:spring-context-support:${spring}"
+			//solr
+			dependency "org.springframework.data:spring-data-solr:${spring_data_solr}"
+			dependency "org.apache.solr:solr-solrj:${solr}"
+			dependency "com.belerweb:pinyin4j:${pinyin}"
+			//页面
+			dependency "org.freemarker:freemarker:${freemarker}"
+			//数据源
+			dependency "mysql:mysql-connector-java:${mysql}"
+			dependency "org.mongodb:mongodb-driver:${mongo}" //3.2同步请用这个
+			dependency "org.mongodb:mongodb-driver-async:${mongo}" //3.2异步请用这个
+			dependency "com.microsoft.sqlserver:sql-jdbc:4.2:jdk16@jar"
+			dependency "redis.clients:jedis:${jedis}"
+			//私服存放微软的jdbc,oracle的不加了
+			//dependency "com.microsoft.sqlserver:sqljdbc:${sqlserver}"	
+			dependency "com.zaxxer:HikariCP:${hikariCP}"
+			//orm
+			dependency "org.hibernate:hibernate-core:${hibernate}"
+			dependency "org.hibernate:hibernate-entitymanager:${hibernate}"
+			dependency "org.hibernate:hibernate-hikaricp:${hibernate}"
+			dependency "org.hibernate:hibernate-validator:5.2.2.Final"
+			dependency "org.mybatis:mybatis:${mybatis}"
+			dependency "org.mybatis:mybatis-spring:1.2.3"
+			//mybatis 分页插件
+			dependency 'com.github.pagehelper:pagehelper:4.1.6'
+			dependency 'tk.mybatis:mapper:3.3.8'
+			dependency "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.0.0"
+			dependency "joda-time:joda-time-hibernate:${joda}"
+			//log4j日志
+			dependency "org.slf4j:slf4j-log4j12:${log4j}"
+			dependency "org.slf4j:slf4j-api:${log4j}"
+			dependency "ch.qos.logback:logback-core:${logback}"		
+			dependency "ch.qos.logback:logback-classic:${logback}"		
+			dependency "org.slf4j:jcl-over-slf4j:${log4j}"
+			//配置文件
+			dependency "org.yaml:snakeyaml:${yaml}"
+			//Zookeeper
+			dependency "com.alibaba:dubbo:${dubbo}"
+			dependency "org.javassist:javassist:${javassist}"
+			dependency "org.apache.zookeeper:zookeeper:${zookeeper}"
+			dependency "com.github.sgroschupf:zkclient:${zkclient}"
+			//集合处理
+			dependency "commons-fileupload:commons-fileupload:${fileUpload}"
+			dependency "org.apache.commons:commons-lang3:${lang}"
+			dependency "commons-collections:commons-collections:3.2.1"
+			dependency "joda-time:joda-time:${jodaTime}"
+			dependency "javax.mail:mail:${mail}"
+			dependency "commons-beanutils:commons-beanutils:1.9.2"
+			dependency "io.netty:netty:${netty}"
+			//各种md5,base64加解密
+			dependency "commons-codec:commons-codec:${codec}"
+			//二维码
+			dependency "com.google.zxing:core:3.2.1"
+			//json----fastjson,gson,jackson,xml
+			dependency "com.alibaba:fastjson:${fastJson}"
+			dependency "com.google.code.gson:gson:${gson}"
+			dependency "javax.servlet:javax.servlet-api:${servlet}"
+			dependency "org.codehaus.jackson:jackson-mapper-asl:1.9.13"
+			dependency "com.fasterxml.jackson.core:jackson-core:${jackson}"
+			dependency "com.fasterxml.jackson.core:jackson-databind:${jackson}"
+			dependency "com.fasterxml.jackson.core:jackson-annotations:${jackson}"
+			dependency "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jackson}"
+			dependency "com.thoughtworks.xstream:xstream:${xstream}"
+			//lombok
+			dependency "org.projectlombok:lombok:${lombok}"
+			//shangpin common
+			dependency "com.shangpin.common:commons-util:1.0"
+			dependency "com.shangpin.common:shangpin-http:1.0"			
+			dependency "org.apache.httpcomponents:httpclient:${httpclient}"
+			//cache
+			dependency "net.spy:spymemcached:${spymemcached}"
+			dependency "com.google.code.simple-spring-memcached:spring-cache:${springCache}"
+			dependency "com.google.code.simple-spring-memcached:spymemcached-provider:${springCache}"
+			//querydsl
+			dependency "com.mysema.querydsl:querydsl-core:${querydsl}"
+			dependency "com.mysema.querydsl:querydsl-annotations:0.2.8"
+			dependency "com.mysema.querydsl:querydsl-sql-spring:${querydsl}"
+			dependency "com.mysema.querydsl:querydsl-mongodb:${querydsl}"
+			
+		}
+	}
+	
+}
+configure(subprojects) {
+	dependencies {
+		compile(
+			     "ch.qos.logback:logback-core:${logback}",		
+			     "ch.qos.logback:logback-classic:${logback}",		
+			     "org.slf4j:slf4j-api:${log4j}",
+			     "org.slf4j:jcl-over-slf4j:${log4j}",
+			    )
+		 testCompile 'junit:junit:4.12'
+	     compile('org.projectlombok:lombok:1.16.6')
+	}
+}

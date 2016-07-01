@@ -1,0 +1,80 @@
+<div>
+    <a class="l-button" href="#/addMenu" style="float:left;margin-right:10px;">增加节点</a>
+    <a class="l-button" style="float:left;margin-right:10px;" ng-click="selectNodeSite()">修改位置</a>
+    <a class="l-button" style="float:left;margin-right:10px;" ng-click="deleteOrgNodeSite()">删除节点</a>
+
+    <br>
+    <br>
+    <!-- 带复选框和图标-->
+    <div style="width:200px; height:300px; border:1px solid #ccc; overflow:auto; clear:both;float:left">
+        <ul class="l-tree" id="tree1" style="width: 200px;" ng-init="manager"></ul>
+        <div class="l-tree-loading"></div>
+    </div>
+
+
+    <div id="nodeMessage" style="display: none">
+        <form method="post" novalidate name="menu_form">
+            <dl>
+                <dt>
+                    菜单名称:
+                </dt>
+                <dd>
+                    <input id="menuName" ng-model="menuName" type="text" />
+                    <div class="form_validation" id="name_div"></div>
+
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    访问地址:
+                </dt>
+                <dd>
+                    <input id="menuUri" ng-model="menuUri" type="text"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    排序数字:
+                </dt>
+                <dd>
+                    <input id="menuSort" ng-model="menuSort" type="text"/><label style="color: red">*注 只能填写排序数字</label>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="button" ng-click="updateMenuNotParentId()" value="修改" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" />
+                </dd>
+            </dl>
+
+        </form>
+    </div>
+
+
+    <div id="nodeSite" style="display: none">
+
+        <dl>
+            <dt>
+                选择父菜单:
+            </dt>
+            <dd>
+                <div id="div_part"></div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>&nbsp;&nbsp;</dt>
+            <dd>
+                <input type="button" ng-click="updateMenuParentId()" value="修改" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                                color: #FFFFFF; cursor: pointer;" />
+
+            </dd>
+        </dl>
+    </div>
+</div>
+
+
+
+
+

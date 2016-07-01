@@ -1,0 +1,8 @@
+{"properties": [
+  {
+    "name": "shangpin.uaas.data-source.hikari",
+    "type": "com.zaxxer.hikari.HikariConfig",
+    "description": "A description for 'com.zaxxer.hikari.HikariConfig'"
+  }
+  
+]}

@@ -1,0 +1,87 @@
+﻿<div ng-controller="OrgControllers">
+    <!--<input type="text" class="l-text" id="txtNode" style="float:left;">-->
+
+    <a class="l-button" href="#/addOrg" style="float:left;margin-right:10px;">增加部门</a>
+    <a class="l-button" style="float:left;margin-right:10px;" ng-click="selectNodeSite()">移动部门</a>
+    <a class="l-button" ng-click="removeOrganizationItem()" style="float:left;margin-right:10px;">删除部门</a>
+
+    <br>
+    <br>
+    <!-- 带复选框和图标-->
+    <div style="width:200px; height:300px; border:1px solid #ccc; overflow:auto; clear:both;float:left">
+        <ul class="l-tree" id="tree1" style="width: 200px;" ng-init="manager"></ul>
+        <div class="l-tree-loading"></div>
+    </div>
+
+    <div id="nodeMessage" style="display: none">
+        <form ng-submit="modifyTreeNode()">
+            <dl>
+                <dt>
+                    部门名称:
+                </dt>
+                <dd>
+                    <input id="orgName" type="text" required/>
+                    <input id="orgId" type="hidden">
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    负责人:
+                </dt>
+                <dd>
+                    <table>
+                        <tr>
+                            <td>
+                                <div id="SearchPartP" ng-controller="InstantSearchController">
+                                    <input id="txt_Name" ng-model="searchString" placeholder="请输入姓名" maxlength="20"
+                                           type="text" onchange="showUserWithNameLike(this)"
+                                           onfocus="ShowNameList(this)"/>
+                                    <ul id="ul_namelist" ng-model="NameList" style="margin-top:3px;display:none">
+                                        <li ng-repeat="i in items | searchFor:searchString"
+                                            style="height: 19px; font-size: 15px; vertical-align: middle; cursor: pointer"
+                                            pid={{i.id}} onclick="printName(this)">
+                                            {{i.title}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td align="left">
+                                <div id="div_selectnamelist" style="float: right;margin-left:5px;">已选负责人：</div>
+                            </td>
+                        </tr>
+                    </table>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="submit" value="修改" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;"/>
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+    <div id="nodeSite" style="display: none">
+
+        <dl>
+            <dt>
+                选择父部门:
+            </dt>
+            <dd>
+                <div id="div_part"></div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>&nbsp;&nbsp;</dt>
+            <dd>
+                <input type="button" ng-click="moveOrganization()" value="移动" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                                color: #FFFFFF; cursor: pointer;"/>
+
+            </dd>
+        </dl>
+    </div>
+    <div id="div_part1"></div>
+
+</div>

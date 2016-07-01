@@ -1,0 +1,86 @@
+﻿﻿﻿<div class="mainbar">
+<div class="main r">
+    <h2 class="maintit l"><span class="l maintitbj">您所在的位置：菜单管理</span><span class="r"><a target="_blank" title="" href="">[帮助]</a></span></h2>
+    <div class="gyslistbotmbar l">
+        <h2 style="padding:10px 0 0;" class="main_title">菜单修改 <a class="combo_btn" href="#/menuManager">菜单列表</a></h2>
+
+        <div class="main_tabs">
+            <dl>
+                <dd class="tabsCell" style="display: block;">
+                    <form method="post" name="menu_form" ng-submit="editMenu()">
+                    <div class="c-node">
+                        <table class="top-table">
+                            <thead>
+                            <tr>
+                                <th class="txtLeft"><div>菜单信息 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+                            </tr>
+                            </thead>
+                            <tbody title="tab01">
+                            <tr>
+                                <td>
+
+                                        <div class="S_form">
+                                            <dl class="clr">
+                                                <dt>菜单名称：<em>*</em></dt>
+                                                <dd><input ng-model="menuName" required type="text" name="menuName" class="txt"></dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt>URI：<em>*</em></dt>
+                                                <dd><input ng-model="menuUri" type="text" required name="menuUri" class="txt"></dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt>排列数字：<em>*</em></dt>
+                                                <dd><input ng-model="menuSort"  type="number" required name="menuSort" class="txt"></dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt>系统编码：<em>*</em></dt>
+                                                <dd><input ng-model="appCode" type="text" name="menuSort" class="txt"><em>顶级时候必填</em></dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt>URL：<em>*</em></dt>
+                                                <dd><input ng-model="url" type="text" required name="url" class="txt">页面访问地址（targetUrl）</dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt>选择父菜单：<em>*</em></dt>
+                                                <dd>
+                                                    <!-- 菜单树 -->
+                                                    <div class="combo">
+                                                        <a style="width:160px;" alt="请选择父菜单" ng-model="parMenuName" href="javascript:void(0);" class="combo_text" title="请选择父菜单">请选择父菜单</a>
+                                                        <input type="hidden" name="pid" id="pid"/>
+                                                        <span class="arrow"></span>
+
+                                                        <div class="popup popup_0" index="0" style="display: none;">
+                                                            <div class="popup_wrap">
+                                                                <div style="height:auto;" id="treeContainer" class="popuplist">
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- 菜单树结束 -->
+                                                </dd>
+                                            </dl>
+                                        </div>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form_submit">
+                            <input type="submit" value="确 定" class="button submit"> <input type="button" value="取  消" onclick="history.go(-1)" class="button">
+                        </div>
+                    </div>
+                    </form>
+                </dd>
+            </dl>
+        </div>
+
+    </div>
+</div>
+</div>

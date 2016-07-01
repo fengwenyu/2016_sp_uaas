@@ -1,0 +1,186 @@
+﻿﻿﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：权限管理</span><span class="r"><a target="_blank" title="" href="">[帮助]</a></span></h2>
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">功能添加 <a class="combo_btn" href="#/resourceManager">功能列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <form method="post" name="menu_form" ng-submit="addResource()">
+                            <div class="c-node">
+                                <table class="top-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="txtLeft"><div>功能信息 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody title="tab01">
+                                    <tr>
+                                        <td>
+
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>模块名称：<em>*</em></dt>
+                                                    <dd><input ng-model="resourceName" required type="text" name="resourceName" class="txt">&nbsp;&nbsp;请控制在1～10字符以内</dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>状态：<em>&nbsp;</em></dt>
+                                                    <dd>
+                                                        <select required ng-model="resourceState">
+                                                            <option value="1" >启用</option>
+                                                            <option value="0" selected="selected">停用</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>类型：<em>&nbsp;</em></dt>
+                                                    <dd>
+                                                        <input required ng-model="resourceType" id="typeEnabled" name="state" type="radio" value="PAGE" checked> <label >页面</label>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input required ng-model="resourceType" id="typeDisabled" name="state" type="radio" value="BUTTON"><label >按钮</label></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>选择父资源：</dt>
+                                                    <dd>
+                                                        <!-- 菜单树 -->
+                                                        <div class="combo">
+                                                            <a style="width:160px;" alt="请选择父资源" href="javascript:void(0);" class="combo_text" title="请选择父资源">请选择父资源</a>
+                                                            <input type="hidden" name="pid" id="pid"/>
+                                                            <span class="arrow"></span>
+
+                                                            <div class="popup popup_0" index="0" style="display: none;">
+                                                                <div class="popup_wrap">
+                                                                    <div style="height:auto;" id="treeContainer" class="popuplist">
+
+
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- 菜单树结束 -->
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>URI：<em>*</em></dt>
+                                                    <dd><input ng-model="resourceURI" required type="text" name="resourceURI" class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>资源描述：<em>&nbsp;</em></dt>
+                                                    <dd>
+                                                        <textarea maxlength="200" ng-model="resourceDesc" name="resourceDesc"></textarea>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form_submit">
+                                    <input type="submit" value="确 定" class="button submit"> <input type="button" value="取  消" onclick="history.go(-1)" class="button">
+                                </div>
+                            </div>
+                        </form>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div id="mx-body">-->
+    <!--<span style="font-size:17px;"> &nbsp;&nbsp;&nbsp;添加权限：</span>-->
+    <!--<div class="mx-brandcontent-msgbox" name="resource_form11" novalidate ng-submit="addResource()">-->
+        <!--<form method="post">-->
+            <!--<dl>-->
+                <!--<dt>-->
+                    <!--模块名称:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<input id="resourceName" name="resourceName" ng-model="resourceName" type="text" required /><span style="color: coral; margin-left: 5px;">*</span>-->
+                <!--</dd>-->
+            <!--</dl>-->
+
+            <!--<dl>-->
+                <!--<dt>-->
+                    <!--状态:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<input id="resourceStateEnabled" name="resourceState" type="radio" value="true" checked/>启用-->
+                    <!--<input id="resourceStateDisabled" name="resourceState" type="radio" value="false" />停用-->
+                <!--</dd>-->
+            <!--</dl>-->
+            <!--<dl>-->
+                <!--<dt>-->
+                    <!--类型:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<input id="resourceTypePage" name="resourceType" type="radio" value="PAGE" checked/>页面-->
+                    <!--<input id="resourceTypeButton" name="resourceType" type="radio" value="BUTTON"/>功能-->
+                <!--</dd>-->
+            <!--</dl>-->
+
+            <!--<dl>-->
+                <!--<dt>-->
+                    <!--选择父资源:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<div id="parent_div"></div>-->
+                <!--</dd>-->
+            <!--</dl>-->
+
+            <!--<dl>-->
+
+                <!--<dt>-->
+                    <!--URI:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<input id="resourceUri" required name="resourceUri" ng-model="resourceUri" type="text" /><span style="color: coral; margin-left: 5px;">*</span>-->
+                <!--</dd>-->
+
+            <!--</dl>-->
+
+            <!--<dl>-->
+                <!--<dt>-->
+                    <!--备注:-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<textarea style="height:200px;width:400px;" name="description" ng-model="description"></textarea>-->
+                <!--</dd>-->
+            <!--</dl>-->
+
+            <!--<dl>-->
+                <!--<dt>&nbsp;&nbsp;</dt>-->
+                <!--<dd>-->
+                    <!--<input type="submit" value="保存" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;-->
+                            <!--color: #FFFFFF; cursor: pointer;" />-->
+                    <!--<input type="button" value="取消" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;-->
+                            <!--color: #FFFFFF; cursor: pointer;" onclick="javascript:history.go(-1)" />-->
+                <!--</dd>-->
+
+            <!--</dl>-->
+        <!--</form>-->
+    <!--</div>-->
+
+<!--</div>-->

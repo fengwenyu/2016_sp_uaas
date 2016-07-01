@@ -1,0 +1,93 @@
+﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：部门添加</span><span class="r"><a target="_blank" title=""
+                                                                                             href="">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">部门添加 <a class="combo_btn" href="#/organizationManager">部门列表</a>
+            </h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <div class="c-node">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th class="txtLeft">
+                                        <div>部门信息
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody title="tab01">
+                                <tr>
+                                    <td>
+                                        <form method="post" ng-submit="addOrganization()">
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>部门名称:<em>*</em></dt>
+                                                    <dd><input type="text" ng-model="organization.name" required
+                                                               class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>部门编号:<em>*</em></dt>
+                                                    <dd><input type="text" ng-model="organization.code" required
+                                                               class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>上级部门:&nbsp;&nbsp;</dt>
+                                                    <dd>
+                                                        <!-- 菜单树 -->
+                                                        <div class="combo">
+                                                            <a style="width:160px;" alt="请选择部门" href="javascript:void(0);" class="combo_text" title="请选择部门">请选择部门</a>
+                                                            <input type="hidden" name="pid" id="pid"/>
+                                                            <span class="arrow"></span>
+
+                                                            <div class="popup popup_0" index="0" style="display: none;">
+                                                                <div class="popup_wrap">
+                                                                    <div style="height:auto;" id="treeContainer" class="popuplist">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- 菜单树结束 -->
+
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>
+                                                        负责人:&nbsp;&nbsp;
+                                                    </dt>
+                                                    <dd>
+                                                        <select style="width: 300px; text-align: left" ui-select2 ng-model="responserId" data-placeholder="请选择直属领导">
+                                                            <option value=""></option>
+                                                            <option ng-repeat="user in allUsers" value="{{user.id}}">{{user.realName}} -- {{user.username}} ({{user.organizationName}})</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+
+                                            <div class="form_submit">
+                                                <input type="submit" value="确 定" class="button submit"> <input
+                                                    type="button"
+                                                    value="取  消"
+                                                    class="button"
+                                                    onclick="history.go(-1)">
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

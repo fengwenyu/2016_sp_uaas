@@ -1,0 +1,94 @@
+﻿<div>
+    <a class="l-button" href="#/addResource" style="float:left;margin-right:10px;">增加资源</a>
+    <!--<a class="l-button" style="float:left;margin-right:10px;" ng-click="selectResourceNodeSite()">修改资源</a>-->
+    <!--<a class="l-button" style="float:left;margin-right:10px;" ng-click="selectResourceNodeSite()">修改位置</a>-->
+    <!--<a class="l-button" style="float:left;margin-right:10px;" ng-click="removeTreeItem()">删除资源</a>-->
+    <a class="l-button" style="float:left;margin-right:10px;" ng-click="relateRoleItem()">角色关联</a>
+
+    <br>
+    <br>
+    <!-- 带复选框和图标-->
+    <div style="width:250px; height:450px; border:1px solid #ccc; overflow:auto; clear:both;float:left">
+        <ul class="l-tree" id="tree1" style="width: 200px;" ng-init="manager"></ul>
+        <div class="l-tree-loading"></div>
+    </div>
+
+    <div id="nodeMessage" style="display: none">
+        <form method="post" novalidate name="resource_form" ng-click="editForm()">
+            <dl>
+                <dt>
+                    菜单名称:
+                </dt>
+                <dd>
+                    <input id="resourceNodeName" required type="text" ng-model="resourceNodeName" /><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    URI:
+                </dt>
+                <dd>
+                    <input id="resourceUri" ng-model="resourceUri" required type="text"/><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    类型:
+                </dt>
+                <dd>
+                    <input id="resourceTypePage" name="resourceType" type="radio" value="PAGE"/> 页面
+                    <input id="resourceTypeBtn" name="resourceType" type="radio" value="BUTTON"> 按钮
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    状态:
+                </dt>
+                <dd>
+                    <input id="resourceStateEnabled" name="resourceState" type="radio" value="true"/> 可用
+                    <input id="resourceStateDisabled" name="resourceState" type="radio" value="false"/> 停用
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    资源描述:
+                </dt>
+                <dd>
+                    <textarea id="resourceDescription" ng-model="description"></textarea>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="button" ng-click="updateResourceNotParentId()" value="修改" style="width: 150px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" />
+                </dd>
+            </dl>
+
+        </form>
+    </div>
+
+
+    <div id="resourceNodeSite" style="display: none">
+
+        <dl>
+            <dt>
+                选择父菜单:
+            </dt>
+            <dd>
+                <div id="div_part"></div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>&nbsp;&nbsp;</dt>
+            <dd>
+                <input type="button" ng-click="updateResourceParentId()" value="修改" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                                color: #FFFFFF; cursor: pointer;" />
+
+            </dd>
+        </dl>
+    </div>
+
+</div>

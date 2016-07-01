@@ -1,0 +1,152 @@
+<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：用户管理</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title">用户列表 <a href="#/addUser" class="combo_btn">添加用户</a></h2>
+
+            <div class="main_filter clr">
+                <div class="combo_key">
+                    姓名 <input type="text" ng-model="criteria.realNameLike"/>
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.gender" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}">
+                        <option value="">性别</option>
+                        <option value="MALE">男</option>
+                        <option value="FEMALE">女</option>
+                    </select>
+                </div>
+                <div class="combo_key">
+
+
+                    <!-- 菜单树 -->
+                    <div class="combo">
+                        <a style="width:160px;" alt="请选择部门" href="javascript:void(0);" class="combo_text" title="请选择部门">请选择部门</a>
+                        <input type="hidden" name="pid" id="pid"/>
+                        <span class="arrow"></span>
+
+                        <div class="popup popup_0" index="0" style="display: none;">
+                            <div class="popup_wrap">
+                                <div style="height:auto;" id="treeContainer" class="popuplist">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- 菜单树结束 -->
+
+
+                    <!--<select ng-model="criteria.organizationId" ng-options=" org.id as org.name for org in organizations">-->
+                    <!--<option value="">部门</option>-->
+                    <!--</select>-->
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.workLocation" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}">
+                        <option value="">办公区</option>
+                        <option value="北京懋隆">北京懋隆</option>
+                        <option value="北京马驹桥">北京马驹桥</option>
+                        <option value="上海">上海</option>
+                        <option value="深圳">深圳</option>
+                    </select>
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.status" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}">
+                        <option value="">用户状态</option>
+                        <option value="ENABLED">启用</option>
+                        <option value="DISABLED">停用</option>
+                    </select>
+                </div>
+
+                <div class="combo_key">
+                    <select ng-model="criteria.hasThisRole" style="border: 1px solid #bfbfbf;color: #666;height: 27px;line-height: 27px; width: 70px;}" ng-options="v as k for (k, v) in hasThisRoleOptions">
+                    </select>
+                </div>
+
+                <div class="combo_key">
+                    <a class="combo_btn" ng-click="criteriaSearch()">查询</a>
+                </div>
+            </div>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell">
+                        <div class="c-node">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th>用户编号</th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>性别</th>
+                                    <th>职务级别</th>
+                                    <th>所在部门</th>
+                                    <th>办公区</th>
+                                    <th>用户状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="" ng-repeat="user in userList">
+                                    <td>
+                                        {{user.userCode}}
+                                    </td>
+                                    <td>
+                                        {{user.username}}
+                                    </td>
+                                    <td>
+                                        {{user.realName}}
+                                    </td>
+                                    <td>
+                                        {{user.gender|enum}}
+                                    </td>
+                                    <td>
+                                        {{user.jobLevel}}
+                                    </td>
+                                    <td>
+                                        {{user.organizationName}}
+                                    </td>
+                                    <td>
+                                        {{user.workPlace}}
+                                    </td>
+                                    <td>
+                                        {{user.status|enum}}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(null)" ng-click="modifyMembership(user)" ng-show="!user.hasThisRole">加入</a>
+                                        <a href="javascript:void(null)" ng-click="modifyMembership(user)" ng-show="user.hasThisRole">请出</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="table-page-border">
+                                <div class="pager-selector" id="pager_selector_COM0_16">
+                                    <div class="page-size-selector">
+                                        每页显示<select ng-model="paginator.pageSize" ng-options="i as i for i in pageSizeOptions" ng-change="pageChanged()"></select>条&nbsp;&nbsp;
+                                        <span class="page-size-selector-num">{{(paginator.page-1)*paginator.pageSize+1}}-{{((paginator.page-1)*paginator.pageSize+paginator.pageSize)<=totalItems?((paginator.page-1)*paginator.pageSize+paginator.pageSize):totalItems}}</span>&nbsp;&nbsp;/&nbsp;&nbsp;
+                                        <span class="page-size-selector-total">{{totalItems}}</span>&nbsp;&nbsp;条
+                                    </div>
+                                </div>
+                                <div class="pager" id="pager_COM0_16">
+                                    <div class="page-control">
+                                        <pagination ng-change="pageChanged()" total-items="totalItems" ng-model="paginator.page" items-per-page="paginator.pageSize" rotate="false" max-size="5" boundary-links="false" directionLinks="false" previous-text="上一页" next-text="下一页" first-text="首页" last-text="末页"></pagination>
+                                        共<span class="page-total">{{totalPage}}</span>页，
+                                        到第<input type="number" class="page-jump-to" ng-model="paginator.page">页
+                                        <input type="button" class="page-jump-btn" value="确定" ng-click="pageChanged()">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+[
+	{
+		MenuName:"用户管理",
+		action:"P"
+		ChildNode:
+		[
+			{
+				ChildName:"用户管理"，
+				action:"usermanger",
+				ChildNode:""
+			},
+			{
+				ChildName:"角色管理"，
+				action:"rolesmanger",
+				ChildNode:""
+			}
+		]
+	},
+	{
+		MenuName:"权限管理",
+		action:"P"
+		ChildNode:
+		[
+			{
+				ChildName:"组织结构"，
+				action:"Orgmanger",
+				ChildNode:""
+			},
+			{
+				ChildName:"权限管理"，
+				action:"righsmanger",
+				ChildNode:""
+			}
+		]
+	}
+]

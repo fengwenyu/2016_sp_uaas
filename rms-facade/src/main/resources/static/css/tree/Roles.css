@@ -1,0 +1,27 @@
+﻿ul {
+    list-style-type: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+#nav li ul li {
+
+    height: 30px;
+}
+
+#nav li ul {
+    margin-left: 30px;
+}
+
+.evl {
+    background: #186298;
+    height: 30px;
+    align-items: center;
+    align-content: center;
+    margin-top: 3px;
+    color: #FFFFFF;
+    font-size: 12;
+    cursor:pointer;
+}

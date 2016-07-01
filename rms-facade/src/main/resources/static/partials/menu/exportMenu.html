@@ -1,0 +1,45 @@
+﻿﻿﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：菜单导出</span><span class="r"><a target="_blank" title="" href="">[帮助]</a></span></h2>
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">菜单导出 <a class="combo_btn" href="#/menuManager">功能列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <iframe style="display: none" onload="onIFrameLoaded(this);" name="exportIframe" id="exportIframe"></iframe>
+                        <form method="post" name="menu_form" target="exportIframe" action="menu/export" enctype="multipart/form-data">
+                            <div class="c-node">
+                                <table class="top-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="txtLeft"><div>功能信息 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody title="tab01">
+                                    <tr>
+                                        <td>
+
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>应用实例名称：</dt>
+                                                    <dd><input type="text" name="appCode" class="txt"> <span ><em style="color: red;margin: 0 5px 0 10px">*</em>请填写要导出的菜单列表的应用名称</span></dd>
+                                                </dl>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form_submit">
+                                    <input type="submit" value="确 定" class="button submit"> <input type="button" value="取  消" ng-click="back()" class="button">
+                                </div>
+                            </div>
+                        </form>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

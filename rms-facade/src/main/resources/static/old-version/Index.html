@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html ng-app="app" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="css/init.css" rel="stylesheet" type="text/css"
+          charset="utf-8" />
+    <link href="css/core.css" rel="stylesheet" type="text/css"
+          charset="utf-8" />
+    <link href="css/layout/header.css" rel="stylesheet" type="text/css"
+          charset="utf-8" />
+    <link href="css/layout/body.css" rel="stylesheet" type="text/css"
+          charset="utf-8" />
+    <link href="css/page/leftmenu/leftmenu.css" rel="stylesheet"
+          type="text/css" charset="utf-8" />
+    <link href="css/page/rightcontent/rightcontent.css" rel="stylesheet"
+          type="text/css" charset="utf-8" />
+    <link href="css/page/rightcontent/brandcontent.css" rel="stylesheet" type="text/css" charset="utf-8" />
+    <link href="css/tree/Roles.css" rel="stylesheet" />
+    <link href="css/jquery.treeview.css" rel="stylesheet" />
+    <link href="css/screen.css" rel="stylesheet" />
+    <link href="css/menu.css" rel="stylesheet" />
+    <link href="css/ligerui/ligerui-all.css" rel="stylesheet" type="text/css" />
+
+
+    <script src="js/jQuery/jquery-1.11.1.min.js"></script>
+    <script src="js/jQuery/jquery.cookie.js"></script>
+    <script src="js/jQuery/jquery.treeview.js"></script>
+
+    <script src="js/angular/angular.js"></script>
+
+    <!-- tree -->
+    <script src="js/ligerui/base.js"></script>
+    <script src="js/ligerui/ligerTree.js"></script>
+    <script src="js/ligerui/ligerResizable.js"></script>
+    <script src="js/ligerui/ligerComboBox.js"></script>
+
+    <script src="facade/jsonWsdl"></script>
+
+    <script src="js/Common.js"></script>
+    <script src="js/app.js"></script>
+    <script src="Controllers/IndexControllers.js"></script>
+    <script src="Controllers/partials/OrgControllers.js"></script>
+    <script src="Controllers/partials/RightControllers.js"></script>
+    <script src="Controllers/partials/UserControllers.js"></script>
+    <script src="Controllers/partials/RolesControllers.js"></script>
+    <script src="Controllers/partials/MenuControllers.js"></script>
+
+
+    <script type="text/javascript" language="javascript">
+        function leftMenu(object) {
+            var that = $(object),
+            objp = $(that).next(),
+            IsShow = $(objp).attr("IsShow");
+            if (IsShow == "ture") {
+                $(objp).hide();
+                $(objp).attr("IsShow", "false")
+
+            } else {
+                $(objp).show();
+                $(objp).attr("IsShow", "ture")
+            }
+        }
+//
+    </script>
+</head>
+<body>
+    <div id="mx-header">
+        <div id="mx-header-logo-wrapper">
+            <span style="float: left;">
+                <a id="mx-header-logo" class="inlb" href="/" style="margin-left: 18px;">
+                    <img src="images/logo.png" alt="尚品OCS系统" />
+                </a>
+            </span><span style="float: right; padding: 20px 20px 0 0;">
+                <a href="../Login/Login.htm">
+                    退出系统
+                </a>
+            </span>
+        </div>
+        <div id="mx-header-nav-wrapper">
+            <ul id="mx-header-nav" class="clr">
+                <li class="cur"><a href="/Shangpin/Brand/AIIBrandsSelect.html">CMS > 权限管理 > 用户管理 </a> </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <ul id="mx-leftmenu" dropzone="">
+        <li class="first cur">
+            <a onclick="leftMenu(this)" style="cursor:pointer">用户管理{{a}}</a>
+            <p style="display:block;" isshow="ture">
+                <a href="#/UserManger">用户管理</a>
+                <a href="#/RolesManger">角色管理</a>
+            </p>
+        </li>
+        <li class="first cur" style="margin-top:1px;">
+            <a onclick="leftMenu(this)" style="cursor:pointer">权限管理</a>
+            <p style="display:block;" isshow="ture">
+                <a href="#/OrgManger">组织结构</a>
+                <a href="#/resourceManager">权限管理</a>
+            </p>
+        </li>
+        <li class="first cur" style="margin-top:1px;">
+            <a onclick="leftMenu(this)" style="cursor:pointer">菜单管理</a>
+            <p style="display:block;" isshow="ture">
+                <a href="#/menuManager">菜单管理</a>
+            </p>
+        </li>
+    </ul>
+    <div ng-view style="position: relative; margin-left: 195px;">欢迎登陆，请点击左边菜单选择功能</div>
+</body>
+</html>

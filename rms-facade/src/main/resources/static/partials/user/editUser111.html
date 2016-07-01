@@ -1,0 +1,180 @@
+﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：用户添加</span><span class="r"><a target="_blank" title=""
+                                                                                             href="">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">用户编辑 <a class="combo_btn" href="#/userManager">用户列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <div class="c-node">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th class="txtLeft">
+                                        <div>用户基本信息
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody title="tab01">
+                                <tr>
+                                    <td>
+                                        <form method="post" ng-submit="editUser()">
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>用户编号：<em>*</em></dt>
+                                                    <dd><input type="text" readonly="readonly" ng-model="user.userCode" required class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>用户名称：<em>*</em></dt>
+                                                    <dd><input type="text" required ng-model="user.username" class="txt">
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>用户姓名：<em>*</em></dt>
+                                                    <dd><input type="text" required ng-model="user.realName" class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>密码重置：</dt>
+                                                    <dd>
+                                                        <a status="false" id="resetpwd" href="javascript:void(0)" class="combo_btn action-button">输入新密码</a>
+                                                        <input id="resetpwdinput" style="display: none" type="text" disabled="disabled" required="required" ng-model="user.password" class="txt">
+                                                        <script type="text/javascript">
+                                                            $(document).ready(
+                                                                    $("#resetpwd").click(function(){
+                                                                        var s = $(this).attr("status")
+                                                                        if(s == "true"){
+                                                                            $("#resetpwdinput").hide().attr("disabled",true)
+                                                                            $(this).attr("status","false").html("输入新密码")
+                                                                        }else{
+                                                                            $("#resetpwdinput").val(null).show().attr("disabled",false)
+                                                                            $(this).attr("status","true").html("取消新密码")
+                                                                        }
+                                                                    })
+                                                            );
+                                                        </script>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>性别：<em>*</em></dt>
+                                                    <dd>
+                                                        <label><input type="radio" ng-model="user.gender.name" value="MALE">男</label>
+                                                        <label class="mgleft"><input type="radio" ng-model="user.gender.name" value="FEMALE">女</label>
+                                                    </dd>
+                                                </dl>
+
+                                                <dl class="clr">
+                                                    <dt>手机：</dt>
+                                                    <dd><input id="mobile" type="text" class="txt" ng-model="user.mobile" onblur="checkMobile()" ></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>座机：</dt>
+                                                    <dd><input id="telephone" type="text" class="txt" ng-model="user.telephone" onblur="checkTelephone()"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>邮箱：</dt>
+                                                    <dd><input type="email" class="txt" ng-model="user.email"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>生日：</dt>
+                                                    <dd><input type="date" class="txt" ng-model="user.birth"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>部门：<em>*</em></dt>
+                                                    <dd>
+
+                                                        <!-- 菜单树 -->
+                                                        <div class="combo">
+                                                            <a style="width:160px;" alt="请选择部门" href="javascript:void(0);" class="combo_text" title="请选择部门">{{user.organizationName}}</a>
+                                                            <input type="hidden" name="pid" id="pid"/>
+                                                            <span class="arrow"></span>
+
+                                                            <div class="popup popup_0" index="0" style="display: none;">
+                                                                <div class="popup_wrap">
+                                                                    <div style="height:auto;" id="treeContainer_edituser" class="popuplist">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- 菜单树结束 -->
+
+                                                        <!--<select ng-model="user.organizationId"-->
+                                                                <!--ng-options="org.id as org.name for org in organizations">-->
+                                                            <!--<option value="">请选择</option>-->
+                                                        <!--</select>-->
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>办公区：<em>*</em></dt>
+                                                    <dd>
+                                                        <select ng-model="user.workPlace">
+                                                            <option value="">请选择</option>
+                                                            <!--<option value="北京朗园">北京朗园</option>-->
+                                                            <option value="北京懋隆">北京懋隆</option>
+                                                            <option value="北京马驹桥">北京马驹桥</option>
+                                                            <option value="上海">上海</option>
+                                                            <option value="深圳">深圳</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                                <!--<dl class="clr">-->
+                                                    <!--<dt>办公区：<em>*</em></dt>-->
+                                                    <!--<dd>-->
+                                                        <!--<input type="radio" value="北京" ng-model="user.workPlace"><label>北京区</label>-->
+                                                        <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                                        <!--<input type="radio" value="上海" ng-model="user.workPlace"><label>上海区</label>-->
+                                                    <!--</dd>-->
+                                                <!--</dl>-->
+                                                <dl class="clr">
+                                                    <dt>职位类别：<em>*</em></dt>
+                                                    <dd>
+                                                        <select ng-model="user.jobLevel">
+                                                            <option value="">请选择</option>
+                                                            <option value="1">一级（CEO）</option>
+                                                            <option value="2">二级（总经理/VP）</option>
+                                                            <option value="3">三级（高级总监）</option>
+                                                            <option value="4">四级（总监）</option>
+                                                            <option value="5">五级（高级经理/主管）</option>
+                                                            <option value="6">六级（经理）</option>
+                                                            <option value="7">七级（正式职员）</option>
+                                                            <option value="8">八级（试用期职员）</option>
+                                                            <option value="9">九级（兼职/劳务外派）</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>
+                                                        直属领导:
+                                                    </dt>
+                                                    <dd>
+                                                        <select style="width: 300px; text-align: left" ui-select2 ng-model="user.directLeaderId" data-placeholder="请选择直属领导">
+                                                            <option value=""></option>
+                                                            <option ng-repeat="user in allUsers" value="{{user.id}}">{{user.realName}} -- {{user.username}} ({{user.organizationName}})</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+
+                                            <div class="form_submit">
+                                                <input type="submit" value="确 定" class="button submit"> <input type="button"
+                                                                                                               value="取  消"
+                                                                                                               class="button" ng-click="back()" >
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

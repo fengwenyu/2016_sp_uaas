@@ -1,0 +1,42 @@
+<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：角色赋权</span><span class="r"><a href="" title="" target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title" style="padding:10px 0 0;">当前角色：{{role.code}}</h2>
+
+            <h3 class="main_title2">权限列表</h3>
+
+            <div class="c-node" style="margin-top:5px;">
+                <ul class="tree_list" >
+                    <!--<li>-->
+                        <!--<span>&nbsp;</span>{{subsys.name}}-->
+                        <!--<p><a href="javascript:void(0);" class="combo_btn2" style="width:40px;" ng-repeat="function in subsys.functions" ng-class="{combo_btn2_selected: function.granted}">{{function.name}}</a></p>-->
+                        <!--<ul ng-if="subsys.hasChildren">-->
+                            <li class="expand" ng-repeat="node in subsystems" ng-include="'permissionNode.tmpl'"></li>
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li class="expand" ng-repeat="node in subsys.children" ng-include="'permissionNode.tmpl'"></li>-->
+                </ul>
+            </div>
+
+            <div class="form_submit" style="padding-bottom:20px;">
+                <input type="submit" class="button submit" ng-click="bind()" value="提 交" /> <input type="button" onclick="history.go(-1)" class="button" value="关 闭" />
+            </div>
+
+            <script type="text/ng-template" id="permissionNode.tmpl">
+                <div>
+                    <span ng-class="{close: (node.hasChildren && !node.expanded), open: node.expanded}" ng-click="toggleNode(node)">&nbsp;</span>{{node.name}}
+                    <p><a href="javascript:void(0);" class="combo_btn2" ng-repeat="function in node.functions" ng-click="grantFunction(function)" ng-class="{combo_btn2_selected: function.granted}">{{function.name}}</a></p>
+
+                    <ul ng-if="node.hasChildren">
+                        <li class="expand" ng-repeat="node in node.children" ng-include="'permissionNode.tmpl'"></li>
+                    </ul>
+                    <div style="clear: both"></div>
+                </div>
+            </script>
+
+        </div>
+    </div>
+</div>

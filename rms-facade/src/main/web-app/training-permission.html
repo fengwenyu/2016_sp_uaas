@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="login">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="facade/jsonWsdl"></script>
+
+    <script type="text/javascript" src="js/controllers/login.js"></script>
+</head>
+<body ng-controller="trainingPermission">
+<a href="#">测试注销</a>
+
+<form name="testPermission" ng-submit="isPermitted()">
+
+    <p style="color: red;"><b> 测试地址（Ajax）:http://xxx.xxx.xxx.xxx:8080/uaas/facade/json/com.shangpin.uaas.api/Authorization/isPermitted</b></p>
+    <br>
+
+    Token: <input type="text" readonly="readonly" ng-model="token"><br>
+    URI:<input type="text" ng-model="permittedUri"><br>
+    返回值： <input type="text" ng-model="uriReturnValue"><br>
+    <input type="submit" value="测试">
+</form>
+
+<hr>
+
+<form name="testMultiPermission" method="post">
+    Token: <input type="text" readonly="readonly" ng-model="token"><br>
+    URI:<textarea> </textarea><br>
+    返回值： <textarea> </textarea><br>
+    <input type="submit" value="测试">
+</form>
+
+<hr>
+<form name="testMultiPermission" method="post">
+    Token: <input type="text" readonly="readonly" ng-model="token"><br>
+    项目名称: <input type="text" placeholder="项目名称"><br>
+    <input type="submit" value="测试获取菜单">
+</form>
+
+</body>
+</html>

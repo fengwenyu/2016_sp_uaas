@@ -1,0 +1,77 @@
+<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：角色赋权</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title" style="padding:10px 0 0;">资源名称：{{resourceNode.name}}</h2>
+
+            <h3 class="main_title2">角色列表</h3>
+
+            <div class="c-node" style="margin-top:5px;">
+                <div class="S_form" style="width:49%; display:inline-block; vertical-align:top;">
+                    <h4 class="main_title3">选择角色</h4>
+
+                    <div style="width:100%; vertical-align:top; height:207px; overflow:hidden; overflow-y:auto; border:1px solid #ccc;">
+                        <table class="top-table row-fade-out" style="border:none;">
+                            <thead>
+                            <tr>
+                                <th style="width:40%;">角色名称</th>
+                                <th style="width:40%;">创建时间</th>
+                                <th style="width:20%;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="role in notSelectedRoles">
+                                <td>{{role.code}}</td>
+                                <td>{{role.createdTime}}</td>
+                                <td>
+                                    <a href="javascript:void(0);" class="combo_btn2" style="width:40px;"
+                                       ng-click="addRoleWithUser(role)">赋权</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="S_form" style="width:49%; display:inline-block; vertical-align:top; margin-left:10px;">
+                    <h4 class="main_title3">已选角色</h4>
+
+                    <div style="width:100%; vertical-align:top; height:207px; overflow:hidden; overflow-y:auto; border:1px solid #ccc;">
+                        <table class="top-table row-fade-out" style="border:none;">
+                            <thead>
+                            <tr>
+                                <th style="width:40%;">角色名称</th>
+                                <th style="width:40%;">创建时间</th>
+                                <th style="width:20%;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="role in assignedRoles">
+                                <td>{{role.code}}</td>
+                                <td>{{role.createdTime}}</td>
+                                <td>
+                                    <a href="javascript:void(0);" class="combo_btn2" style="width:40px;"
+                                       ng-click="removeRoleWithUser(role)">取消</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form_submit" style="padding-bottom:20px;">
+                <input type="button" class="button submit" ng-click="bindingRole()" value="提 交" /> <input type="button"  class="button" value="关 闭" onclick="history.go(-1)" />
+            </div>
+        </div>
+    </div>
+</div>

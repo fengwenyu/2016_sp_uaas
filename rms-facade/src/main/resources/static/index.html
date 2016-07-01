@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html ng-app="app" xmlns:XslExtInvokeProxy="urn:XslExtInvokeProxy" xmlns:XslExtCommonUtil="urn:XslExtCommonUtil" xmlns:BeziKeyValue="urn:BeziKeyValue">
+-->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <link rel="stylesheet" href="css/new-version/site_common.css" type="text/css"/>
+    <link rel="stylesheet" href="css/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/select2/select2.css">
+
+    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">-->
+    <title></title>
+    <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/select2/select2.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
+
+
+   <!--  <script type="text/javascript" src="facade/jsonWsdl"></script> -->
+    <!--<script type="text/javascript" src="js/service.js"></script>-->
+    <script type="text/javascript" src="js/facadeservice.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/new-version/cms_common.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/indexController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/menuController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/userController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/groupController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/rolesController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/organizationController.js"></script>
+    <script type="text/javascript" src="js/controllers/partials/permissionController.js"></script>
+
+</head>
+<body ng-controller="indexCtrl">
+
+<div class="wrapper" ng-include="'partials/commons/top-menu.html'"></div>
+<div class="wrapper100">
+    <div class="bottomhr l"></div>
+    <h1 class="titbj l"></h1>
+</div>
+
+<div class="wrapper">
+    <div class="wrapper101">
+        <div class="contnaier l">
+            <div class="contentbar l">
+                <div class="sidebar l" ng-include="'partials/commons/left-menu.html'"></div>
+            </div>
+            <div ng-view></div>
+            <!--<div ng-include="content.main"></div>-->
+        </div>
+    </div>
+</div>
+
+<ng-include src="'templates/pagination.html'"></ng-include>
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：用户组添加</span><span class="r"><a target="_blank" title=""
+                                                                                             href="">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">用户组添加 <a class="combo_btn" href="#/groupManager">用户组列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <div class="c-node">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th class="txtLeft">
+                                        <div>用户组信息
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody title="tab01">
+                                <tr>
+                                    <td>
+                                        <form  method="post" ng-submit="addGroup()">
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>用户组名称：<em>*</em></dt>
+                                                    <dd><input type="text"ng-model="group.name" required class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>状态：<em>*</em></dt>
+
+                                                    <dd>
+                                                        <input name="group.isEnabled" required type="radio"
+                                                               value="true" ng-model="group.isEnabled"><label>启用</label>
+                                                        &nbsp;
+                                                        <input name="group.isEnabled" required
+                                                               type="radio" value="false" ng-model="group.isEnabled"><label>停用</label></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>描述：&nbsp;</dt>
+                                                    <dd>
+                                                        <textarea maxlength="200" ng-model="group.description"></textarea>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+
+                                            <div class="form_submit">
+                                                <input type="submit" value="确 定" class="button submit"> <input type="button"
+                                                                                                               value="取  消"
+                                                                                                               class="button"  onclick="history.go(-1)">
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

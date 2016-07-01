@@ -1,0 +1,38 @@
+﻿﻿
+<div id="mx-body" ng-controller="EditRolesControllers" ng-init="modifyRole()">
+    <!--内容--->
+    <span style="font-size:17px;"> &nbsp;&nbsp;&nbsp;修改角色：</span>
+    <div class="mx-brandcontent-msgbox">
+        <form method="post">
+            <dl>
+                <dt>
+                    角色名称:
+                </dt>
+                <dd>
+                    <input id="Text14" maxlength="11" name="TemplateNO" ng-model="result.code"/><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    角色描述:
+                </dt>
+                <dd>
+                    <textarea style="height:100px;width:200px;" ng-model="result.description"></textarea>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="submit" value="保存" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" ng-click="submitEditRole()"/>
+                    <input type="button" onclick="javascript:history.go(-1)" value="取消" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;" />
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+
+</div>

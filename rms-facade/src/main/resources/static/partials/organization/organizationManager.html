@@ -1,0 +1,50 @@
+﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：组织结构</span><span class="r"><a href="" title=""
+                                                                                             target="_blank">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 class="main_title">部门列表 <a href="#/addOrganization" class="combo_btn">添加部门</a></h2>
+        </div>
+
+        <div class="c-node" style="margin-top:5px;">
+            <ul class="tree_list" ng-repeat="subsys in subsystems">
+                <li class="extract" style="position: static">
+                    <span>&nbsp;</span><span style="display:inline-block;width:200px">{{subsys.name}}</span>
+                    <!--<span style="margin-left: 170px;">&nbsp;</span>-->
+                    <span style="display:inline-block;width:200px">负责人</span>
+                    <p><a href="javascript:void(0);" class="combo_btn2" style="width:40px;" ng-repeat="permission in subsys.permissions" ng-class="{combo_btn2_selected: permission.granted}">{{permission.resourceName}}</a></p>
+                </li>
+                <li class="expand extract" ng-repeat="node in subsys.children" style="position: static" ng-include="'permissionNode.tmpl'">
+                </li>
+            </ul>
+        </div>
+
+        <script type="text/ng-template" id="permissionNode.tmpl">
+            <div>
+                <span ng-class="{close: (node.hasChildren && !node.expanded), open: node.expanded}" ng-click="toggleNode(node)">&nbsp;</span>
+                <span style="display:inline-block;width:100px" ng-if="node.name.length > 8" title="{{node.name}}">{{node.name.substring(0,8)}}...</span>
+                <span style="display:inline-block;width:100px" ng-if="node.name.length <= 8">{{node.name}}</span>
+                <!--<span style="margin-right: 150px;">&nbsp;</span>-->
+                <span style="display:inline-block;left:24%;position: absolute;width: 150px" ng-if="node.leader[0].realName.length > 8" title="{{node.leader[0].realName}}">{{node.leader[0].realName.substring(0,8)}}...</span>
+                <span style="display:inline-block;left:24%;position: absolute;width: 150px" ng-if="node.leader[0].realName.length <= 8">{{node.leader[0].realName}}</span>
+                <p>
+                    <a href="javascript:void(0);" class="combo_btn2" style="width:60px;" ng-repeat="permission in node.permissions" ng-class="{combo_btn2_selected: permission.granted}" ng-click="operation(permission)">{{permission.resourceName}}</a>
+                </p>
+
+                <!--<a href="javascript:void(0);" class="combo_btn2" style="margin-left: 5px;width:40px;" ng-class="{combo_btn2_selected: permission.granted}" ng-click="">编辑</a>-->
+                <!--<a href="javascript:void(0);" class="combo_btn2" style="margin-left: 5px; width:40px;" ng-class="{combo_btn2_selected: permission.granted}" ng-click="">移动</a>-->
+                <!--<a href="javascript:void(0);" class="combo_btn2" style="margin-left: 5px; width:40px;" ng-class="{combo_btn2_selected: permission.granted}" ng-click="">删除</a>-->
+                <!--<a href="javascript:void(0);" class="combo_btn2" style="margin-left: 5px; width:60px;" ng-class="{combo_btn2_selected: permission.granted}" ng-click="">用户管理</a>-->
+                <ul ng-if="node.hasChildren">
+                    <li class="expand extract" ng-repeat="node in node.children" ng-include="'permissionNode.tmpl'"></li>
+                </ul>
+                <div style="clear: both"></div>
+            </div>
+        </script>
+
+    </div>
+
+    </div>
+</div>

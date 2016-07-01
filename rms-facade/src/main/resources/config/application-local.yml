@@ -1,0 +1,21 @@
+shangpin: 
+  uaas: 
+    dataSource: 
+      hikari: 
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: root
+        jdbcUrl: jdbc:mysql://localhost:3306/uaas?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+        autoCommit: true
+        #连接超时5s
+        connectionTimeout:  6000
+        #空闲超时时间（10分钟）
+        idleTimeout:  600000
+        #最大存活时间 （最好设置）默认30分钟
+        maxLifetime: 1800000
+        #最大连接池大小
+        maximumPoolSize: 200
+        minimumIdle: 5
+        cachePrepStmts: true
+        prepStmtCacheSize:  300
+        prepStmtCacheSqlLimit:  2048

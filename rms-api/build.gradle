@@ -1,0 +1,9 @@
+dependencies {
+	testCompile(
+		"org.springframework:spring-tx",
+		"org.springframework:spring-jdbc",
+		"org.springframework:spring-aop",
+		"org.springframework:spring-aspects",
+		"org.springframework:spring-context-support",
+	)
+}

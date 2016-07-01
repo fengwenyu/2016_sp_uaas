@@ -1,0 +1,45 @@
+﻿﻿﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：用户上传</span><span class="r"><a target="_blank" title="" href="">[帮助]</a></span></h2>
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">用户上传 <a class="combo_btn" href="#/userManager">功能列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <iframe style="display: none" onload="onIFrameLoaded(this);" name="fileUpload" id="fileUpload"></iframe>
+                        <form method="post" name="user_form" target="fileUpload" action="user/importUserWithRole" enctype="multipart/form-data">
+                            <div class="c-node">
+                                <table class="top-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="txtLeft"><div>功能信息 <a class="closeBtn" data-title="tab01" href="javascript:void(0);"></a></div></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody title="tab01">
+                                    <tr>
+                                        <td>
+
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>文件名称：<em>*</em></dt>
+                                                    <dd><input required type="file" name="userRole" class="file"> <a href="partials/user/userWithRole.xlsx">下载模板文件</a></dd>
+                                                </dl>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form_submit">
+                                    <input type="submit" value="确 定" class="button submit"> <input type="button" value="取  消" ng-click="back()" class="button">
+                                </div>
+                            </div>
+                        </form>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+﻿﻿<div id="mx-body" ng-controller="AddRolesControllers">
+    <!--内容--->
+    <span style="font-size:17px;"> &nbsp;&nbsp;&nbsp;添加角色：</span>
+
+    <div class="mx-brandcontent-msgbox">
+        <form method="post" ng-submit="addRole()">
+            <dl>
+                <dt>
+                    角色名称:
+                </dt>
+                <dd>
+                    <input id="Text14" maxlength="20" name="TemplateNO" type="text" required ng-model="txt_RoleCode"/><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    状态:
+                </dt>
+                <dd>
+                    <input id="TemplatePath" name="state" type="radio" value="true" />开启
+                    <input id="Radio1" name="state" type="radio" value="false" checked/>禁用
+                    <span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    角色描述:
+                </dt>
+                <dd>
+                    <textarea style="height:100px;width:200px;"maxlength="200" ng-model="txt_Role_Desc"></textarea>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="submit" value="保存" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;"/>
+                    <input type="button" onclick="javascript:history.go(-1)" value="取消" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;"/>
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+
+</div>

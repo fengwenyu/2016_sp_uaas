@@ -1,0 +1,110 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>CSS下拉菜单演示</title>
+    <style type="text/css">
+        ul {
+            list-style-type: none;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        #nav li ul li {
+            display: none;
+        }
+
+        .evl {
+            background: #0094ff;
+        }
+    </style>
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script type=text/javascript>
+        function ShowList(obj) {
+            var v = jQuery(obj).parent();
+            var IsShow = v.attr("isshow");
+            if (IsShow == "false") {
+                v.next().find("li").css("display", "block");
+                v.attr("isshow", "ture")
+            }
+            else {
+                v.next().find("li").css("display", "none");
+                v.attr("isshow", "false")
+            }
+        }
+    </script>
+</head>
+<body>
+    <ul id="nav" style="width:100%">
+        <li style="width:100%">
+            <div style="width:100%" class="evl"><a href="#" onclick="ShowList(this)" isshow="false">尚品CMS</a></div>
+            <ul>
+                <li><a href="#">产品一</a></li>
+                <li><a href="#">产品一</a></li>
+                <li><a href="#">产品一</a></li>
+                <li><a href="#">产品一</a></li>
+                <li><a href="#">产品一</a></li>
+                <li><a href="#">产品一</a></li>
+            </ul>
+        </li>
+        <li>
+            <div style="width:100%" class="evl">
+                <a href="#" onclick="ShowList(this)" isshow="false">奥莱CMS</a>
+            </div>
+            <ul>
+                <li><a href="#">服务二</a></li>
+                <li><a href="#">服务二</a></li>
+                <li><a href="#">服务二</a></li>
+                <li><a href="#">服务二</a></li>
+                <li><a href="#">服务二</a></li>
+                <li><a href="#">服务二</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" onclick="ShowList(this)" isshow="false">市场运营</a>
+            <ul>
+                <li><a href="#">案例三</a></li>
+                <li><a href="#">案例</a></li>
+                <li><a href="#">案例三</a></li>
+                <li><a href="#">案例三</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" onclick="ShowList(this)" isshow="false">测试数据</a>
+            <ul>
+                <li><a href="#">我们四</a></li>
+                <li><a href="#">我们四</a></li>
+                <li><a href="#">我们四</a></li>
+                <li><a href="#">我们四111</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" onclick="ShowList(this)" isshow="false">测试数据</a>
+            <ul>
+                <li><a href="#">演示</a></li>
+                <li><a href="#">演示</a></li>
+                <li><a href="#">演示</a></li>
+                <li><a href="#">演示演示演示</a></li>
+                <li><a href="#">演示演示演示</a></li>
+                <li><a href="#">演示演示</a></li>
+                <li><a href="#">演示演示演示</a></li>
+                <li><a href="#">演示演示演示演示演示</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" onclick="ShowList(this)" isshow="false">测试数据</a>
+            <ul>
+                <li><a href="#">联系联系联系联系联系</a></li>
+                <li><a href="#">联系联系联系</a></li>
+                <li><a href="#">联系</a></li>
+                <li><a href="#">联系联系</a></li>
+                <li><a href="#">联系联系</a></li>
+                <li><a href="#">联系联系联系</a></li>
+                <li><a href="#">联系联系联系</a></li>
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>

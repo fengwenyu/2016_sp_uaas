@@ -1,0 +1,36 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html ng-app="LoginApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/login.css" rel="stylesheet" />
+    <script src="js/angular/angular.min.js"></script>
+    <script src="Controllers/LoginControllers.js"></script>
+
+    <title>CMS -权限系统</title>
+</head>
+<body>
+    <form name="LoginFrom" ng-controller="LoginControllerds">
+        <h1>CMS -权限系统</h1>
+        <div class="lgcontenbar">
+            <table>
+                <tr><td class="greyWord">用户名/USERNAME:</td></tr>
+                <tr><td><input class="input" name="UserName" type="text" ng-model="UserName" required=required /></td></tr>
+
+                <tr><td class="greyWord">密码/PASSWORD:</td></tr>
+                <tr><td><input class="input" name="Password" ng-model="PassWord" type="password" required=required /></td></tr>
+
+                <!--<tr><td class="greyWord"><input type="checkbox" value="0" name="RemberOCSUser" id="RemberOCSUser" /><label for="RemberOCSUser">记住用户名</label></td></tr>-->
+                <tr>
+                    <td class="greyWord" align="center">
+
+                        <input type="button" ng-click="login()" value="登录" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" ng-click="Rest()" value="重置" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

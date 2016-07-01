@@ -1,0 +1,8 @@
+
+    <div class="title_bg">用户</div>
+    <ul id="menu" ng-controller="leftMenuCtrl">
+        <li ng-repeat="menu in menus">
+            <a href="{{menu.href}}" title="{{menu.title}}" ng-class="{'meuncut':isActive(menu)}">{{menu.content}}</a>
+        </li>
+    </ul>
+

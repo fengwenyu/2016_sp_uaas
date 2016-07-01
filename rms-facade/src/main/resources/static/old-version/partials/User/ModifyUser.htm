@@ -1,0 +1,142 @@
+﻿<div id="mx-body">
+    <!--内容--->
+    <span style="font-size:17px;"> &nbsp;&nbsp;&nbsp;修改用户：</span>
+
+    <div class="mx-brandcontent-msgbox">
+        <form method="post" ng-submit="modifyUser()">
+            <div id="errorInfo" style="margin-left:20px; color: red;"></div>
+            <dl>
+                <dt>
+                    用户编号:
+                </dt>
+                <dd>
+                    <input id="userNo" maxlength="20" readonly="readonly" ng-blur="checkModifyUserNo()" required
+                           type="text" ng-model="result.userCode"/><span
+                        style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    用户名称:
+                </dt>
+                <dd>
+                    <input id="userName" ng-blur="checkModifyUserName()" required type="text"
+                           ng-model="result.username"/><span style="color: coral; margin-left: 5px;">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>用户姓名:</dt>
+                <dd>
+                    <input id="Text1" type="text" required ng-model="result.realName"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    性别:
+                </dt>
+                <dd>
+                    <input id="genderMale" name="gender" type="radio" value="MALE"/>男
+                    <input id="genderFeMale" name="gender" type="radio" value="FEMALE"/>女
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    手机:
+                </dt>
+                <dd>
+                    <input id="mobile" maxlength="20" ng-model="result.mobile" onblur="checkMobile()"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    座机:
+                </dt>
+                <dd>
+                    <input id="telephone" maxlength="20" type="text" ng-model="result.telephone"
+                           onblur="checkTelephone()"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    邮箱:
+                </dt>
+                <dd>
+                    <input id="Text4" maxlength="100" ng-model="result.email" type="email"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    生日:
+                </dt>
+                <dd>
+                    <input id="Text5" ng-model="result.birth" type="date"/>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    部门:
+                </dt>
+                <dd>
+                <dd>
+                    <div id="div_part"></div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    办公区:
+                </dt>
+                <dd>
+                    <input id="workPlaceBeijing" name="workPlace" value="北京" type="radio"/>北京区
+                    <input id="workPlaceShanghai" name="workPlace" value="上海" type="radio"/>上海区
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    职务级别:
+                </dt>
+                <dd>
+                    <select id="jobLevel">
+                        <option selected="selected" value="0">请选择</option>
+                        <option value="1">一级</option>
+                        <option value="2">二级</option>
+                        <option value="3">三级</option>
+                        <option value="4">四级</option>
+                        <option value="5">五级</option>
+                        <option value="6">六级</option>
+                        <option value="7">七级</option>
+                        <option value="8">八级</option>
+                        <option value="9">九级</option>
+                    </select>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    直属领导:
+                </dt>
+                <dd>
+                    <div style="position:relative;">
+                        <span style="margin-left:100px;width:18px;overflow:hidden;">
+                        <select id="leaders" style="width:130px;margin-left:-100px;"
+                                onchange="this.parentNode.nextSibling.value=this.options[this.selectedIndex].text;">
+                            <option value="">请输入...</option>
+                        </select>
+                        </span>
+                        <input id="leaderName" type="text" style="width:100px;position:absolute;left:0px;"
+                               onchange="selectName()" value="请输入姓名">
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>&nbsp;&nbsp;</dt>
+                <dd>
+                    <input type="submit" value="保存" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;"/>
+                    <input type="button" onclick="javascript:history.go(-1)" value="取消" style="width: 90px; height: 27px; background-color: #4D90FE; border: 1px solid #3079ED;
+                            color: #FFFFFF; cursor: pointer;"
+                            />
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+</div>

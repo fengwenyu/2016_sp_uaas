@@ -1,0 +1,95 @@
+apply plugin:"spring-boot"
+apply plugin: 'java'
+apply plugin: 'eclipse'
+version = '1.0'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+allprojects {
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
+}
+configurations {
+	compile.exclude module: "spring-boot-starter-logging"
+	compile.exclude module: "spring-boot-starter-tomcat"
+}
+repositories {
+	mavenLocal()
+ 	mavenCentral()
+    maven {
+        //url "http://192.168.9.109:8888/nexus/content/groups/public/"
+        url "http://192.168.1.212:8081/nexus/content/groups/public/"
+    }
+}
+
+dependencies {
+	compile project(":rms-api")
+	//testCompile("org.springframework.boot:spring-boot-devtools")
+	/**compile(
+	     "ch.qos.logback:logback-core:${logback}",
+	     "ch.qos.logback:logback-classic:${logback}",
+	     "org.slf4j:slf4j-api:${log4j}",
+	     "org.slf4j:jcl-over-slf4j:${log4j}",
+	    )**/
+	compile(
+			"org.apache.commons:commons-lang3",
+			"redis.clients:jedis",
+			"commons-collections:commons-collections",
+			"org.springframework.boot:spring-boot",
+			"org.springframework:spring-context-support",
+			"org.springframework.boot:spring-boot-autoconfigure",
+			"org.springframework.boot:spring-boot-configuration-processor",
+			"org.springframework.boot:spring-boot-starter-redis",
+			"org.springframework.boot:spring-boot-starter-cache",
+			"com.google.code.gson:gson",
+			"com.zaxxer:HikariCP",
+			"mysql:mysql-connector-java",
+			)
+	//compile("org.springframework.data:spring-data-jpa")
+	/**compile("org.springframework.boot:spring-boot-starter-data-jpa"){
+		exclude group:'org.apache.tomcat'
+		exclude module:'spring-boot-starter-logging'
+		exclude group:"org.hibernate"
+	}**/
+	compile("org.springframework.boot:spring-boot-starter-web"){
+    	exclude group:"org.apache.tomcat.embed"
+		exclude module:'spring-boot-starter-logging'
+    	exclude group:"org.apache.tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty"){
+    	exclude group:"org.eclipse.jetty.websocket"
+    }
+    /** mybatis **/
+	compile(
+		"org.springframework:spring-tx",
+		"org.springframework:spring-jdbc",
+		"org.springframework:spring-aop",
+		"org.springframework:spring-aspects",
+		"org.springframework:spring-context-support",
+		"org.mybatis:mybatis",
+		//可继承一些类结构
+		"tk.mybatis:mapper",
+		"org.mybatis:mybatis-spring",
+		"com.github.pagehelper:pagehelper",
+		//"org.mybatis.spring.boot:mybatis-spring-boot-starter",
+	)
+	compile(
+	        "org.codehaus.jackson:jackson-mapper-asl",
+			"io.netty:netty",
+			//"com.google.code.simple-spring-memcached:spring-cache",
+			//"com.google.code.simple-spring-memcached:spymemcached-provider",
+            "org.apache.poi:poi-ooxml:3.7",
+			"org.javassist:javassist",
+			"net.spy:spymemcached",
+			"commons-beanutils:commons-beanutils",
+			"com.shangpin.common:commons-util",
+	)
+	/**compile("com.netflix.curator:curator-framework:1.3.3"){
+		exclude group: "org.slf4j"
+	}**/
+}
+springBoot{
+    mainClass = "com.shangpin.uaas.UassBootApplication"
+}
+//bootRun的时候自动刷新静态资源
+bootRun {
+	addResources = true
+}

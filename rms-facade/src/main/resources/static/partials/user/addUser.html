@@ -1,0 +1,402 @@
+﻿<div class="mainbar">
+    <div class="main r">
+        <h2 class="maintit l"><span class="l maintitbj">您所在的位置：用户添加</span><span class="r"><a target="_blank" title=""
+                                                                                             href="">[帮助]</a></span>
+        </h2>
+
+        <div class="gyslistbotmbar l">
+            <h2 style="padding:10px 0 0;" class="main_title">用户添加 <a class="combo_btn" href="#/userManager">用户列表</a></h2>
+
+            <div class="main_tabs">
+                <dl>
+                    <dd class="tabsCell" style="display: block;">
+                        <div class="c-node">
+                            <form  method="post" ng-submit="addUser()">
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th class="txtLeft">
+                                        <div>用户基本信息
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody title="tab01">
+                                <tr>
+                                    <td>
+                                        <div class="S_form">
+                                            <dl class="clr">
+                                                <dt>员工编号：<em>*</em></dt>
+                                                <dd><input type="text"ng-model="user.userCode" required class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
+                                                <dt>员工姓名：<em>*</em></dt>
+                                                <dd><input type="text" required ng-model="user.realName" class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt>用户名：<em>*</em></dt>
+                                                <dd><input type="text" required ng-model="user.username" class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
+                                                <dt>性别：<em>*</em></dt>
+                                                <dd>
+                                                    <input type="radio"name="gender" value="MALE" checked="checked" ng-model="user.gender">
+                                                    <label>男</label>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" name="gender" value="FEMALE" ng-model="user.gender"><label>女</label>
+                                                </dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt>邮箱：</dt>
+                                                <dd><input type="email" id="email" class="txt" ng-model="user.email"></dd>
+                                                <dt style="margin-left: 140px;">登录密码：<em>*</em></dt>
+                                                <dd>
+                                                    <input id="userPassword" required readonly="readonly" type="text" ng-model="user.password"
+                                                           class="txt" ng-click="randomPassword()"/>
+                                                </dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt>手机号：</dt>
+                                                <dd><input  type="text" class="txt" id="mobile" ng-model="user.mobile" /></dd>
+                                                <dt style="margin-left: 140px;">分机号：</dt>
+                                                <dd><input id="telephone" type="text" class="txt" ng-model="user.telephone"></dd>
+                                            </dl>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="top-table">
+                                <thead>
+                                <tr>
+                                    <th class="txtLeft">
+                                        <div>员工入职信息
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody title="tab01">
+                                <tr>
+                                    <td>
+                                        <div class="S_form">
+                                            <dl class="clr">
+                                                <dt style="width: 140px;">所在部门：<em>*</em></dt>
+                                                <dd>
+                                                    <div class="combo">
+                                                    <a style="width:160px;" alt="请选择部门" href="javascript:void(0);" class="combo_text" title="请选择部门">请选择部门</a>
+                                                    <input type="hidden" name="pid" id="pid"/>
+                                                    <span class="arrow"></span>
+
+                                                    <div class="popup popup_0" index="0" style="display: none;">
+                                                        <div class="popup_wrap">
+                                                            <div style="height:auto;" id="treeContainer_adduser" class="popuplist">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    </div>
+                                                </dd>
+                                                <dt  style="margin-left: 130px; width: 140px;">职位：<em>*</em></dt>
+                                                <dd>
+                                                    <input type="text" ng-model="user.jobTitle" class="txt">
+                                                </dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt  style="width: 140px;">上级领导：</dt>
+                                                <dd>
+                                                    <select style="width: 300px; text-align: left" ui-select2 ng-model="user.directLeaderId" data-placeholder="请选择直属领导">
+                                                    <option value=""></option>
+                                                    <option ng-repeat="user in allUsers" value="{{user.id}}">{{user.realName}} -- {{user.username}} ({{user.organizationName}})</option>
+                                                    </select>
+                                                </dd>
+                                                <dt  style="margin-left: 30px; width: 140px;">办公区：<em>*</em></dt>
+                                                <dd>
+                                                    <select ng-model="user.workPlace">
+                                                    <option value="">请选择</option>
+                                                    <option value="北京懋隆">北京懋隆</option>
+                                                    <option value="北京马驹桥">北京马驹桥</option>
+                                                    <option value="上海">上海</option>
+                                                    <option value="深圳">深圳</option>
+                                                    </select>
+                                                </dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt style="width: 140px;">所属公司：</dt>
+                                                <dd>
+                                                    <select ng-model="user.company">
+                                                        <option value="">请选择</option>
+                                                        <option value="和诚华信">和诚华信</option>
+                                                        <option value="尚品百姿">尚品百姿</option>
+                                                        <option value="尚品亚洲">尚品亚洲</option>
+                                                        <option value="盈天讯">盈天讯</option>
+                                                    </select>
+                                                </dd>
+                                                <dt  style="margin-left: 260px;width: 140px;">入职日期：</dt>
+                                                <dd><input type="date" ng-model="user.entryDate" class="txt"></dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt style="width:140px;">担任本职位日期：</dt>
+                                                <dd><input type="date" ng-model="user.jobTitleDate" class="txt"></dd>
+                                                <dt  style="margin-left: 180px;">合同开始日期：</dt>
+                                                <dd><input type="date" ng-model="user.contractStartDate" class="txt"></dd>
+                                            </dl>
+
+                                            <dl class="clr">
+                                                <dt style="width: 140px;">试用期结束时间：</dt>
+                                                <dd><input type="date" ng-model="user.probationEndDate" class="txt"></dd>
+                                                <dt  style="margin-left: 140px; width: 140px;">转正时间：</dt>
+                                                <dd><input type="date" ng-model="user.positiveDate" class="txt"></dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt style="width: 140px;">第一次合同结束时间：</dt>
+                                                <dd><input type="date" ng-model="user.firstContractEndDate" class="txt"></dd>
+                                                <dt  style="margin-left: 140px;width: 140px;">第二次合同结束时间：</dt>
+                                                <dd><input type="date" ng-model="user.secondContractEndDate" class="txt"></dd>
+                                            </dl>
+                                            <dl class="clr">
+                                                <dt style="width: 140px;">入职时间：</dt>
+                                                <dd><input type="date" ng-model="user.turnoverDate" class="txt"></dd>
+                                                <dt  style="margin-left: 140px; width: 140px;">员工状态：<em>*</em></dt>
+                                                <dd>
+                                                    <select ng-model="user.employeeStatus">
+                                                        <option value="">请选择</option>
+                                                        <option value="正式员工">正式员工</option>
+                                                        <option value="实习">实习</option>
+                                                        <option value="劳务">劳务</option>
+                                                        <option value="派遣">派遣</option>
+                                                        <option value="外包">外包</option>
+                                                    </select>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                                <table class="top-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="txtLeft">
+                                            <div>员工个人信息
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody title="tab01">
+                                    <tr>
+                                        <td>
+                                            <div class="S_form">
+                                                <dl class="clr">
+                                                    <dt>身份标识：<em>*</em></dt>
+                                                    <dd>
+                                                        <select ng-model="user.identity">
+                                                            <option value="">请选择</option>
+                                                            <option value="身份证">身份证</option>
+                                                            <option value="港澳通行证">港澳通行证</option>
+                                                            <option value="护照">护照</option>
+                                                            <option value="台胞证">台胞证</option>
+                                                        </select>
+                                                    </dd>
+                                                    <dt style="margin-left: 262px;">身份号码：<em>*</em></dt>
+                                                    <dd><input type="text" required ng-model="user.identityNumber" class="txt"></dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>出生日期：</dt>
+                                                    <dd><input type="date" ng-model="user.birth" class="txt"></dd>
+                                                    <dt style="margin-left: 140px;">年龄：</dt>
+                                                    <dd><input type="text" ng-model="user.age" class="txt"></dd>
+                                                </dl>
+
+                                                <dl class="clr">
+                                                    <dt>民族：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.nation">
+                                                            <option value="">请选择</option>
+                                                            <option value="汉族">汉族</option>
+                                                            <option value="蒙古族">蒙古族</option>
+                                                            <option value="回族">回族</option>
+                                                            <option value="朝鲜族">朝鲜族</option>
+                                                            <option value="满族">满族</option>
+                                                            <option value="其他">其他</option>
+                                                        </select>
+                                                    </dd>
+                                                    <dt style="margin-left: 262px;">国籍：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.nationality">
+                                                            <option value="">请选择</option>
+                                                            <option value="中国大陆">中国大陆</option>
+                                                            <option value="中国香港">中国香港</option>
+                                                            <option value="中国澳门">中国澳门</option>
+                                                            <option value="中国台湾">中国台湾</option>
+                                                            <option value="其他">其他</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+
+                                                <dl class="clr">
+                                                    <dt>学历：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.education">
+                                                            <option value="">请选择最高学历</option>
+                                                            <option value="研究生">研究生</option>
+                                                            <option value="本科">本科</option>
+                                                            <option value="大专">大专</option>
+                                                            <option value="大专以下">大专以下</option>
+                                                            <option value="高中">高中</option>
+                                                            <option value="初中及以下">初中及以下</option>
+                                                            <option value="其他">其他</option>
+                                                        </select>
+                                                    </dd>
+                                                    <dt style="margin-left: 262px;">学位：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.degree">
+                                                            <option value="">请选择学位</option>
+                                                            <option value="研究生">硕士</option>
+                                                            <option value="本科">学士</option>
+                                                            <option value="大专">双学士</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+
+                                                <dl class="clr">
+                                                    <dt>学习形式：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.learningType">
+                                                            <option value="">请选择学习形式</option>
+                                                            <option value="统招">统招</option>
+                                                            <option value="非统招">非统招</option>
+                                                            <option value="其他">其他</option>
+                                                        </select>
+                                                    </dd>
+                                                    <dt style="margin-left: 262px;">政治面貌：</dt>
+                                                    <dd>
+                                                        <input type="radio" name="politicalAffiliation" value="群众" checked="checked" ng-model="user.politicalAffiliation">
+                                                        <label>群众</label>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" name="politicalAffiliation" value="党员" ng-model="user.politicalAffiliation"><label>党员</label>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>工作时间：</dt>
+                                                    <dd><input type="date" ng-model="user.workStartDate" class="txt"></dd>
+                                                    <dt  style="margin-left: 140px;">毕业时间：</dt>
+                                                    <dd><input type="date" ng-model="user.graduationTime" class="txt"></dd>
+                                                </dl>
+
+                                                <dl class="clr">
+                                                    <dt>户籍性质：</dt>
+                                                    <dd>
+                                                        <input type="radio"name="familyRegister" value="本市城镇" checked="checked" ng-model="user.familyRegister">
+                                                        <label>本市城镇</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="radio"name="familyRegister" value="本市农户" ng-model="user.familyRegister">
+                                                        <label>本市农户</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="radio"name="familyRegister" value="外埠城镇" ng-model="user.familyRegister">
+                                                        <label>外埠城镇</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="radio"name="familyRegister" value="外部农户" ng-model="user.familyRegister">
+                                                        <label>外部农户</label>
+                                                    </dd>
+                                                    <dt  style="margin-left: 20px;">外语能力：</dt>
+                                                    <dd>
+                                                        <input type="checkbox" ng-model="user.foreignEnglish">英语
+                                                        <input type="checkbox" ng-model="user.foreignRussian">俄语
+                                                        <input type="checkbox" ng-model="user.foreignFrench">法语
+                                                        <input type="checkbox" ng-model="user.foreignKorean">韩语
+                                                        <input type="checkbox" ng-model="user.foreignJapanese">日语
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>婚姻状况：</dt>
+                                                    <dd>
+                                                        <input type="radio"name="maritalStatus" value="未婚" checked="checked" ng-model="user.maritalStatus">
+                                                        <label>未婚</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="radio"name="maritalStatus" value="已婚" checked="checked" ng-model="user.maritalStatus">
+                                                        <label>已婚</label>
+                                                        &nbsp;&nbsp;
+                                                        <input type="radio"name="maritalStatus" value="离异" checked="checked" ng-model="user.maritalStatus">
+                                                        <label>离异</label>
+                                                    </dd>
+                                                    <dt  style="margin-left: 170px;">籍贯：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.birthPlace">
+                                                            <option value="">请选择籍贯</option>
+                                                            <option value="北京">北京市</option>
+                                                            <option value="浙江省">浙江省</option>
+                                                            <option value="天津市">天津市</option>
+                                                            <option value="安徽省">安徽省</option>
+                                                            <option value="上海市">上海市</option>
+                                                            <option value="福建省">福建省</option>
+                                                            <option value="重庆市">重庆市</option>
+                                                            <option value="江西省">江西省</option>
+                                                            <option value="山东省">山东省</option>
+                                                            <option value="河南省">河南省</option>
+                                                            <option value="湖北省">湖北省</option>
+                                                            <option value="湖南省">湖南省</option>
+                                                            <option value="广东省">广东省</option>
+                                                            <option value="海南省">海南省</option>
+                                                            <option value="山西省">山西省</option>
+                                                            <option value="青海省">青海省</option>
+                                                            <option value="江苏省">江苏省</option>
+                                                            <option value="辽宁省">辽宁省</option>
+                                                            <option value="吉林省">吉林省</option>
+                                                            <option value="台湾省">台湾省</option>
+                                                            <option value="河北省">河北省</option>
+                                                            <option value="贵州省">贵州省</option>
+                                                            <option value="四川省">四川省</option>
+                                                            <option value="云南省">云南省</option>
+                                                            <option value="陕西省">陕西省</option>
+                                                            <option value="甘肃省">甘肃省</option>
+                                                            <option value="黑龙江省">黑龙江省</option>
+                                                            <option value="香港特别行政区">香港特别行政区</option>
+                                                            <option value="澳门特别行政区">澳门特别行政区</option>
+                                                            <option value="广西壮族自治区">广西壮族自治区</option>
+                                                            <option value="宁夏回族自治区">宁夏回族自治区</option>
+                                                            <option value="新疆维吾尔自治区">新疆维吾尔自治区</option>
+                                                            <option value="内蒙古自治区">内蒙古自治区</option>
+                                                            <option value="西藏自治区">西藏自治区</option>
+                                                        </select>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="clr">
+                                                    <dt>薪酬发放银行：</dt>
+                                                    <dd>
+                                                        <select ng-model="user.salaryBank">
+                                                            <option value="">请选择银行</option>
+                                                            <option value="工商银行">工商银行</option>
+                                                            <option value="建设银行">建设银行</option>
+                                                            <option value="交通银行">交通银行</option>
+                                                            <option value="华夏银行">华夏银行</option>
+                                                            <option value="招商银行">招商银行</option>
+                                                            <option value="农业银行">农业银行</option>
+                                                            <option value="中国银行">中国银行</option>
+                                                        </select>
+
+                                                    </dd>
+                                                    <dt  style="margin-left: 260px;">银行账号：</dt>
+                                                    <dd><input type="text" ng-model="user.salaryBankNumber" class="txt"></dd>
+                                                </dl>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="form_submit">
+                                    <input type="submit" value="确 定" class="button submit"> <input type="button"
+                                                                                                   value="取  消"
+                                                                                                   class="button"  onclick="history.go(-1)">
+                                </div>
+                            </form>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>

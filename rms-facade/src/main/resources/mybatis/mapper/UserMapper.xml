@@ -1,0 +1,1100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shangpin.uaas.services.dao.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.shangpin.uaas.entity.User" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="realName" property="realName" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="userCode" property="userCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="createdTime" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updatedTime" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="organizationId" property="organizationId" jdbcType="VARCHAR" />
+    <result column="organizationName" property="organizationName" jdbcType="VARCHAR" />
+    <result column="directLeaderId" property="directLeaderId" jdbcType="VARCHAR" />
+    <result column="jobLevel" property="jobLevel" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="workplace" property="workplace" jdbcType="VARCHAR" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="jobTitle" property="jobTitle" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="entryDate" property="entryDate" jdbcType="VARCHAR" />
+    <result column="jobTitleDate" property="jobTitleDate" jdbcType="VARCHAR" />
+    <result column="contractStartDate" property="contractStartDate" jdbcType="VARCHAR" />
+    <result column="probationEndDate" property="probationEndDate" jdbcType="VARCHAR" />
+    <result column="positiveDate" property="positiveDate" jdbcType="VARCHAR" />
+    <result column="firstContractEndDate" property="firstContractEndDate" jdbcType="VARCHAR" />
+    <result column="secondContractEndDate" property="secondContractEndDate" jdbcType="VARCHAR" />
+    <result column="turnoverDate" property="turnoverDate" jdbcType="VARCHAR" />
+    <result column="employeeStatus" property="employeeStatus" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="identityNumber" property="identityNumber" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="SMALLINT" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="education" property="education" jdbcType="VARCHAR" />
+    <result column="degree" property="degree" jdbcType="VARCHAR" />
+    <result column="learningType" property="learningType" jdbcType="VARCHAR" />
+    <result column="politicalAffiliation" property="politicalAffiliation" jdbcType="VARCHAR" />
+    <result column="workStartDate" property="workStartDate" jdbcType="VARCHAR" />
+    <result column="graduationTime" property="graduationTime" jdbcType="VARCHAR" />
+    <result column="familyRegister" property="familyRegister" jdbcType="VARCHAR" />
+    <result column="foreignEnglish" property="foreignEnglish" jdbcType="VARCHAR" />
+    <result column="foreignRussian" property="foreignRussian" jdbcType="VARCHAR" />
+    <result column="foreignFrench" property="foreignFrench" jdbcType="VARCHAR" />
+    <result column="foreignKorean" property="foreignKorean" jdbcType="VARCHAR" />
+    <result column="foreignJapanese" property="foreignJapanese" jdbcType="VARCHAR" />
+    <result column="maritalStatus" property="maritalStatus" jdbcType="VARCHAR" />
+    <result column="birthPlace" property="birthPlace" jdbcType="VARCHAR" />
+    <result column="salaryBank" property="salaryBank" jdbcType="VARCHAR" />
+    <result column="salaryBankNumber" property="salaryBankNumber" jdbcType="VARCHAR" />
+    <result column="roleId" property="roleId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+     id,  realName, username,  gender,userCode,  status, createdTime, updatedTime, mobile,
+    telephone, email, organizationId, directLeaderId, jobLevel, password, workplace, 
+    birth, jobTitle, company, entryDate, jobTitleDate, contractStartDate, probationEndDate, 
+    positiveDate, firstContractEndDate, secondContractEndDate, turnoverDate, employeeStatus, 
+    identity, identityNumber, age, nation, nationality, education, degree, learningType, 
+    politicalAffiliation, workStartDate, graduationTime, familyRegister, foreignEnglish, 
+    foreignRussian, foreignFrench, foreignKorean, foreignJapanese, maritalStatus, birthPlace, 
+    salaryBank, salaryBankNumber
+  </sql>
+  <sql id="Base_Column_List_New" >
+    u.`id` id, u.`realName` realName, u.`username` username, u.`gender` gender,u.`userCode` userCode, u.`status` status,u.`createdTime` createdTime,u.`updatedTime` updatedTime,u.`mobile` mobile,
+    telephone, email, organizationId, directLeaderId, jobLevel, password, workplace,
+    birth, jobTitle, company, entryDate, jobTitleDate, contractStartDate, probationEndDate,
+    positiveDate, firstContractEndDate, secondContractEndDate, turnoverDate, employeeStatus,
+    identity, identityNumber, age, nation, nationality, education, degree, learningType,
+    politicalAffiliation, workStartDate, graduationTime, familyRegister, foreignEnglish,
+    foreignRussian, foreignFrench, foreignKorean, foreignJapanese, maritalStatus, birthPlace,
+    salaryBank, salaryBankNumber,o.`name` organizationName
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.shangpin.uaas.entity.example.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user /*u left join organization o on u.`organizationId`=o.`id`*/
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="findByCriteriaDto" resultMap="BaseResultMap" >
+    SELECT u.*,o.`name` organizationName  FROM user u left join organization  o on u.`organizationId`=o.`id`
+    <where>
+      <if test="userDto.gender != null">
+        u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+    LIMIT #{start},#{size}
+  </select>
+  <select id="findAllUsersWithRoleByCriteria" resultMap="BaseResultMap" >
+    SELECT u.*,o.`name` organizationName,r.`id` roleId
+      FROM role r INNER JOIN  userRole ur
+        ON ur.`roleId`=r.`id`
+      INNER JOIN user u
+        ON ur.`userId`=u.`id`
+      INNER JOIN organization  o
+        on u.`organizationId`=o.`id`
+    <where>
+      <if test="roleId!=null">
+        r.`id`=#{roleId}
+      </if>
+      <if test="userDto.gender != null">
+        and u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+    LIMIT #{start},#{size}
+  </select>
+  <select id="findCountAllUsersWithRoleByCriteria" resultType="java.lang.Long" >
+    SELECT count(u.`id`)
+      FROM role r INNER JOIN  userRole ur
+        ON ur.`roleId`=r.`id`
+      INNER JOIN user u
+        ON ur.`userId`=u.`id`
+      INNER JOIN organization  o
+        on u.`organizationId`=o.`id`
+    <where>
+      <if test="roleId!=null">
+        r.`id`=#{roleId}
+      </if>
+      <if test="userDto.gender != null">
+        and u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+  </select>
+  <select id="findAllUsersWithNotHaveRoleByCriteria" resultMap="BaseResultMap" >
+    SELECT u.*,o.`name` organizationName, r.`id` roleId
+      FROM role r INNER JOIN  userRole ur
+        ON ur.`roleId`=r.`id`
+      INNER JOIN user u
+        ON ur.`userId`=u.`id`
+      INNER JOIN organization  o
+        on u.`organizationId`=o.`id`
+    <where>
+      <if test="roleId!=null">
+        r.`id`!=#{roleId}
+      </if>
+      <if test="userDto.gender != null">
+        and u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+    LIMIT #{start},#{size}
+  </select>
+  <select id="findCountAllUsersWithNotHaveRoleByCriteria" resultType="java.lang.Long" >
+    SELECT count(r.`id`)
+      FROM role r INNER JOIN  userRole ur
+        ON ur.`roleId`=r.`id`
+      INNER JOIN user u
+        ON ur.`userId`=u.`id`
+      INNER JOIN organization  o
+        on u.`organizationId`=o.`id`
+    <where>
+      <if test="roleId!=null">
+        r.`id`!=#{roleId}
+      </if>
+      <if test="userDto.gender != null">
+        and u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+  </select>
+  <select id="findCountByCriteriaDto" resultType="java.lang.Long">
+    SELECT count(u.`id`) FROM user u LEFT JOIN organization o ON u.`organizationId`=o.`id`
+    <where>
+      <if test="userDto.gender != null">
+        u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List_New" />
+    from user u left join organization  o on u.`organizationId`=o.`id`
+    where u.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.shangpin.uaas.entity.example.UserExample" >
+    delete from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.shangpin.uaas.entity.User" >
+    insert into user (id, realName, username, 
+      gender, userCode, status, 
+      createdTime, updatedTime, mobile, 
+      telephone, email, organizationId, 
+      directLeaderId, jobLevel, password, 
+      workplace, birth, jobTitle, 
+      company, entryDate, jobTitleDate, 
+      contractStartDate, probationEndDate, positiveDate, 
+      firstContractEndDate, secondContractEndDate, 
+      turnoverDate, employeeStatus, identity, 
+      identityNumber, age, nation, 
+      nationality, education, degree, 
+      learningType, politicalAffiliation, workStartDate, 
+      graduationTime, familyRegister, foreignEnglish, 
+      foreignRussian, foreignFrench, foreignKorean, 
+      foreignJapanese, maritalStatus, birthPlace, 
+      salaryBank, salaryBankNumber)
+    values (#{id,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{mobile,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{organizationId,jdbcType=VARCHAR}, 
+      #{directLeaderId,jdbcType=VARCHAR}, #{jobLevel,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{workplace,jdbcType=VARCHAR}, #{birth,jdbcType=DATE}, #{jobTitle,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{entryDate,jdbcType=VARCHAR}, #{jobTitleDate,jdbcType=VARCHAR}, 
+      #{contractStartDate,jdbcType=VARCHAR}, #{probationEndDate,jdbcType=VARCHAR}, #{positiveDate,jdbcType=VARCHAR}, 
+      #{firstContractEndDate,jdbcType=VARCHAR}, #{secondContractEndDate,jdbcType=VARCHAR}, 
+      #{turnoverDate,jdbcType=VARCHAR}, #{employeeStatus,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
+      #{identityNumber,jdbcType=VARCHAR}, #{age,jdbcType=SMALLINT}, #{nation,jdbcType=VARCHAR}, 
+      #{nationality,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{degree,jdbcType=VARCHAR}, 
+      #{learningType,jdbcType=VARCHAR}, #{politicalAffiliation,jdbcType=VARCHAR}, #{workStartDate,jdbcType=VARCHAR}, 
+      #{graduationTime,jdbcType=VARCHAR}, #{familyRegister,jdbcType=VARCHAR}, #{foreignEnglish,jdbcType=VARCHAR}, 
+      #{foreignRussian,jdbcType=VARCHAR}, #{foreignFrench,jdbcType=VARCHAR}, #{foreignKorean,jdbcType=VARCHAR}, 
+      #{foreignJapanese,jdbcType=VARCHAR}, #{maritalStatus,jdbcType=VARCHAR}, #{birthPlace,jdbcType=VARCHAR}, 
+      #{salaryBank,jdbcType=VARCHAR}, #{salaryBankNumber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shangpin.uaas.entity.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="realName != null" >
+        realName,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="userCode != null" >
+        userCode,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdTime != null" >
+        createdTime,
+      </if>
+      <if test="updatedTime != null" >
+        updatedTime,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="organizationId != null" >
+        organizationId,
+      </if>
+      <if test="directLeaderId != null" >
+        directLeaderId,
+      </if>
+      <if test="jobLevel != null" >
+        jobLevel,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="workplace != null" >
+        workplace,
+      </if>
+      <if test="birth != null" >
+        birth,
+      </if>
+      <if test="jobTitle != null" >
+        jobTitle,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="entryDate != null" >
+        entryDate,
+      </if>
+      <if test="jobTitleDate != null" >
+        jobTitleDate,
+      </if>
+      <if test="contractStartDate != null" >
+        contractStartDate,
+      </if>
+      <if test="probationEndDate != null" >
+        probationEndDate,
+      </if>
+      <if test="positiveDate != null" >
+        positiveDate,
+      </if>
+      <if test="firstContractEndDate != null" >
+        firstContractEndDate,
+      </if>
+      <if test="secondContractEndDate != null" >
+        secondContractEndDate,
+      </if>
+      <if test="turnoverDate != null" >
+        turnoverDate,
+      </if>
+      <if test="employeeStatus != null" >
+        employeeStatus,
+      </if>
+      <if test="identity != null" >
+        identity,
+      </if>
+      <if test="identityNumber != null" >
+        identityNumber,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="nation != null" >
+        nation,
+      </if>
+      <if test="nationality != null" >
+        nationality,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="degree != null" >
+        degree,
+      </if>
+      <if test="learningType != null" >
+        learningType,
+      </if>
+      <if test="politicalAffiliation != null" >
+        politicalAffiliation,
+      </if>
+      <if test="workStartDate != null" >
+        workStartDate,
+      </if>
+      <if test="graduationTime != null" >
+        graduationTime,
+      </if>
+      <if test="familyRegister != null" >
+        familyRegister,
+      </if>
+      <if test="foreignEnglish != null" >
+        foreignEnglish,
+      </if>
+      <if test="foreignRussian != null" >
+        foreignRussian,
+      </if>
+      <if test="foreignFrench != null" >
+        foreignFrench,
+      </if>
+      <if test="foreignKorean != null" >
+        foreignKorean,
+      </if>
+      <if test="foreignJapanese != null" >
+        foreignJapanese,
+      </if>
+      <if test="maritalStatus != null" >
+        maritalStatus,
+      </if>
+      <if test="birthPlace != null" >
+        birthPlace,
+      </if>
+      <if test="salaryBank != null" >
+        salaryBank,
+      </if>
+      <if test="salaryBankNumber != null" >
+        salaryBankNumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId != null" >
+        #{organizationId,jdbcType=VARCHAR},
+      </if>
+      <if test="directLeaderId != null" >
+        #{directLeaderId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobLevel != null" >
+        #{jobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="workplace != null" >
+        #{workplace,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null" >
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="jobTitle != null" >
+        #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="entryDate != null" >
+        #{entryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="jobTitleDate != null" >
+        #{jobTitleDate,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStartDate != null" >
+        #{contractStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="probationEndDate != null" >
+        #{probationEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveDate != null" >
+        #{positiveDate,jdbcType=VARCHAR},
+      </if>
+      <if test="firstContractEndDate != null" >
+        #{firstContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="secondContractEndDate != null" >
+        #{secondContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="turnoverDate != null" >
+        #{turnoverDate,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeStatus != null" >
+        #{employeeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="identityNumber != null" >
+        #{identityNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=SMALLINT},
+      </if>
+      <if test="nation != null" >
+        #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="learningType != null" >
+        #{learningType,jdbcType=VARCHAR},
+      </if>
+      <if test="politicalAffiliation != null" >
+        #{politicalAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartDate != null" >
+        #{workStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="graduationTime != null" >
+        #{graduationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="familyRegister != null" >
+        #{familyRegister,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignEnglish != null" >
+        #{foreignEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignRussian != null" >
+        #{foreignRussian,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignFrench != null" >
+        #{foreignFrench,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignKorean != null" >
+        #{foreignKorean,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignJapanese != null" >
+        #{foreignJapanese,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="birthPlace != null" >
+        #{birthPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="salaryBank != null" >
+        #{salaryBank,jdbcType=VARCHAR},
+      </if>
+      <if test="salaryBankNumber != null" >
+        #{salaryBankNumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.shangpin.uaas.entity.example.UserExample" resultType="java.lang.Integer" >
+    select count(id) from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="findAll"  parameterType="map">
+    select * from user u left join organization  o on u.`organizationId`=o.`id`
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realName != null" >
+        realName = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userCode != null" >
+        userCode = #{record.userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=SMALLINT},
+      </if>
+      <if test="record.createdTime != null" >
+        createdTime = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updatedTime = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null" >
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationId != null" >
+        organizationId = #{record.organizationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.directLeaderId != null" >
+        directLeaderId = #{record.directLeaderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobLevel != null" >
+        jobLevel = #{record.jobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workplace != null" >
+        workplace = #{record.workplace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birth != null" >
+        birth = #{record.birth,jdbcType=DATE},
+      </if>
+      <if test="record.jobTitle != null" >
+        jobTitle = #{record.jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null" >
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entryDate != null" >
+        entryDate = #{record.entryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobTitleDate != null" >
+        jobTitleDate = #{record.jobTitleDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractStartDate != null" >
+        contractStartDate = #{record.contractStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.probationEndDate != null" >
+        probationEndDate = #{record.probationEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positiveDate != null" >
+        positiveDate = #{record.positiveDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstContractEndDate != null" >
+        firstContractEndDate = #{record.firstContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondContractEndDate != null" >
+        secondContractEndDate = #{record.secondContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.turnoverDate != null" >
+        turnoverDate = #{record.turnoverDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeStatus != null" >
+        employeeStatus = #{record.employeeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identity != null" >
+        identity = #{record.identity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identityNumber != null" >
+        identityNumber = #{record.identityNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null" >
+        age = #{record.age,jdbcType=SMALLINT},
+      </if>
+      <if test="record.nation != null" >
+        nation = #{record.nation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nationality != null" >
+        nationality = #{record.nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.education != null" >
+        education = #{record.education,jdbcType=VARCHAR},
+      </if>
+      <if test="record.degree != null" >
+        degree = #{record.degree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.learningType != null" >
+        learningType = #{record.learningType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.politicalAffiliation != null" >
+        politicalAffiliation = #{record.politicalAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workStartDate != null" >
+        workStartDate = #{record.workStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graduationTime != null" >
+        graduationTime = #{record.graduationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyRegister != null" >
+        familyRegister = #{record.familyRegister,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignEnglish != null" >
+        foreignEnglish = #{record.foreignEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignRussian != null" >
+        foreignRussian = #{record.foreignRussian,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignFrench != null" >
+        foreignFrench = #{record.foreignFrench,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignKorean != null" >
+        foreignKorean = #{record.foreignKorean,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignJapanese != null" >
+        foreignJapanese = #{record.foreignJapanese,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maritalStatus != null" >
+        maritalStatus = #{record.maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthPlace != null" >
+        birthPlace = #{record.birthPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salaryBank != null" >
+        salaryBank = #{record.salaryBank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salaryBankNumber != null" >
+        salaryBankNumber = #{record.salaryBankNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user
+    set id = #{record.id,jdbcType=VARCHAR},
+      realName = #{record.realName,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=VARCHAR},
+      userCode = #{record.userCode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=SMALLINT},
+      createdTime = #{record.createdTime,jdbcType=TIMESTAMP},
+      updatedTime = #{record.updatedTime,jdbcType=TIMESTAMP},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      telephone = #{record.telephone,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      organizationId = #{record.organizationId,jdbcType=VARCHAR},
+      directLeaderId = #{record.directLeaderId,jdbcType=VARCHAR},
+      jobLevel = #{record.jobLevel,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      workplace = #{record.workplace,jdbcType=VARCHAR},
+      birth = #{record.birth,jdbcType=DATE},
+      jobTitle = #{record.jobTitle,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR},
+      entryDate = #{record.entryDate,jdbcType=VARCHAR},
+      jobTitleDate = #{record.jobTitleDate,jdbcType=VARCHAR},
+      contractStartDate = #{record.contractStartDate,jdbcType=VARCHAR},
+      probationEndDate = #{record.probationEndDate,jdbcType=VARCHAR},
+      positiveDate = #{record.positiveDate,jdbcType=VARCHAR},
+      firstContractEndDate = #{record.firstContractEndDate,jdbcType=VARCHAR},
+      secondContractEndDate = #{record.secondContractEndDate,jdbcType=VARCHAR},
+      turnoverDate = #{record.turnoverDate,jdbcType=VARCHAR},
+      employeeStatus = #{record.employeeStatus,jdbcType=VARCHAR},
+      identity = #{record.identity,jdbcType=VARCHAR},
+      identityNumber = #{record.identityNumber,jdbcType=VARCHAR},
+      age = #{record.age,jdbcType=SMALLINT},
+      nation = #{record.nation,jdbcType=VARCHAR},
+      nationality = #{record.nationality,jdbcType=VARCHAR},
+      education = #{record.education,jdbcType=VARCHAR},
+      degree = #{record.degree,jdbcType=VARCHAR},
+      learningType = #{record.learningType,jdbcType=VARCHAR},
+      politicalAffiliation = #{record.politicalAffiliation,jdbcType=VARCHAR},
+      workStartDate = #{record.workStartDate,jdbcType=VARCHAR},
+      graduationTime = #{record.graduationTime,jdbcType=VARCHAR},
+      familyRegister = #{record.familyRegister,jdbcType=VARCHAR},
+      foreignEnglish = #{record.foreignEnglish,jdbcType=VARCHAR},
+      foreignRussian = #{record.foreignRussian,jdbcType=VARCHAR},
+      foreignFrench = #{record.foreignFrench,jdbcType=VARCHAR},
+      foreignKorean = #{record.foreignKorean,jdbcType=VARCHAR},
+      foreignJapanese = #{record.foreignJapanese,jdbcType=VARCHAR},
+      maritalStatus = #{record.maritalStatus,jdbcType=VARCHAR},
+      birthPlace = #{record.birthPlace,jdbcType=VARCHAR},
+      salaryBank = #{record.salaryBank,jdbcType=VARCHAR},
+      salaryBankNumber = #{record.salaryBankNumber,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shangpin.uaas.entity.User" >
+    update user
+    <set >
+      <if test="realName != null" >
+        realName = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        userCode = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="createdTime != null" >
+        createdTime = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updatedTime = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationId != null" >
+        organizationId = #{organizationId,jdbcType=VARCHAR},
+      </if>
+      <if test="directLeaderId != null" >
+        directLeaderId = #{directLeaderId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobLevel != null" >
+        jobLevel = #{jobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="workplace != null" >
+        workplace = #{workplace,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null" >
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="jobTitle != null" >
+        jobTitle = #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="entryDate != null" >
+        entryDate = #{entryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="jobTitleDate != null" >
+        jobTitleDate = #{jobTitleDate,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStartDate != null" >
+        contractStartDate = #{contractStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="probationEndDate != null" >
+        probationEndDate = #{probationEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="positiveDate != null" >
+        positiveDate = #{positiveDate,jdbcType=VARCHAR},
+      </if>
+      <if test="firstContractEndDate != null" >
+        firstContractEndDate = #{firstContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="secondContractEndDate != null" >
+        secondContractEndDate = #{secondContractEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="turnoverDate != null" >
+        turnoverDate = #{turnoverDate,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeStatus != null" >
+        employeeStatus = #{employeeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        identity = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="identityNumber != null" >
+        identityNumber = #{identityNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=SMALLINT},
+      </if>
+      <if test="nation != null" >
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="nationality != null" >
+        nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        degree = #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="learningType != null" >
+        learningType = #{learningType,jdbcType=VARCHAR},
+      </if>
+      <if test="politicalAffiliation != null" >
+        politicalAffiliation = #{politicalAffiliation,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartDate != null" >
+        workStartDate = #{workStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="graduationTime != null" >
+        graduationTime = #{graduationTime,jdbcType=VARCHAR},
+      </if>
+      <if test="familyRegister != null" >
+        familyRegister = #{familyRegister,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignEnglish != null" >
+        foreignEnglish = #{foreignEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignRussian != null" >
+        foreignRussian = #{foreignRussian,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignFrench != null" >
+        foreignFrench = #{foreignFrench,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignKorean != null" >
+        foreignKorean = #{foreignKorean,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignJapanese != null" >
+        foreignJapanese = #{foreignJapanese,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalStatus != null" >
+        maritalStatus = #{maritalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="birthPlace != null" >
+        birthPlace = #{birthPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="salaryBank != null" >
+        salaryBank = #{salaryBank,jdbcType=VARCHAR},
+      </if>
+      <if test="salaryBankNumber != null" >
+        salaryBankNumber = #{salaryBankNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shangpin.uaas.entity.User" >
+    update user
+    set realName = #{realName,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      userCode = #{userCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      createdTime = #{createdTime,jdbcType=TIMESTAMP},
+      updatedTime = #{updatedTime,jdbcType=TIMESTAMP},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      organizationId = #{organizationId,jdbcType=VARCHAR},
+      directLeaderId = #{directLeaderId,jdbcType=VARCHAR},
+      jobLevel = #{jobLevel,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      workplace = #{workplace,jdbcType=VARCHAR},
+      birth = #{birth,jdbcType=DATE},
+      jobTitle = #{jobTitle,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      entryDate = #{entryDate,jdbcType=VARCHAR},
+      jobTitleDate = #{jobTitleDate,jdbcType=VARCHAR},
+      contractStartDate = #{contractStartDate,jdbcType=VARCHAR},
+      probationEndDate = #{probationEndDate,jdbcType=VARCHAR},
+      positiveDate = #{positiveDate,jdbcType=VARCHAR},
+      firstContractEndDate = #{firstContractEndDate,jdbcType=VARCHAR},
+      secondContractEndDate = #{secondContractEndDate,jdbcType=VARCHAR},
+      turnoverDate = #{turnoverDate,jdbcType=VARCHAR},
+      employeeStatus = #{employeeStatus,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR},
+      identityNumber = #{identityNumber,jdbcType=VARCHAR},
+      age = #{age,jdbcType=SMALLINT},
+      nation = #{nation,jdbcType=VARCHAR},
+      nationality = #{nationality,jdbcType=VARCHAR},
+      education = #{education,jdbcType=VARCHAR},
+      degree = #{degree,jdbcType=VARCHAR},
+      learningType = #{learningType,jdbcType=VARCHAR},
+      politicalAffiliation = #{politicalAffiliation,jdbcType=VARCHAR},
+      workStartDate = #{workStartDate,jdbcType=VARCHAR},
+      graduationTime = #{graduationTime,jdbcType=VARCHAR},
+      familyRegister = #{familyRegister,jdbcType=VARCHAR},
+      foreignEnglish = #{foreignEnglish,jdbcType=VARCHAR},
+      foreignRussian = #{foreignRussian,jdbcType=VARCHAR},
+      foreignFrench = #{foreignFrench,jdbcType=VARCHAR},
+      foreignKorean = #{foreignKorean,jdbcType=VARCHAR},
+      foreignJapanese = #{foreignJapanese,jdbcType=VARCHAR},
+      maritalStatus = #{maritalStatus,jdbcType=VARCHAR},
+      birthPlace = #{birthPlace,jdbcType=VARCHAR},
+      salaryBank = #{salaryBank,jdbcType=VARCHAR},
+      salaryBankNumber = #{salaryBankNumber,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
