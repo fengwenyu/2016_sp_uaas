@@ -114,7 +114,17 @@ public class UserRepoService/* extends Mapper<User>*/{
             return userMapper.findAllUsersWithRoleByCriteria(defaultUserCriteriaDTO(userCriteriaDTO),"ENABLED".equals(status.toString())?"1":"0",roleId,start,size);
         }
     }
-    public long findCountAllUsersWithRoleByCriteria(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator){
+    public List<User> findAllUsersWithRoleByCriteriaAndStatusNull(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator){
+        int start =(int) paginator.getOffset();
+        int size = paginator.getPageSize();
+        Status status = userCriteriaDTO.getStatus();
+        if(status ==null){
+            return userMapper.findAllUsersWithRoleByCriteriaAndStatusNull(defaultUserCriteriaDTO(userCriteriaDTO),null,roleId,start,size);
+        }else{
+            return userMapper.findAllUsersWithRoleByCriteriaAndStatusNull(defaultUserCriteriaDTO(userCriteriaDTO),"ENABLED".equals(status.toString())?"1":"0",roleId,start,size);
+        }
+    }
+    public long findCountAllUsersWithRoleByCriteria(UserCriteriaDTO userCriteriaDTO,String roleId){
         Status status = userCriteriaDTO.getStatus();
         if(status ==null){
             return userMapper.findCountAllUsersWithRoleByCriteria(defaultUserCriteriaDTO(userCriteriaDTO),null,roleId);
@@ -227,6 +237,7 @@ public class UserRepoService/* extends Mapper<User>*/{
             userCriteriaDTO.setStatus(StringUtils.isNotBlank(userCriteriaDTO.getStatus().toString())?userCriteriaDTO.getStatus():null);
         }
         userCriteriaDTO.setWorkLocation(StringUtils.isNotBlank(userCriteriaDTO.getWorkLocation())?userCriteriaDTO.getWorkLocation():null);
+        userCriteriaDTO.setOrganizationIds((userCriteriaDTO.getOrganizationIds()==null ||userCriteriaDTO.getOrganizationIds().isEmpty())?null:userCriteriaDTO.getOrganizationIds());
         return userCriteriaDTO;
     }
 }

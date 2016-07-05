@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.shangpin.uaas.api.admin.user.UserDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 组织结构DTO
  */
+@Getter
+@Setter
 public class OrganizationDTO {
     /**
      * 创建时不需要，创建成功后返回
@@ -48,7 +52,10 @@ public class OrganizationDTO {
      * 是否有子节点
      */
     private Boolean isLeaf;
-
+    /**
+     * 是否有父节点
+     */
+    private Boolean hasParent; //页面渲染树 用
     /**
      * 部门负责人--多个
      * <p/>

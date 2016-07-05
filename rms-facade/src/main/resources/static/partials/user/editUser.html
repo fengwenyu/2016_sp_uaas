@@ -33,7 +33,7 @@
                                             </dl>
                                             <dl class="clr">
                                                 <dt>用户名：<em>*</em></dt>
-                                                <dd><input type="text" required ng-model="user.username" class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
+                                                <dd><input type="text" required readonly="readonly" ng-model="user.username" class="txt">&nbsp;&nbsp;请控制在1～25字符以内</dd>
                                                 <dt>性别：<em>*</em></dt>
                                                 <dd>
                                                     <label><input type="radio" ng-model="user.gender" value="MALE">男</label>
@@ -120,7 +120,7 @@
                                                         <option ng-repeat="user in allUsers" value="{{user.id}}">{{user.realName}} -- {{user.username}} ({{user.organizationName}})</option>
                                                     </select>
                                                 </dd>
-                                                <dt  style="margin-left: 30px; width: 140px;">办公区：</dt>
+                                                <dt  style="margin-left: 30px; width: 140px;">办公区：<em>*</em></dt>
                                                 <dd>
                                                     <select ng-model="user.workPlace">
                                                         <option value="">请选择</option>
@@ -210,12 +210,12 @@
                                                     <option value="台胞证">台胞证</option>
                                                 </select>
                                             </dd>
-                                            <dt style="margin-left: 262px;">身份号码：<em>*</em></dt>
-                                            <dd><input type="text" required ng-model="user.identityNumber" class="txt"></dd>
+                                            <dt style="margin-left: 262px;">证件号码：<em>*</em></dt>
+                                            <dd><input type="text" required ng-model="user.identityNumber" ng-blur="copyDate()" class="txt"></dd>
                                         </dl>
                                         <dl class="clr">
                                             <dt>出生日期：</dt>
-                                            <dd><input type="date" ng-model="user.birth" class="txt"></dd>
+                                            <dd><input type="date" ng-model="user.birth" class="txt" ng-change="copyAge()"></dd>
                                             <dt style="margin-left: 140px;">年龄：</dt>
                                             <dd><input type="text" ng-model="user.age" class="txt"></dd>
                                         </dl>

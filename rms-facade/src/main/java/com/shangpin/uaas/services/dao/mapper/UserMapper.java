@@ -35,6 +35,7 @@ public interface UserMapper {
 
     List<User> findByCriteriaDto(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("start")int start,@Param("size")int size);
     List<User> findAllUsersWithRoleByCriteria(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("roleId") String roleId,@Param("start")int start,@Param("size")int size);
+    List<User> findAllUsersWithRoleByCriteriaAndStatusNull(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("roleId") String roleId,@Param("start")int start,@Param("size")int size);
     long findCountAllUsersWithRoleByCriteria(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("roleId") String roleId);
     List<User> findAllUsersWithNotHaveRoleByCriteria(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("roleId") String roleId,@Param("start")int start,@Param("size")int size);
     long findCountAllUsersWithNotHaveRoleByCriteria(@Param("userDto") UserCriteriaDTO userCriteriaDTO,@Param("userStatus") String status,@Param("roleId") String roleId);

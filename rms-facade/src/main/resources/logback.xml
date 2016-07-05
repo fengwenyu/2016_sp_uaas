@@ -47,7 +47,7 @@
         <appender-ref ref="STDOUT" />
     </logger>
     <logger name="com.shangpin" level="INFO"></logger>
-    <logger name="org.mybatis" level="info"></logger>
+    <logger name="org" level="info"></logger>
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE_INFO" />

@@ -170,6 +170,9 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
         }
         String resourceId = resourceNode.getResourceId();
         List<Permission> permissions = permissionRepoService.findByResourceId(resourceId);
+        if(permissions==null ||permissions.isEmpty()){
+            return new ArrayList<RoleDTO>();
+        }
         Set<String> roleIds = new HashSet<>();
         for (Permission permission : permissions) {
             roleIds.add(permission.getRoleId());

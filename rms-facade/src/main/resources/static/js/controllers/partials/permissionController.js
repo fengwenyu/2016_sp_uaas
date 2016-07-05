@@ -222,7 +222,7 @@
                     name : $scope.resourceName,
                     isEnabled : ($scope.resourceState == 1 ? true : false),
                     //type : $scope.resourceType.name || "BUTTON",
-                    type : $scope.resourceType.name || "BUTTON",
+                    type : $scope.resourceType || "BUTTON",
                     uri : $scope.resourceURI,
                     parentId : $scope.pid,
                     description : $scope.resourceDesc

@@ -51,7 +51,7 @@ public class User implements Serializable {
     
     private String jobLevel; //职位级别
     
-    private String password;
+    private String password;//密码
     
     private String workplace;
     

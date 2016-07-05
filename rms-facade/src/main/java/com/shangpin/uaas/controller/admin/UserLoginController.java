@@ -66,7 +66,14 @@ public class UserLoginController {
         try {
         	Cookie[] cookies = request.getCookies();
         	
-        	String token = authenticateFacadeService.login(username,password);
+        	Map<String,String> loginMap = authenticateFacadeService.login(username,password);
+            if(loginMap.get("token")==null){
+                String msg = loginMap.get("msg");
+                map.put("code", "0");
+                map.put("msg", msg);
+                return map;
+            }
+            String token = loginMap.get("token");
         	Cookie cookieToken = new Cookie("UAAS_TOKEN", token);
         	Cookie userToken = new Cookie("UAAS_USER",username);
             cookieToken.setPath("/");

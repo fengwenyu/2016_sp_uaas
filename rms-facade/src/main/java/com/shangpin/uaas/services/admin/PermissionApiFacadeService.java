@@ -48,14 +48,6 @@ public class PermissionApiFacadeService {
     public List<Permission> getAllPermissionByUserId(String userId) {
         List<Permission> permissions = permissionRepoService.findByUserId(userId);
         return permissions;
-        /*List<Permission> permissions = new ArrayList<Permission>();
-        List<String> roleIds = getUserRolesByUserId(userId);
-        for (String roleId : roleIds) {
-        	List<Permission> ps = getResourceByRole(roleId);
-            if (!ps.isEmpty()) {
-                permissions.addAll(ps);
-            }
-		}*/
 
     }
 
@@ -67,36 +59,6 @@ public class PermissionApiFacadeService {
         for (Menu menu : menus) {
             menuDTOs.add(MenuConverter.convert(menu));
         }
-        /*List<Menu> resultMenu = new ArrayList<>();
-        log.debug("该系统一共得菜单数为："+menus.size());
-        if (menus.isEmpty()) {
-            log.error("该应用没有菜单:" + appCode);
-            return menuDTOs;
-        } else {
-            Menu menu = menus.get(0);
-            resultMenu.add(menu);
-            List<Menu> subMenus = menuRepoService.findByParentId(menu.getId());
-            for (Menu subMenu : subMenus) {
-                resultMenu.add(subMenu);
-                List<Menu> subMenus2 = menuRepoService.findByParentId(subMenu.getId());
-                for (Menu subMenu2 : subMenus2) {
-                    resultMenu.add(subMenu2);
-                    List<Menu> subMenus3 = menuRepoService.findByParentId(subMenu2.getId());
-                    resultMenu.addAll(subMenus3);
-                }
-            }
-            for (Menu menu1 : resultMenu) {
-               menuDTOs.add(MenuConverter.convert(menu1));
-			}
-        }*/
-
-		/*List<Menu> topMenus = menuRepoService.findByParentId("1");
-		for (Menu subMenu : topMenus) {
-			if (!appCode.equals(subMenu.getAppCode())) {
-				menuDTOs.add(MenuConverter.convert(subMenu));
-			}
-		}*/
-		
         List<MenuDTO> results = new ArrayList<MenuDTO>();
         log.debug("最终需要认证的菜单数为："+menuDTOs.size());
         List<Permission> permissionDTOs = getAllPermissionByUserId(userId);

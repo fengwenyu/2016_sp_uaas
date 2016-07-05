@@ -1,5 +1,6 @@
 package com.shangpin.uaas.convert.api;
 
+import com.shangpin.uaas.api.admin.user.Status;
 import com.shangpin.uaas.api.facade.auth.dto.OrganizationDTO;
 import com.shangpin.uaas.api.facade.user.UserDTO;
 import com.shangpin.uaas.entity.User;
@@ -13,7 +14,7 @@ public class UserConverter {
    public static UserDTO convert(User user) {
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setStatus(user.isStatus()?"1":"0");
+        userDTO.setStatus(user.isStatus()? Status.ENABLED:Status.DISABLED);
         userDTO.setDirectLeaderId(user.getDirectLeaderId());
         userDTO.setEmail(user.getEmail());
         userDTO.setGender(user.getGender().name());

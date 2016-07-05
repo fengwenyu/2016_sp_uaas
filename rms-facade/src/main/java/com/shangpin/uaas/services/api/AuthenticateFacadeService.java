@@ -1,8 +1,6 @@
 package com.shangpin.uaas.services.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import com.shangpin.uaas.entity.Role;
@@ -33,24 +31,34 @@ public class AuthenticateFacadeService implements AuthenticationFacade {
     @Autowired
     private RoleRepoService roleRepoService;
 
-    public String login(String userLogin, String password) {
-
+    public Map<String,String> login(String userLogin, String password) {
+        Map<String,String> resultMap = new HashMap<>();
         log.info("登录用户名为:" + userLogin);
-
         password = org.springframework.util.DigestUtils.md5DigestAsHex(password.getBytes());
         List<User> users = userRepoService.findByUsername(userLogin);
         if (users.isEmpty()) {
-            throw new RuntimeException("没有该用户" + userLogin);
+            resultMap.put("msg","没有该用户");
+            return resultMap;
+            //throw new RuntimeException("没有该用户" + userLogin);
+        }
+        if (users.size()>1) {
+            resultMap.put("msg","该用户名下有过多的用户");
+            return resultMap;
+            //throw new RuntimeException("没有该用户" + userLogin);
         }
 
         User user = users.get(0);
 
         if (!user.isStatus()) {
-            throw new RuntimeException("该用户已禁用！");
+            resultMap.put("msg","该用户已禁用！");
+            return resultMap;
+//            throw new RuntimeException("该用户已禁用！");
         }
 
         if (!password.equals(user.getPassword())) {
-            throw new RuntimeException("该用户输入密码不正确！");
+            resultMap.put("msg","该用户输入密码不正确！");
+            return resultMap;
+            //throw new RuntimeException("该用户输入密码不正确！");
         }
 
         String token = UUID.randomUUID().toString();
@@ -73,9 +81,10 @@ public class AuthenticateFacadeService implements AuthenticationFacade {
         }
         memcachedClient.set(resourceKey, 60*60*30, roleIds);
 
-
+        resultMap.put("token",token);
         //  log.debug("------------" + ((Subject) memcachedClient.get(token)).userCode);
-        return token;
+        //return token;
+        return resultMap;
     }
 
     public void touch(String token) {

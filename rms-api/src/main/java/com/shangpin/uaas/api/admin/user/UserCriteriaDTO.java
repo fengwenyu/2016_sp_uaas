@@ -3,6 +3,8 @@ package com.shangpin.uaas.api.admin.user;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  *
  */
@@ -42,6 +44,11 @@ public class UserCriteriaDTO {
      * 部门标识
      */
     private String organizationId;
+
+    /**
+     * 当前部门及子部门的id
+     */
+    private List<String> organizationIds;
 /*
     public String getRealNameLike() {
         return realNameLike;

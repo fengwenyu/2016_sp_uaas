@@ -1,10 +1,9 @@
 package com.shangpin.uaas.services.admin;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import com.shangpin.common.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,6 +121,16 @@ public class UserAdminFacadeService implements UserAdminFacade {
 			paginator.setPageSize(10);
 		}
 		log.debug("============" + paginator.getPage() + " ==========" + paginator.getPageSize());
+
+		//查询树 人员 处理开始
+		if(StringUtils.isNotBlank(userCriteriaDTO.getOrganizationId())){
+			Set<String> organizationIds= getAllChildOrgidByNowOriId(userCriteriaDTO.getOrganizationId(), new HashSet<String>());
+			if(!organizationIds.isEmpty()){
+				userCriteriaDTO.setOrganizationIds(new ArrayList<String>(organizationIds));
+			}
+		}
+		//查询树 人员结束
+
 		List<User> userList = userRepoService.findByCriteriaDto(userCriteriaDTO,paginator);
 		log.debug("result.size:" + userList.size());
 		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
@@ -174,7 +183,24 @@ public class UserAdminFacadeService implements UserAdminFacade {
 			userDTOs.add(UserConverter.toUserDTO(user));
 		}
 		log.debug("userDTOs size" + userDTOs.size());
-		long totalCount = userRepoService.findCountAllUsersWithNotHaveRoleByCriteria(userCriteriaDTO,roleId);
+		long totalCount = userRepoService.findCountAllUsersWithRoleByCriteria(userCriteriaDTO,roleId);
+		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
+		return pagedList;
+	}
+	public PagedList<UserDTO> findAllUsersWithRoleByCriteriaAndStatusNull(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator) {
+		if (null == paginator) {
+			paginator = new Paginator();
+			paginator.setPage(1);
+			paginator.setPageSize(10);
+		}
+		List<User> userList = userRepoService.findAllUsersWithRoleByCriteriaAndStatusNull(userCriteriaDTO,roleId,paginator);
+		log.debug("result.size:" + userList.size());
+		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+		for (User user : userList) {
+			userDTOs.add(UserConverter.toUserDTO(user));
+		}
+		log.debug("userDTOs size" + userDTOs.size());
+		long totalCount = userRepoService.findCountAllUsersWithRoleByCriteria(userCriteriaDTO,null);
 		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
 		return pagedList;
 	}
@@ -320,12 +346,44 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		if (users==null || users.size()==0 ||users.size() > 2) {
 			return false;
 		}
-		//TODO 不知道什么逻辑，待定
-		/*if (users.size() == 1) {
-			// ???
-			// return users[0].uuid == userId;
-			//users.get(0).setId(userId);
-		}*/
-		return true;
+		String id = users.get(0).getId();
+		return id.equals(userId);
+	}
+
+	/**
+	 * 根据生日获取年龄
+	 * @param date 生日 yyyy-MM-dd
+	 * @return
+     */
+	public String getUserAge(String date) {
+		String[] split = date.split("-");
+		Calendar birthday = new GregorianCalendar(Integer.parseInt(split[0]), Integer.parseInt(split[1])-1,Integer.parseInt(split[2]));//month从0开始
+
+		Calendar now = Calendar.getInstance();
+		int day = now.get(Calendar.DAY_OF_MONTH) - birthday.get(Calendar.DAY_OF_MONTH);
+		int month = now.get(Calendar.MONTH) - birthday.get(Calendar.MONTH);
+		int year = now.get(Calendar.YEAR) - birthday.get(Calendar.YEAR);
+		//按照减法原理，先day相减，不够向month借；然后month相减，不够向year借；最后year相减。
+
+		if(day<0){
+			month -= 1;
+			now.add(Calendar.MONTH, -1);//得到上一个月，用来得到上个月的天数。
+			day = day + now.getActualMaximum(Calendar.DAY_OF_MONTH);
+		}
+		if(month<0){
+			month = (month+12)%12;
+			year--;
+		}
+		return year+"";
+	}
+
+	public Set<String> getAllChildOrgidByNowOriId(String orgId,Set<String> orgIds){
+		orgIds.add(orgId);
+		//查询出所有的子节点
+		List<Organization> byParentId = organizationRepoService.findByParentId(orgId);
+		for (Organization organization : byParentId) {
+			getAllChildOrgidByNowOriId(organization.getId(),orgIds);
+		}
+		return orgIds;
 	}
 }

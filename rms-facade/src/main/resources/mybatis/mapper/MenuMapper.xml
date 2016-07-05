@@ -103,9 +103,9 @@
   </delete>
   <insert id="insert" parameterType="com.shangpin.uaas.entity.Menu" >
     insert into menu (id, uri, parentId, 
-      name, sort, appCode, 
+      name, sort, appCode,
       url)
-    values (#{id,jdbcType=VARCHAR}, #{uri,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{uri,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
       #{name,jdbcType=VARCHAR}, #{sort,jdbcType=SMALLINT}, #{appCode,jdbcType=VARCHAR}, 
       #{url,jdbcType=VARCHAR})
   </insert>
@@ -118,7 +118,7 @@
       <if test="uri != null" >
         uri,
       </if>
-      <if test="roleId != null" >
+      <if test="parentId != null" >
         parentId,
       </if>
       <if test="name != null" >
@@ -141,8 +141,8 @@
       <if test="uri != null" >
         #{uri,jdbcType=VARCHAR},
       </if>
-      <if test="roleId != null" >
-        #{roleId,jdbcType=VARCHAR},
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -173,8 +173,8 @@
       <if test="record.uri != null" >
         uri = #{record.uri,jdbcType=VARCHAR},
       </if>
-      <if test="record.roleId != null" >
-        parentId = #{record.roleId,jdbcType=VARCHAR},
+      <if test="record.parentId != null" >
+        parentId = #{record.parentId,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
@@ -197,7 +197,7 @@
     update menu
     set id = #{record.id,jdbcType=VARCHAR},
       uri = #{record.uri,jdbcType=VARCHAR},
-      parentId = #{record.roleId,jdbcType=VARCHAR},
+      parentId = #{record.parentId,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       sort = #{record.sort,jdbcType=SMALLINT},
       appCode = #{record.appCode,jdbcType=VARCHAR},
@@ -212,8 +212,8 @@
       <if test="uri != null" >
         uri = #{uri,jdbcType=VARCHAR},
       </if>
-      <if test="roleId != null" >
-        parentId = #{roleId,jdbcType=VARCHAR},
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -233,7 +233,7 @@
   <update id="updateByPrimaryKey" parameterType="com.shangpin.uaas.entity.Menu" >
     update menu
     set uri = #{uri,jdbcType=VARCHAR},
-      parentId = #{roleId,jdbcType=VARCHAR},
+      parentId = #{parentId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=SMALLINT},
       appCode = #{appCode,jdbcType=VARCHAR},

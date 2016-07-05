@@ -101,5 +101,11 @@ public interface UserAdminFacade {
      */
     @FacadeApi(params = {"userId", "userName"})
     public boolean verifyUserName(String userId , String userName);
+    /**
+     * 获取用户年龄
+     * @param date 生日 yyyy/MM/dd
+     */
+    @FacadeApi(params = {"userId", "userName"})
+    public String getUserAge(String date);
 
 }

@@ -38,11 +38,12 @@ import com.google.gson.JsonSerializer;
 public class Json2MethodParamUtil {
 	private static final Logger logger = LoggerFactory.getLogger(Json2MethodParamUtil.class);
 	private static GsonBuilder gb=new GsonBuilder();
-	private static Gson gson = gb.create();
+	private static Gson gson =null;
 	static {
 		gb.registerTypeAdapter(java.util.Date.class, new DateSerializer()).setDateFormat(DateFormat.LONG);
 		gb.registerTypeAdapter(java.util.Date.class, new DateDeserializer()).setDateFormat(DateFormat.LONG);
 		gb.registerTypeAdapter(Boolean.class,new BooleanDeserializer());
+		gson = gb.create();
 	}
 	/**
 	 * google Gson方式将json数组转换成类型数组对应的对象集合<br/>

@@ -1,6 +1,5 @@
 package com.shangpin.uaas.controller.admin;
 
-import com.shangpin.common.utils.DateUtil;
 import com.shangpin.uaas.api.admin.user.Gender;
 import com.shangpin.uaas.api.admin.user.Status;
 import com.shangpin.uaas.api.admin.user.UserDTO;
@@ -12,7 +11,6 @@ import com.shangpin.uaas.entity.UserRole;
 import com.shangpin.uaas.services.admin.RoleAdminFacadeService;
 import com.shangpin.uaas.services.admin.UserAdminFacadeService;
 import com.shangpin.uaas.services.dao.*;
-import com.shangpin.uaas.util.PoiUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -28,10 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -302,62 +301,6 @@ public class UserController {
 
 	}
 
-	public Map<String,String> uploadUser(File user){
-		Map<String,String> resultMap = new HashMap<>();
-		try {
-			FileInputStream input = new FileInputStream(user);
-			Map<Integer, String> inputMap = PoiUtil.readExcelContent(input);
-			if(inputMap.isEmpty()){
-				resultMap.put("code","1");
-				resultMap.put("msg","文件内容不能为空");
-				return resultMap;
-			}
-			Set<Map.Entry<Integer, String>> entries = inputMap.entrySet();
-			for (Map.Entry<Integer, String> entry : entries) {
-				String[] split = entry.getValue().split("||");
-				List<User> findUser = userRepoService.findByUsername(split[1]);
-				if(findUser!=null){
-					resultMap.put("code","1");
-					resultMap.put("msg","用户名"+split[1]+"已经被使用");
-					return resultMap;
-				}
-				User newUser = new User();
-				newUser.setId(UUID.randomUUID().toString());
-				newUser.setRealName(split[0]);
-				newUser.setUsername(split[1]);
-				if(Gender.MALE.name().equals(split[2])){
-					newUser.setGender(Gender.MALE);
-				}else{
-					newUser.setGender(Gender.FEMALE);
-				}
-				newUser.setUserCode(split[3]);
-				newUser.setOrganizationId(split[4]);
-				newUser.setMobile(split[5]);
-				newUser.setTelephone(split[6]);
-				newUser.setDirectLeaderId(split[7]);
-				newUser.setEmail(split[8]);
-				newUser.setJobLevel(split[9]);
-				newUser.setPassword(split[10]);
-				if(StringUtils.isNotBlank(split[11])){
-					newUser.setBirth(DateUtil.parseDatetime19(split[11]));
-				}
-				newUser.setWorkplace(split[12]);
-				newUser.setStatus("1".equals(split[13]));
-				int save = userRepoService.save(newUser);
-				if(save!=1){
-					resultMap.put("code","1");
-					resultMap.put("msg","创建用户失败,用户名"+split[1]);
-					throw new Exception("创建用户失败，用户id："+newUser.getId());
-				}
-			}
-			resultMap.put("code","0");
-			resultMap.put("msg","创建用户完成");
-			return resultMap;
-		}catch (Exception e){
-			e.printStackTrace();
-			return resultMap;
-		}
-	}
 
 /*	public void exportUserWithRole() {
 		UserCriteriaDTO userCriteriaDTO = new UserCriteriaDTO();

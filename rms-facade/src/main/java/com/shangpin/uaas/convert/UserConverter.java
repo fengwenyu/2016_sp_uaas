@@ -56,11 +56,11 @@ public class UserConverter {
         result.setWorkStartDate(user.getWorkStartDate()!=null?DateUtil.date10(user.getWorkStartDate()):"");
         result.setGraduationTime(user.getGraduationTime());
         result.setFamilyRegister(user.getFamilyRegister());
-        result.setForeignEnglish(user.getForeignEnglish());
-        result.setForeignRussian(user.getForeignRussian());
-        result.setForeignFrench(user.getForeignFrench());
-        result.setForeignKorean(user.getForeignKorean());
-        result.setForeignJapanese(user.getForeignJapanese());
+        result.setForeignEnglish("true".equals(user.getForeignEnglish()));
+        result.setForeignRussian("true".equals(user.getForeignRussian()));
+        result.setForeignFrench("true".equals(user.getForeignFrench()));
+        result.setForeignKorean("true".equals(user.getForeignKorean()));
+        result.setForeignJapanese("true".equals(user.getForeignJapanese()));
                
         result.setMaritalStatus(user.getMaritalStatus());
         result.setBirthPlace(user.getBirthPlace());

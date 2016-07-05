@@ -147,13 +147,16 @@
     </if>
   </select>
   <select id="findByCriteriaDto" resultMap="BaseResultMap" >
-    SELECT u.*,o.`name` organizationName  FROM user u left join organization  o on u.`organizationId`=o.`id`
+    SELECT
+    <include refid="Base_Column_List_New" />
+    FROM user u left join organization  o on u.`organizationId`=o.`id`
     <where>
       <if test="userDto.gender != null">
         u.`gender`=#{userDto.gender}
       </if>
-      <if test="userDto.organizationId !=null">
-        and u.`organizationId`=#{userDto.organizationId}
+      <if test="userDto.organizationIds !=null">
+        and u.`organizationId` in
+        <foreach item="item" index="index" collection="userDto.organizationIds"  open="(" separator="," close=")"> #{item}  </foreach>
       </if>
       <if test="userStatus !=null">
         and u.`status`=#{userStatus}
@@ -165,13 +168,16 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        and u.`realName` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`username` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`email` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`telephone` LIKE CONCAT('%',#{userDto.realNameLike},'%')
       </if>
     </where>
+    ORDER BY u.`createdTime` DESC
     LIMIT #{start},#{size}
   </select>
   <select id="findAllUsersWithRoleByCriteria" resultMap="BaseResultMap" >
-    SELECT u.*,o.`name` organizationName,r.`id` roleId
+    SELECT
+    <include refid="Base_Column_List_New" />
+    ,r.`id` roleId
       FROM role r INNER JOIN  userRole ur
         ON ur.`roleId`=r.`id`
       INNER JOIN user u
@@ -203,17 +209,47 @@
     </where>
     LIMIT #{start},#{size}
   </select>
+  <select id="findAllUsersWithRoleByCriteriaAndStatusNull" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List_New" />
+    ,ur.`roleId` roleId
+    FROM  userRole  ur
+    RIGHT JOIN `user` u
+    ON ur.`userId` = u.`id`
+    AND ur.`roleId` = #{roleId}
+    INNER JOIN organization o
+    on u.`organizationId`=o.`id`
+    <where>
+      <if test="userDto.gender != null">
+        and u.`gender`=#{userDto.gender}
+      </if>
+      <if test="userDto.organizationId !=null">
+        and u.`organizationId`=#{userDto.organizationId}
+      </if>
+      <if test="userStatus !=null">
+        and u.`status`=#{userStatus}
+      </if>
+      <if test="userDto.workLocation !=null">
+        and u.`workplace`like CONCAT('%', #{userDto.workLocation},'%')
+      </if>
+      <if test="userDto.organizationNameLike !=null">
+        and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
+      </if>
+      <if test="userDto.realNameLike!=null">
+        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')</if>
+    </where>
+    ORDER BY ur.`roleId` DESC, u.`createdTime` DESC
+    LIMIT #{start},#{size}
+  </select>
   <select id="findCountAllUsersWithRoleByCriteria" resultType="java.lang.Long" >
     SELECT count(u.`id`)
-      FROM role r INNER JOIN  userRole ur
-        ON ur.`roleId`=r.`id`
-      INNER JOIN user u
-        ON ur.`userId`=u.`id`
-      INNER JOIN organization  o
-        on u.`organizationId`=o.`id`
+    FROM user u LEFT JOIN userRole ur
+    ON ur.`userId`=u.`id`
+    INNER JOIN organization o
+    on u.`organizationId`=o.`id`
     <where>
       <if test="roleId!=null">
-        r.`id`=#{roleId}
+        ur.`roleId`=#{roleId}
       </if>
       <if test="userDto.gender != null">
         and u.`gender`=#{userDto.gender}
@@ -236,16 +272,16 @@
     </where>
   </select>
   <select id="findAllUsersWithNotHaveRoleByCriteria" resultMap="BaseResultMap" >
-    SELECT u.*,o.`name` organizationName, r.`id` roleId
-      FROM role r INNER JOIN  userRole ur
-        ON ur.`roleId`=r.`id`
-      INNER JOIN user u
-        ON ur.`userId`=u.`id`
-      INNER JOIN organization  o
-        on u.`organizationId`=o.`id`
+    SELECT
+    <include refid="Base_Column_List_New" />
+    ,ur.`roleId` roleId
+    FROM user u LEFT JOIN userRole ur
+    ON ur.`userId`=u.`id`
+    INNER JOIN organization o
+    on u.`organizationId`=o.`id`
     <where>
       <if test="roleId!=null">
-        r.`id`!=#{roleId}
+        u.`id` NOT IN (SELECT userId FROM userRole WHERE  roleId=#{roleId})
       </if>
       <if test="userDto.gender != null">
         and u.`gender`=#{userDto.gender}
@@ -269,16 +305,14 @@
     LIMIT #{start},#{size}
   </select>
   <select id="findCountAllUsersWithNotHaveRoleByCriteria" resultType="java.lang.Long" >
-    SELECT count(r.`id`)
-      FROM role r INNER JOIN  userRole ur
-        ON ur.`roleId`=r.`id`
-      INNER JOIN user u
-        ON ur.`userId`=u.`id`
-      INNER JOIN organization  o
-        on u.`organizationId`=o.`id`
+    SELECT count(u.`id`)
+    FROM user u LEFT JOIN userRole ur
+    ON ur.`userId`=u.`id`
+    INNER JOIN organization o
+    on u.`organizationId`=o.`id`
     <where>
       <if test="roleId!=null">
-        r.`id`!=#{roleId}
+        u.`id` NOT IN (SELECT userId FROM userRole WHERE  roleId=#{roleId})
       </if>
       <if test="userDto.gender != null">
         and u.`gender`=#{userDto.gender}
@@ -306,8 +340,9 @@
       <if test="userDto.gender != null">
         u.`gender`=#{userDto.gender}
       </if>
-      <if test="userDto.organizationId !=null">
-        and u.`organizationId`=#{userDto.organizationId}
+      <if test="userDto.organizationIds !=null">
+        and u.`organizationId` in
+        <foreach item="item" index="index" collection="userDto.organizationIds"  open="(" separator="," close=")"> #{item}  </foreach>
       </if>
       <if test="userStatus !=null">
         and u.`status`=#{userStatus}
@@ -682,7 +717,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <select id="findAll"  parameterType="map">
+  <select id="findAll" resultMap="BaseResultMap" >
     select * from user u left join organization  o on u.`organizationId`=o.`id`
   </select>
   <update id="updateByExampleSelective" parameterType="map" >

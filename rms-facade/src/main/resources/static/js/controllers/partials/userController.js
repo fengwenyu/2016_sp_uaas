@@ -227,82 +227,20 @@
              * 添加用户
              */
             $scope.addUser = function () {
-                var checkState = true;
 
-                /**
-                 * 用户编码长度校验
-                 */
-                if($scope.user.userCode.length > 25){
-                    alert("用户编码过长！");
-                    checkState = false;
+                var checkState = checkUserHtml($scope);
+                if(!checkState){
                     return;
                 }
-
-                /**
-                 * 用户名称长度校验
-                 */
-                if($scope.user.username.length > 250){
-                    alert("用户名称过长！");
-                    checkState = true;
-                    return;
-                }
-
-                /**
-                 * 用户姓名长度校验
-                 */
-                if($scope.user.realName.length > 25){
-                    alert("用户姓名过长！");
-                    checkState = true;
-                    return;
-                }
-
-                checkState = checkMobile() && checkState;
-                if (!checkState) {
-                    return;
-                }
-//                checkState = checkTelephone();
-//                if (!checkState) {
-//                    return;
-//                }
-
-                /**
-                 * 校验邮箱格式
-                 */
-                if (undefined != $scope.user.email && "" != $scope.user.email) {
-                    if(!/(^\s*)[_|0-9|a-z|A-Z]+@[0-9|a-z|A-Z]+\.[a-z]+(\s*$)/g.test($scope.user.email)){
-                        checkState = false;
-                        alert("邮箱格式不正确");
-                        return (checkState = false);
-                    }
-                }
-
-//                if ($scope.user.jobLevel == "") {
-//                    alert("请选择职位级别");
-//                    checkState = false;
-//                    return;
-//                }
-
-                if ($scope.user.workPlace == "") {
-                    alert("请选择办公区");
-                    checkState = false;
-                    return;
-                }
-
-                if (undefined == $scope.pid || "1" == $scope.pid) {
-                    alert("请选择所在部门");
-                    checkState = false;
-                    return;
-                }
-
                 checkState = checkUserNo($scope.user.userCode);
                 if (!checkState) {
-                    return;
+                    return false;
                 }
-                checkState = checkUserName($scope.user.username)
-
+                checkState = checkUserName($scope.user.username);
                 if (!checkState) {
-                    return;
+                    return false;
                 }
+
                 if (checkState) {
                     try {
                         console.debug($scope.user.organizationId);
@@ -315,6 +253,27 @@
                     }
                 }
             };
+
+            $scope.copyDate = function(){
+                var idNumber = $scope.user.identityNumber;
+                if (idNumber!=null && idNumber!="") {
+                    //15位和18位身份证号码的正则表达式
+                    var regIdCard=/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+                    //如果通过该验证，说明身份证格式正确，但准确性还需计算
+                    if(regIdCard.test(idNumber)&&idNumber.length == 18) {
+                        var year = idNumber.substring(6, 10)+"-"+idNumber.substring(10, 12)+"-"+idNumber.substring(12, 14);
+                        var age=userapi.getUserAge(year);
+                        $scope.user.birth = year;
+                         $scope.user.age = age;
+                    }
+                }
+            };
+            $scope.copyAge = function(){
+               var year = $scope.user.birth;
+                var age=userapi.getUserAge(year);
+               // $("#userAge").val(age);
+                $scope.user.age = age;
+            }
 
         })
 
@@ -461,7 +420,26 @@
             };
 
             $scope.allUsers = userapi.findAllUsersByCriteria(allUserCriteria, page).list;
-
+            $scope.copyDate = function(){
+                var idNumber = $scope.user.identityNumber;
+                if (idNumber!=null && idNumber!="") {
+                    //15位和18位身份证号码的正则表达式
+                    var regIdCard=/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+                    //如果通过该验证，说明身份证格式正确，但准确性还需计算
+                    if(regIdCard.test(idNumber)&&idNumber.length == 18) {
+                        var year = idNumber.substring(6, 10)+"-"+idNumber.substring(10, 12)+"-"+idNumber.substring(12, 14);
+                        var age=userapi.getUserAge(year);
+                        $scope.user.birth = year;
+                        $scope.user.age = age;
+                    }
+                }
+            };
+            $scope.copyAge = function(){
+                var year = $scope.user.birth;
+                var age=userapi.getUserAge(year);
+                // $("#userAge").val(age);
+                $scope.user.age = age;
+            }
             //创建用户树开始
 
            /* var dataList_user = treeGridDataHandler($scope.allUsers);
@@ -482,77 +460,18 @@
 
 
             $scope.editUser = function () {
-
-                var checkState = true;/**
-                 * 用户编码长度校验
-                 */
-                if($scope.user.userCode.length > 25){
-                    alert("用户编码过长！");
-                    checkState = false;
-                    return;
+                var checkState = checkUserHtml($scope);
+                if(!checkState){
+                    return ;
                 }
-
-                /**
-                 * 用户名称长度校验
-                 */
-                if($scope.user.username.length > 250){
-                    alert("用户名称过长！");
-                    checkState = true;
-                    return;
+                checkState = checkModifyUserName($scope.user.id,$scope.user.username);
+                if(!checkState){
+                    return ;
                 }
-
-                /**
-                 * 用户姓名长度校验
-                 */
-                if($scope.user.realName.length > 25){
-                    alert("用户姓名过长！");
-                    checkState = true;
-                    return;
+                checkState = checkModifyUserNo($scope.user.id,$scope.user.userCode);
+                if(!checkState){
+                    return ;
                 }
-
-                checkState = checkMobile() && checkState;
-                if (!checkState) {
-                    return;
-                }
-//                checkState = checkTelephone();
-//                if (!checkState) {
-//                    return;
-//                }
-
-                /**
-                 * 校验邮箱格式
-                 */
-                if (undefined != $scope.user.email && "" != $scope.user.email) {
-                    if(!/(^\s*)[_|0-9|a-z|A-Z]+@[0-9|a-z|A-Z]+\.[a-z]+(\s*$)/g.test($scope.user.email)){
-                        checkState = false;
-                        alert("邮箱格式不正确");
-                        return (checkState = false);
-                    }
-                }
-
-//                if($scope.user.jobLevel == "" || $scope.user.jobLevel == "0"){
-//                    alert("请选择职位类别");
-//                    checkState = false;
-//                    return;
-//                }
-
-                if (undefined == $scope.pid || "1" == $scope.pid) {
-                    alert("请选择所在部门");
-                    checkState = false;
-                    return;
-                }
-
-                if ($scope.user.workPlace == "" || null == $scope.user.workPlace) {
-                    alert("请选择办公区");
-                    checkState = false;
-                    return;
-                }
-                checkState = checkModifyUserName($scope.user.id , $scope.user.username)
-                if (!checkState) {
-                    return;
-                }
-
-                //var checkResult = checkModifyUserName($scope.user.username);
                 if (checkState) {
                     $scope.user.organizationId = $scope.pid;
                     try {
@@ -693,12 +612,11 @@
         return true;
     }
 
-    // TODO 为什么没有使用？
-    function checkModifyUserNo(userId) {
-        console.debug("焦点离开～" + $("#userNo").val());
-        var userNo = $("#userNo").val();
+    function checkModifyUserNo(userId,userNo) {
+       // console.debug("焦点离开～" + $("#userNo").val());
+       // var userNo = $("#userNo").val();
         var user = userapi.getUserByUserCode(userNo);
-        if (null != user && user.id != userId) {
+        if (user !=null  && user.id != userId) {
             alert("该用户编号已存在!");
             return false
         }
@@ -853,36 +771,145 @@
     }
 
 
+    function checkUserHtml($scope){
+        /**
+         * 用户编码长度校验
+         */
+        if($scope.user.userCode.length > 25){
+            alert("用户编码过长！");
+            return false;
+        }
+
+        /**
+         * 用户名称长度校验
+         */
+        if($scope.user.username.length > 250){
+            alert("用户名称过长！");
+            return false;
+        }
+
+        /**
+         * 用户姓名长度校验
+         */
+        if($scope.user.realName.length > 25){
+            alert("用户姓名过长！");
+            return fasle;
+        }
+        var checkmobile = checkMobile();
+        if (!checkmobile) {
+            return checkmobile;
+        }
+
+        /**
+         * 校验邮箱格式
+         */
+        if (undefined != $scope.user.email && "" != $scope.user.email) {
+            if(!/(^\s*)[_|0-9|a-z|A-Z]+@[0-9|a-z|A-Z]+\.[a-z]+(\s*$)/g.test($scope.user.email)){
+                alert("邮箱格式不正确");
+                return  false;
+            }
+        }
+
+
+        if ($scope.user.workPlace==undefined||$scope.user.workPlace == "") {
+            alert("请选择办公区");
+            return false;
+        }
+
+        if ($scope.user.employeeStatus==undefined||$scope.user.employeeStatus == "") {
+            alert("请选择员工状态");
+            return false;
+        }
+
+        if (undefined == $scope.pid || "1" == $scope.pid) {
+            alert("请选择所在部门");
+            return false;
+        }
+        if ($scope.user.identity==null || $scope.user.identity == "") {
+            alert("请选择身份标识");
+            return false;
+        }
+
+        if ($scope.user.identityNumber !=null && $scope.user.identityNumber!="") {
+            if($scope.user.identity=="身份证"){
+                var idCard = $scope.user.identityNumber;
+                //15位和18位身份证号码的正则表达式
+                var regIdCard=/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+                //如果通过该验证，说明身份证格式正确，但准确性还需计算
+                if(regIdCard.test(idCard)) {
+                    if (idCard.length == 18) {
+                        var idCardWi = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2); //将前17位加权因子保存在数组里
+                        var idCardY = new Array(1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2); //这是除以11后，可能产生的11位余数、验证码，也保存成数组
+                        var idCardWiSum = 0; //用来保存前17位各自乖以加权因子后的总和
+                        for (var i = 0; i < 17; i++) {
+                            idCardWiSum += idCard.substring(i, i + 1) * idCardWi[i];
+                        }
+
+                        var idCardMod = idCardWiSum % 11;//计算出校验码所在数组的位置
+                        var idCardLast = idCard.substring(17);//得到最后一位身份证号码
+
+                        //如果等于2，则说明校验码是10，身份证号码最后一位应该是X
+                        if (idCardMod == 2) {
+                            if (idCardLast != "X" && idCardLast != "x") {
+                                alert("请输入正确的证件号码");
+                                return false;
+                            }
+                        } else {
+                            //用计算出的验证码与最后一位身份证号码匹配，如果一致，说明通过，否则是无效的身份证号码
+                            if (idCardLast != idCardY[idCardMod]) {
+                                alert("请输入正确的证件号码");
+                                return false;
+                            }
+                        }
+                    }
+                }else{
+                    alert("请输入正确的证件号码");
+                    return false;
+                }
+            }
+        }else{
+            alert("请输入证件号码");
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * 检查手机格式
+     */
+    function checkMobile() {
+
+        var re = /^1[3|4|5|8][0-9]\d{4,8}$/;
+        var mobile = $("#mobile").val();
+        if (mobile != null && mobile != "" && !re.test(mobile)) {
+            alert("手机号格式错误");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 检查电话格式
+     *
+     * @returns {boolean}
+     */
+    function checkTelephone() {
+
+        var re = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/;
+        var telephone = $("#telephone").val();
+        if (telephone != null && telephone != "" && !re.test(telephone)) {
+            alert("座机号码格式不正确");
+            return false;
+        }
+        return true;
+    }
+
+
+
 })();
 
 
-/**
- * 检查手机格式
- */
-function checkMobile() {
 
-    var re = /^1[3|4|5|8][0-9]\d{4,8}$/;
-    var mobile = $("#mobile").val();
-    if (mobile != null && mobile != "" && !re.test(mobile)) {
-        alert("手机号格式错误");
-        return false;
-    }
 
-    return true;
-}
-
-/**
- * 检查电话格式
- *
- * @returns {boolean}
- */
-function checkTelephone() {
-
-    var re = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/;
-    var telephone = $("#telephone").val();
-    if (telephone != null && telephone != "" && !re.test(telephone)) {
-        alert("座机号码格式不正确");
-        return false;
-    }
-    return true;
-}

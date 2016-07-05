@@ -154,26 +154,6 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
 		List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>(organizations.size());
 		for (Organization organization : organizations) {
 			OrganizationDTO organizationDTO=OrganizationConverter.toOrganizationDTO(organization);
-			//TODO leader user
-			/*if (!CollectionUtils.isEmpty(organizationDTO.getOrganizationLeaders())) {
-				List<UserDTO> organizationLeaders =new ArrayList<UserDTO>();
-				List<String> userIds = new ArrayList<String>();
-				for (UserDTO userDTO : organizationDTO.getOrganizationLeaders()) {
-					if (StringUtils.isNotEmpty(userDTO.getId())) {
-						userIds.add(userDTO.getId());
-					}
-				}
-				if(!userIds.isEmpty()){
-					List<User> users = userRepoService.findByIdIn(userIds);
-					if(users!=null && !users.isEmpty()){
-						for (User user : users) {
-							UserDTO c=UserConverter.toUserDTO(user);
-							organizationLeaders.add(c);
-						}
-					}
-				}
-				organizationDTO.setOrganizationLeaders(organizationLeaders);
-			}*/
 		organizationDTOs.add(organizationDTO);
       }
      return organizationDTOs;
@@ -253,23 +233,32 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
             throw new RuntimeException("没有该机构：" + id);
         }
         OrganizationDTO result = OrganizationConverter.toOrganizationDTO(organization);
-        //TODO use while orgs ?
-        List<Organization> organizations1 = organizationRepoService.findByParentId(result.getId());
-
-        if (organizations1.size() > 0) {
-            result.setIsLeaf(false);
-        } else {
-            result.setIsLeaf(true);
-        }
-        for (UserDTO user : result.getOrganizationLeaders()) {
+		List<Organization> byParentId = organizationRepoService.findByParentId(result.getId());
+		String rn ="/" + organization.getName();
+		String pId = organization.getParentId();
+		while(pId!=null && !"1".equals(pId)&& !"0".equals(pId)){
+			Organization organizations1 = organizationRepoService.findById(pId);
+			if(organizations1 !=null ){
+				rn=("/"+organizations1.getName())+rn;
+				pId = organizations1.getParentId();
+			}else{
+				pId =null;
+			}
+		}
+		result.setRdn(rn);
+		if (byParentId.size() > 0) {
+			result.setIsLeaf(false);
+		} else {
+			result.setIsLeaf(true);
+		}
+        /*for (UserDTO user : result.getOrganizationLeaders()) {
         	User u = userRepoService.findById(user.getId());
             if (u == null) {
                 log.warn("没有该用户：" + user.getId());
             } else {
                 user=UserConverter.toUserDTO(u);
             }
-		}
-        log.debug("######################:" + (result == null));
+		}*/
         log.debug("############" + result.getName());
 
         return result;

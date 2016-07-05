@@ -19,7 +19,7 @@ public class OrganizationConverter {
         result.setIsEnabled(organization.isStatus());
         result.setDescription(organization.getDescription());
         result.setParentId(organization.getParentId());
-
+        result.setHasParent(!"1".equals(organization.getParentId()));
        /* String tempRdn = organization.getId().getSuffix(1).toString();
         String[] allRdns = tempRdn.split(",");
         for (int i = allRdns.length - 1; i >= 0; i--) {

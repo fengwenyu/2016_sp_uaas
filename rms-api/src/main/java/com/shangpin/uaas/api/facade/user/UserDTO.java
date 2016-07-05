@@ -4,9 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shangpin.uaas.api.admin.user.Status;
 import com.shangpin.uaas.api.facade.auth.dto.OrganizationDTO;
 import com.shangpin.uaas.api.facade.auth.dto.RoleDTO;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +47,7 @@ public class UserDTO implements Serializable {
     /**
      * 用户状态--枚举--必须
      */
-    private String status;
+    private Status status;
 
     /**
      * 手机号码--建议--登录时候可以使用手机号码登录
@@ -120,13 +125,6 @@ public class UserDTO implements Serializable {
         this.userCode = userCode;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getMobile() {
         return mobile;

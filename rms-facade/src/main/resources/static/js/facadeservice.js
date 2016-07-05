@@ -2007,5 +2007,26 @@ com.shangpin.uaas.api.admin.user.UserAdminFacade = {
         });
         if (rsl.err) throw rsl.err;
         return rsl.val;
+    },
+    getUserAge: function(date) {
+        var params = [date];
+        var rsl;
+        $.ajax({
+            type: "POST",
+            url: "/facade/json/com.shangpin.uaas.api.admin.user/UserAdmin/getUserAge",
+            data: {
+                "params": JSON.stringify(params)
+            },
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                rsl = data;
+            },
+            error: function(o) {
+                rsl = o;
+            }
+        });
+        if (rsl.err) throw rsl.err;
+        return rsl.val;
     }
 };

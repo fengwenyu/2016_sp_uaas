@@ -234,9 +234,6 @@ public class UserFacadeService implements UserFacade {
         for (User user : users) {
         	 userDTOs.add(convert(user));
 		}
-        for (User user : users) {
-        	userDTOs.add(convert(user));
-		}
         return userDTOs;
     }
 

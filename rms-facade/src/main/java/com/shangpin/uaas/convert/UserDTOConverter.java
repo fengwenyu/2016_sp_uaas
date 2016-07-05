@@ -138,20 +138,20 @@ public class UserDTOConverter {
             result.setFamilyRegister(userDTO.getFamilyRegister());
         }
 
-        if (StringUtils.isNotEmpty(userDTO.getForeignEnglish())) {
-            result.setForeignEnglish(userDTO.getForeignEnglish());
+        if (userDTO.getForeignEnglish()!=null) {
+            result.setForeignEnglish(userDTO.getForeignEnglish()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignRussian())) {
-            result.setForeignRussian(userDTO.getForeignRussian());
+        if (userDTO.getForeignRussian()!=null) {
+            result.setForeignRussian(userDTO.getForeignRussian()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignFrench())) {
-            result.setForeignFrench(userDTO.getForeignFrench());
+        if (userDTO.getForeignFrench()!=null) {
+            result.setForeignFrench(userDTO.getForeignFrench()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignKorean())) {
-            result.setForeignKorean(userDTO.getForeignKorean());
+        if (userDTO.getForeignKorean()!=null) {
+            result.setForeignKorean(userDTO.getForeignKorean()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignJapanese())) {
-            result.setForeignJapanese(userDTO.getForeignJapanese());
+        if (userDTO.getForeignJapanese()!=null) {
+            result.setForeignJapanese(userDTO.getForeignJapanese()+"");
         }
 
         if (StringUtils.isNotEmpty(userDTO.getMaritalStatus())) {
@@ -166,7 +166,6 @@ public class UserDTOConverter {
         if (StringUtils.isNotEmpty(userDTO.getSalaryBankNumber())) {
             result.setSalaryBankNumber(userDTO.getSalaryBankNumber());
         }
-
         return result;
     }
 
@@ -176,7 +175,9 @@ public class UserDTOConverter {
      * @return
      */
     public static User toUpdateEntity(User user,UserDTO userDTO) {
-
+        if (StringUtils.isNotEmpty(userDTO.getUserCode())) {
+            user.setUserCode(userDTO.getUserCode());
+        }
         if (StringUtils.isNotEmpty(userDTO.getRealName())) {
             user.setRealName(userDTO.getRealName());
         }
@@ -297,20 +298,20 @@ public class UserDTOConverter {
         if (StringUtils.isNotEmpty(userDTO.getFamilyRegister())) {
             user.setFamilyRegister(userDTO.getFamilyRegister());
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignEnglish())) {
-            user.setForeignEnglish(userDTO.getForeignEnglish());
+        if (userDTO.getForeignEnglish()!=null) {
+            user.setForeignEnglish(userDTO.getForeignEnglish()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignRussian())) {
-            user.setForeignRussian( userDTO.getForeignRussian());
+        if (userDTO.getForeignRussian()!=null) {
+            user.setForeignRussian( userDTO.getForeignRussian()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignFrench())) {
-            user.setForeignFrench(userDTO.getForeignFrench());
+        if (userDTO.getForeignFrench()!=null) {
+            user.setForeignFrench(userDTO.getForeignFrench()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignKorean())) {
-            user.setForeignKorean(userDTO.getForeignKorean());
+        if (userDTO.getForeignKorean()!=null) {
+            user.setForeignKorean(userDTO.getForeignKorean()+"");
         }
-        if (StringUtils.isNotEmpty(userDTO.getForeignJapanese())) {
-            user.setForeignJapanese(userDTO.getForeignJapanese());
+        if (userDTO.getForeignJapanese()!=null) {
+            user.setForeignJapanese(userDTO.getForeignJapanese()+"");
         }
         if (StringUtils.isNotEmpty(userDTO.getMaritalStatus())) {
             user.setMaritalStatus(userDTO.getMaritalStatus());

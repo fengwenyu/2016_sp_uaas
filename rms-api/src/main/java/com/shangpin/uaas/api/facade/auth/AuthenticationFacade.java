@@ -1,5 +1,7 @@
 package com.shangpin.uaas.api.facade.auth;
 
+import java.util.Map;
+
 /**
  * 认证服务
  * <p/>
@@ -18,7 +20,7 @@ public interface AuthenticationFacade {
      * @param password  密码 -- 必填
      * @return 访问令牌
      */
-	public String login(String userLogin, String password);
+	public Map<String,String> login(String userLogin, String password);
 
     /**
      * 延长令牌有效期

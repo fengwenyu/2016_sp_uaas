@@ -269,40 +269,20 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 			PagedList<UserDTO> result;
 			String hasThisRole;
 			if(criteria.getHasThisRole()==null){
-				result = userAdminFacadeService.findAllUsersWithRoleByCriteria(userCriteriaDTO,null,Paginator.page(1, Integer.MAX_VALUE));
+				result = userAdminFacadeService.findAllUsersWithRoleByCriteriaAndStatusNull(userCriteriaDTO,roleId,paginator);
 			}else if("true".equals(criteria.getHasThisRole().toString())){
-				result = userAdminFacadeService.findAllUsersWithRoleByCriteria(userCriteriaDTO,roleId,Paginator.page(1, Integer.MAX_VALUE));
+				result = userAdminFacadeService.findAllUsersWithRoleByCriteria(userCriteriaDTO,roleId,paginator);
 			}else{
-				result = userAdminFacadeService.findAllUsersWithNotHaveRoleByCriteria(userCriteriaDTO,roleId,Paginator.page(1, Integer.MAX_VALUE));
+				result = userAdminFacadeService.findAllUsersWithNotHaveRoleByCriteria(userCriteriaDTO,roleId,paginator);
 			}
 			for (UserDTO udto : result.getList()) {
 				UserWithRoleDTO user = new UserWithRoleDTO();
 				BeanUtils.copyProperties(user, udto);
-				user.setHasThisRole(roleId.endsWith(udto.getRoleId()));
+				user.setHasThisRole(roleId.equals(udto.getRoleId()));
 				returnList.add(user);
-				/*PagedList<RoleDTO> rPagedList = findRolesByUserId(user.getId(), Paginator.page(1, Integer.MAX_VALUE));
-				for (RoleDTO rDto : rPagedList.getList()) {
-					if (roleId.equals(rDto.getId())) {
-						user.setHasThisRole(true);
-						break;
-					}
-				}*/
-				/*if (criteria.getHasThisRole() == null) {
-					// returnList.add(user);
-				} else {
-					user = user.getHasThisRole() != null && user.getHasThisRole() ? user : null;
-					// user =
-					// criteria.getHasThisRole().equals(user.getHasThisRole()) ?
-					// user : null;
-					// user =
-					// criteria.getHasThisRole().equals(user.getHasThisRole()) ?
-					// user : null;
-				}*/
-
-				/*if (user != null) {
-				}*/
 			}
-			return PageListUtil.convert(paginator, returnList);
+			return  new PagedList<UserWithRoleDTO>(result.getTotalCount(), paginator, returnList);
+			//return PageListUtil.convert(paginator, returnList);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			return new PagedList<UserWithRoleDTO>();
@@ -346,9 +326,14 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	 * @param userId
 	 */
 	@Override
-	public void revokeRoleFromUser(String roleId, String userId) {
+	public boolean revokeRoleFromUser(String roleId, String userId) {
 		flushCacheService.modify++;
-		userRoleRepoService.deleteByUserIdAndRoleId(roleId,userId);
+		int delete = userRoleRepoService.deleteByUserIdAndRoleId(roleId, userId);
+		if(delete!=1){
+			return false;
+		}else{
+			return true;
+		}
 		/*List<UserRole> userRoles = userRoleRepoService.findUserRoleByUser(userId);
 		for (UserRole userRole : userRoles) {
 			if (userRole.getRoleId().equals(roleId)) {

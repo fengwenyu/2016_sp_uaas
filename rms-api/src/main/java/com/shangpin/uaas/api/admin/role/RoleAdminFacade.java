@@ -117,6 +117,6 @@ public interface RoleAdminFacade {
      * @param roleId 角色id
      * @param userId 用户id
      */
-    public void revokeRoleFromUser(String roleId, String userId);
+    public boolean revokeRoleFromUser(String roleId, String userId);
 
 }

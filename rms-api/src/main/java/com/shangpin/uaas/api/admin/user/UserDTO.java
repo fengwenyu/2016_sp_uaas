@@ -115,11 +115,11 @@ public class UserDTO{
     private String workStartDate;
     private String graduationTime;
     private String familyRegister;
-    private String foreignEnglish;
-    private String foreignRussian;
-    private String foreignFrench;
-    private String foreignKorean;
-    private String foreignJapanese;
+    private Boolean foreignEnglish;
+    private Boolean foreignRussian;
+    private Boolean foreignFrench;
+    private Boolean foreignKorean;
+    private Boolean foreignJapanese;
 
     private String maritalStatus;
     private String birthPlace;
