@@ -245,9 +245,13 @@
                     try {
                         console.debug($scope.user.organizationId);
                         $scope.user.organizationId = $scope.pid;
-                        userapi.createUser($scope.user);
-                        alert("创建用户成功！");
-                        history.go(-1);
+                        var data = userapi.createUser($scope.user);
+                        if(data =="success"){
+                            alert("创建用户成功！");
+                            history.go(-1);
+                        }else{
+                            alert(data);
+                        }
                     } catch (e) {
                         alert("创建用户出错：" + e);
                     }
@@ -792,7 +796,7 @@
          * 用户姓名长度校验
          */
         if($scope.user.realName.length > 25){
-            alert("用户姓名过长！");
+            alert("员工姓名过长！");
             return fasle;
         }
         var checkmobile = checkMobile();
@@ -810,7 +814,10 @@
             }
         }
 
-
+        if (undefined == $scope.pid || "1" == $scope.pid) {
+            alert("请选择所在部门");
+            return false;
+        }
         if ($scope.user.workPlace==undefined||$scope.user.workPlace == "") {
             alert("请选择办公区");
             return false;
@@ -821,10 +828,7 @@
             return false;
         }
 
-        if (undefined == $scope.pid || "1" == $scope.pid) {
-            alert("请选择所在部门");
-            return false;
-        }
+
         if ($scope.user.identity==null || $scope.user.identity == "") {
             alert("请选择身份标识");
             return false;

@@ -1,15 +1,17 @@
 package com.shangpin.uaas.services.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.shangpin.uaas.api.admin.resource.ResourceDTO;
+import com.shangpin.uaas.api.facade.auth.dto.GroupDTO;
+import com.shangpin.uaas.api.facade.auth.dto.MenuDTO;
+import com.shangpin.uaas.api.facade.auth.dto.OrganizationDTO;
+import com.shangpin.uaas.api.facade.auth.dto.RoleDTO;
+import com.shangpin.uaas.api.facade.user.Subject;
+import com.shangpin.uaas.api.facade.user.UserDTO;
+import com.shangpin.uaas.api.facade.user.UserFacade;
+import com.shangpin.uaas.convert.api.*;
 import com.shangpin.uaas.entity.*;
+import com.shangpin.uaas.services.admin.PermissionApiFacadeService;
 import com.shangpin.uaas.services.dao.*;
+import net.spy.memcached.MemcachedClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,29 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import com.shangpin.uaas.api.facade.auth.dto.GroupDTO;
-import com.shangpin.uaas.api.facade.auth.dto.MenuDTO;
-import com.shangpin.uaas.api.facade.auth.dto.OrganizationDTO;
-import com.shangpin.uaas.api.facade.auth.dto.RoleDTO;
-import com.shangpin.uaas.api.facade.e.APPCode;
-import com.shangpin.uaas.api.facade.user.Subject;
-import com.shangpin.uaas.api.facade.user.UserDTO;
-import com.shangpin.uaas.api.facade.user.UserFacade;
-import com.shangpin.uaas.convert.api.GroupConverter;
-import com.shangpin.uaas.convert.api.MenuConverter;
-import com.shangpin.uaas.convert.api.OrganizationConverter;
-import com.shangpin.uaas.convert.api.RoleConverter;
-import com.shangpin.uaas.convert.api.UserConverter;
-import com.shangpin.uaas.services.admin.PermissionApiFacadeService;
-
-import net.spy.memcached.MemcachedClient;
+import java.util.*;
 
 /**
  */
 @Service
 public class UserFacadeService implements UserFacade {
 	protected static Logger log = LoggerFactory.getLogger(UserFacadeService.class);
-    final String ORGANIZATION_BASE_DN = "ou=Department";
+    //final String ORGANIZATION_BASE_DN = "ou=Department";
     @Autowired
     MemcachedClient memcachedClient;
     @Autowired
@@ -85,8 +72,7 @@ public class UserFacadeService implements UserFacade {
             log.error("该用户被禁用:" + subject.getUserId());
             throw new RuntimeException("该用户被禁用！");
         }
-        UserDTO userDTO = convert(user);
-        return userDTO;
+       return convert(user);
     }
 
     @Override
@@ -105,24 +91,13 @@ public class UserFacadeService implements UserFacade {
 
         Subject subject = (Subject) memcachedClient.get(token);
         List<Role> roles = roleRepoService.findByUserId(subject.getUserId());
-        List<RoleDTO> roleDTOs = new ArrayList<RoleDTO>();
+        List<RoleDTO> roleDTOs = new ArrayList<>();
         if(roles!=null && roles.size()>0){
             for (Role role : roles) {
                 roleDTOs.add(RoleConverter.convert(role));
             }
         }
         return roleDTOs;
-       /* List<UserRole> userRoles = userRoleRepoService.findUserRoles(subject.getUserId());
-
-        for (UserRole userRole : userRoles) {
-        	  Role role = roleRepoService.findById(userRole.getRoleId());
-        	  if (role==null) {
-                  log.error("该角色不存在或者被删除／禁用" + userRole.getRoleId());
-              } else {
-                  //Role role = roles.get(0);
-                  roleDTOs.add(RoleConverter.convert(role));
-              }
-		}*/
 
     }
     public List<String> findAllResourcesByToken(String token) {
@@ -162,13 +137,13 @@ public class UserFacadeService implements UserFacade {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
         //获取所有的目录节点menu
-        List<MenuDTO> menuDTOs = new ArrayList<MenuDTO>();
+        List<MenuDTO> menuDTOs = new ArrayList<>();
         List<Menu> topMenus = menuRepoService.findByParentId("1");
         for (Menu subMenu : topMenus) {
         	 menuDTOs.add(MenuConverter.convert(subMenu));
 		}
 
-        List<MenuDTO> results = new ArrayList<MenuDTO>();
+        List<MenuDTO> results = new ArrayList<>();
         for (MenuDTO menu : menuDTOs) {
         	 log.debug("菜单认证权限的URI:" + menu.getUri());
             //校验该用户是否有首页menu的权限
@@ -191,8 +166,7 @@ public class UserFacadeService implements UserFacade {
             log.error("没有该用户：" + userId);
         }
 
-        UserDTO userDTO = convert(user);
-        return userDTO;
+        return convert(user);
     }
 
     @Override
@@ -203,7 +177,7 @@ public class UserFacadeService implements UserFacade {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
         List<Organization> organizations = organizationRepoService.findByParentId(parentId);
-        List<OrganizationDTO> organizationDTOs=new ArrayList<OrganizationDTO>();
+        List<OrganizationDTO> organizationDTOs=new ArrayList<>();
         for (Organization organization : organizations) {
         	organizationDTOs.add(OrganizationConverter.convert(organization));
 		}
@@ -216,7 +190,7 @@ public class UserFacadeService implements UserFacade {
 		    throw new RuntimeException("该访问令牌过期或无效！");
 		}
 		List<Organization> organizations = organizationRepoService.findAll();
-		List<OrganizationDTO> result=new ArrayList<OrganizationDTO>();
+		List<OrganizationDTO> result=new ArrayList<>();
 		for (Organization organization : organizations) {
 			result.add(OrganizationConverter.convert(organization));
 		}
@@ -230,7 +204,7 @@ public class UserFacadeService implements UserFacade {
         }
 
         List<User> users = userRepoService.findByOrganizationId(organizationId);
-        List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+        List<UserDTO> userDTOs = new ArrayList<>();
         for (User user : users) {
         	 userDTOs.add(convert(user));
 		}
@@ -242,8 +216,8 @@ public class UserFacadeService implements UserFacade {
         if (!authenticateFacadeService.isValid(token)) {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
-        List<UserDTO> userDTOs = new ArrayList<UserDTO>();
-        List<UserRole> allUserRoles = new ArrayList<UserRole>();
+        List<UserDTO> userDTOs = new ArrayList<>();
+        List<UserRole> allUserRoles = new ArrayList<>();
         if (null == roleIds || roleIds.isEmpty()) {
             return userDTOs;
         }
@@ -254,7 +228,7 @@ public class UserFacadeService implements UserFacade {
              }
 		}
 
-        Set<String> userIds = new HashSet<String>();
+        Set<String> userIds = new HashSet<>();
         for (UserRole userRole : allUserRoles) {
         	  userIds.add(userRole.getUserId());
 		}
@@ -273,7 +247,7 @@ public class UserFacadeService implements UserFacade {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
         List<UserGroup> userGroups = userGroupRepoService.findUserGroupByGroupId(groupId);
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         for (UserGroup userGroup : userGroups) {
         	 User users1 = userRepoService.findById(userGroup.getUserId());
         	 if (users1!=null) {
@@ -308,7 +282,7 @@ public class UserFacadeService implements UserFacade {
         }
 
         List<Group> groups = groupRepoService.findAll();
-        List<GroupDTO> result=new ArrayList<GroupDTO>();
+        List<GroupDTO> result=new ArrayList<>();
         for (Group group : groups) {
         	result.add(GroupConverter.convert(group));
 		}
@@ -321,7 +295,7 @@ public class UserFacadeService implements UserFacade {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
 
-        List<MenuDTO> menuDTOs = new ArrayList<MenuDTO>();
+        List<MenuDTO> menuDTOs = new ArrayList<>();
         List<Menu> menus = menuRepoService.findByAppCodeAndParentId(appCode, "1");
 
         log.debug("该系统一共得菜单数为：${menus.size()}");
@@ -345,7 +319,7 @@ public class UserFacadeService implements UserFacade {
              }
 		}
 
-        List<MenuDTO> results = new ArrayList<MenuDTO>();
+        List<MenuDTO> results = new ArrayList<>();
 
         log.debug("最终需要认证的菜单数为：${menuDTOs.size()}");
         for (MenuDTO menu : menuDTOs) {

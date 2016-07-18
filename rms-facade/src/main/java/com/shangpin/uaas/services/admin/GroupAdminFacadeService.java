@@ -25,10 +25,10 @@ import java.util.*;
 @Service
 public class GroupAdminFacadeService implements GroupAdminFacade {
 	protected static Logger log = LoggerFactory.getLogger(GroupAdminFacadeService.class);
-    final String BASE_DN = "ou=Group";
-    final String USER_Group_DN = "ou=UserGroup";
-    final String ROLE_Group_DN = "ou=RoleGroup";
-    final String USER_DN = "ou=Department";
+//    final String BASE_DN = "ou=Group";
+//    final String USER_Group_DN = "ou=UserGroup";
+//    final String ROLE_Group_DN = "ou=RoleGroup";
+//    final String USER_DN = "ou=Department";
     @Autowired
     GroupRepoService groupRepoService;
     @Autowired
@@ -97,13 +97,13 @@ public class GroupAdminFacadeService implements GroupAdminFacade {
         List<UserGroup> userGroups = userGroupRepoService.findUserGroupByGroupId(groupId);
         String groupUserIds = null;
         if(userGroups!=null && !userGroups.isEmpty()){
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (UserGroup userGroup : userGroups) {
                 sb.append(userGroup.getUserId()).append(",");
             }
             groupUserIds = sb.toString();
         }
-        List<UserWithGroupDTO> resultListDtos=new ArrayList<UserWithGroupDTO>();
+        List<UserWithGroupDTO> resultListDtos=new ArrayList<>();
         for (User user : users) {
         	UserWithGroupDTO temp=UserConverter.toUserWithGroupDTO(user);
             if(groupUserIds!=null){
@@ -119,7 +119,7 @@ public class GroupAdminFacadeService implements GroupAdminFacade {
             public int compare(UserWithGroupDTO o1, UserWithGroupDTO o2) {
                 return o2.getHasThisGroup().toString().compareTo(o1.getHasThisGroup().toString());
             }});
-        return new PagedList<UserWithGroupDTO>(totalCount, paginator, resultListDtos);
+        return new PagedList<>(totalCount, paginator, resultListDtos);
     }
 
     @Override

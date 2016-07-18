@@ -92,7 +92,7 @@
         ON ur.`roleId`=r.`id`
       INNER JOIN  permission p
         ON r.`id`=p.`roleId`
-      WHERE u.`id`=#{userId}
+      WHERE r.`status`='1' and u.`id`=#{userId}
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

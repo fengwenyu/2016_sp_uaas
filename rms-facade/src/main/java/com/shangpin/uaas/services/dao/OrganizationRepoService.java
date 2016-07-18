@@ -33,6 +33,13 @@ public class OrganizationRepoService {
         criteria.andParentidEqualTo(parentId);
         return organizationMapper.selectByExample(example);
     }
+    public List<Organization> findByNameAndParentId(String name,String parentId) {
+        OrganizationExample example = new OrganizationExample();
+        OrganizationExample.Criteria criteria = example.createCriteria();
+        criteria.andParentidEqualTo(parentId);
+        criteria.andNameEqualTo(name);
+        return organizationMapper.selectByExample(example);
+    }
 
     /**
      * 更新机构

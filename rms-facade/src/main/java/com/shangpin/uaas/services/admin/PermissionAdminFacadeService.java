@@ -1,22 +1,5 @@
 package com.shangpin.uaas.services.admin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.shangpin.uaas.api.admin.permission.PermissionAdminFacade;
 import com.shangpin.uaas.api.admin.permission.PermissionDTO;
 import com.shangpin.uaas.api.admin.resource.ResourceNodeDTO;
@@ -36,6 +19,15 @@ import com.shangpin.uaas.services.dao.ResourceNodeRepoService;
 import com.shangpin.uaas.services.dao.ResourceRepoService;
 import com.shangpin.uaas.services.dao.RoleRepoService;
 import com.shangpin.uaas.util.PageListUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class PermissionAdminFacadeService implements PermissionAdminFacade {
@@ -65,8 +57,7 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
         for (Permission permission : permissions) {
             permissionRepoService.delete(permission.getId());
         }
-        List<Role> roles = new ArrayList<Role>();
-        //TODO use in 
+        List<Role> roles = new ArrayList<>();
         for (String roleId : roleIds) {
             Role tempRoles = roleRepoService.findById(roleId);
             if (tempRoles == null) {
@@ -94,10 +85,10 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
             throw new RuntimeException("没有该角色:" + roleId);
         }
         //删除原来配置的权限
-        int delete = permissionRepoService.deleteByRoleId(roleId);
+        permissionRepoService.deleteByRoleId(roleId);
         log.debug("查询出的资源数为：" + resourceNodeIds.size());
 
-        Set<String> singleIds = new HashSet<String>();
+        Set<String> singleIds = new HashSet<>();
         List<ResourceNode> resourceNodes=resourceNodeRepoService.findAllInNodeIds(resourceNodeIds);
         if(CollectionUtils.isEmpty(resourceNodes) || resourceNodeIds.size()!=resourceNodes.size()){
             throw new RuntimeException("部分资源节点不存在！");
@@ -105,8 +96,7 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
         for (ResourceNode resourceNode2 : resourceNodes) {
             singleIds.add(resourceNode2.getResourceId());
         }
-        //TODO use left join
-        List ids = new ArrayList<>(singleIds);
+        List<String> ids = new ArrayList<>(singleIds);
         List<Resource> resources = resourceRepoService.findByIdIn(ids);
         for (Resource resource : resources) {
             registerPermission(role, resource);
@@ -121,7 +111,7 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
         }
         List<Permission> permissions = permissionRepoService.findByRoleIdIn(roleIds);
 
-        Map<String, Permission> permissionMap = new HashMap<String, Permission>();
+        Map<String, Permission> permissionMap = new HashMap<>();
         for (Permission permission : permissions) {
             if (!permissionMap.containsKey(permission.getId())) {
                 permissionMap.put(permission.getId(), permission);
@@ -140,13 +130,20 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
     public PagedList<ResourceNodeDTO> findAllResourceNodesByRoles(List<String> roleIds, String resourceType, Paginator paginator) {
 
         List<Permission> permissions = permissionRepoService.findByRoleIdIn(roleIds);
+        if(permissions==null || permissions.isEmpty()){
+            return PageListUtil.convert(paginator, new ArrayList<ResourceNodeDTO>());
+        }
         Set<String> resourceIds=new HashSet<>(permissions.size());
         for (Permission permission : permissions) {
             resourceIds.add(permission.getResourceId());
         }
 
-        Map<String, ResourceNode> allResourceNodes = new HashMap<String, ResourceNode>();
-        List reNodeIds = new ArrayList<>(resourceIds);
+        List<String> reNodeIds = new ArrayList<>(resourceIds);
+        if(reNodeIds.isEmpty()){
+            return PageListUtil.convert(paginator, new ArrayList<ResourceNodeDTO>());
+        }
+
+        Map<String, ResourceNode> allResourceNodes = new HashMap<>();
         List<ResourceNode> resourceNodes = resourceNodeRepoService.findByResourceIdIn(reNodeIds);
         for (ResourceNode resourceNode : resourceNodes) {
             if (ResourceType.BUTTON.name().equals(resourceType)) {
@@ -154,7 +151,7 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
             }
         }
         Collection<ResourceNode> setResourceNodes = allResourceNodes.values();
-        List<ResourceNodeDTO> resultResourceNodes = new ArrayList<ResourceNodeDTO>();
+        List<ResourceNodeDTO> resultResourceNodes = new ArrayList<>();
         for (ResourceNode resourceNode : setResourceNodes) {
             resultResourceNodes.add(ResourceNodeConverter.toResourceNodeDTO(resourceNode));
         }
@@ -171,7 +168,7 @@ public class PermissionAdminFacadeService implements PermissionAdminFacade {
         String resourceId = resourceNode.getResourceId();
         List<Permission> permissions = permissionRepoService.findByResourceId(resourceId);
         if(permissions==null ||permissions.isEmpty()){
-            return new ArrayList<RoleDTO>();
+            return new ArrayList<>();
         }
         Set<String> roleIds = new HashSet<>();
         for (Permission permission : permissions) {

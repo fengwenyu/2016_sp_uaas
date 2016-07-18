@@ -1,5 +1,6 @@
 package com.shangpin.uaas.configuration;
 
+import com.shangpin.uaas.api.facade.user.Subject;
 import com.shangpin.uaas.services.api.AuthenticateFacadeService;
 import com.shangpin.uaas.services.api.MemcachedUtilService;
 import com.shangpin.uaas.services.api.UserFacadeService;
@@ -8,6 +9,7 @@ import com.shangpin.uaas.services.dao.ResourceNodeRepoService;
 import com.shangpin.uaas.services.dao.ResourceRepoService;
 import com.shangpin.uaas.services.dao.RoleRepoService;
 import net.spy.memcached.MemcachedClient;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,7 @@ public class ResourceInterceptor implements HandlerInterceptor {
 					Cookie cookieToken = new Cookie("UAAS_TOKEN", uaasCookie.getValue());
 					cookieToken.setPath("/");
 					cookieToken.setDomain("shangpin.com");
-					cookieToken.setMaxAge(30 * 60);
+					cookieToken.setMaxAge(30*60*60);
 					token = uaasCookie.getValue();
 					response.addCookie(cookieToken);
 					hasRole = true;
@@ -98,7 +100,6 @@ public class ResourceInterceptor implements HandlerInterceptor {
 					}
 				}
 			}
-			authenticateFacadeService.touch(token);
 			authenticateFacadeService.touch(roleKey);
 			if (hasPermission) {
 				return true;

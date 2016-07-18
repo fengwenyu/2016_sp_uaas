@@ -57,7 +57,7 @@ public class UserSecurityInterceptor implements HandlerInterceptor {
 				Cookie cookieToken = new Cookie("UAAS_TOKEN", uaasCookie.getValue());
 				cookieToken.setPath("/");
 				cookieToken.setDomain("shangpin.com");
-				cookieToken.setMaxAge(30 * 60);
+				cookieToken.setMaxAge(30*60*60);
 				token = uaasCookie.getValue();
 				response.addCookie(cookieToken);
 			}
@@ -65,7 +65,6 @@ public class UserSecurityInterceptor implements HandlerInterceptor {
 		if (token == "" || !authenticateFacadeService.isValid(token)) {
 			throw new RuntimeException("该访问令牌无效或者已过期！");
 		}
-		authenticateFacadeService.touch(token);
 		List<RoleDTO> roles = userFacadeService.findAllRolesByToken(token);
 		List<ResourceNode> resourceNodes=resourceNodeRepoService.findByModuleNameLike("UAAS");
 		if (CollectionUtils.isNotEmpty(resourceNodes)) {

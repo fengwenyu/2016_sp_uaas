@@ -1,24 +1,10 @@
 package com.shangpin.uaas.services.admin;
 
-import java.util.*;
-
-import com.shangpin.uaas.convert.ResourceNodeDTOConverter;
-import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.shangpin.uaas.api.admin.resource.FunctionDTO;
-import com.shangpin.uaas.api.admin.resource.ResourceNodeAdminFacade;
-import com.shangpin.uaas.api.admin.resource.ResourceNodeCriteriaDTO;
-import com.shangpin.uaas.api.admin.resource.ResourceNodeDTO;
-import com.shangpin.uaas.api.admin.resource.ResourceNodeWithFunctionsDTO;
-import com.shangpin.uaas.api.admin.resource.ResourceType;
+import com.shangpin.uaas.api.admin.resource.*;
 import com.shangpin.uaas.api.common.PagedList;
 import com.shangpin.uaas.api.common.Paginator;
 import com.shangpin.uaas.convert.ResourceNodeConverter;
+import com.shangpin.uaas.convert.ResourceNodeDTOConverter;
 import com.shangpin.uaas.entity.Permission;
 import com.shangpin.uaas.entity.Resource;
 import com.shangpin.uaas.entity.ResourceNode;
@@ -26,6 +12,14 @@ import com.shangpin.uaas.services.dao.PermissionRepoService;
 import com.shangpin.uaas.services.dao.ResourceNodeRepoService;
 import com.shangpin.uaas.services.dao.ResourceRepoService;
 import com.shangpin.uaas.util.PageListUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  */
@@ -43,7 +37,7 @@ public class ResourceNodeAdminFacadeService implements ResourceNodeAdminFacade {
     public List<ResourceNodeDTO> findResourceNodeByParentResourceId(String parentResourceId) {
         List<ResourceNode> resourceNodes = resourceNodeRepoService.findByParentResourceId(parentResourceId);
 
-        List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<ResourceNodeDTO>(resourceNodes.size());
+        List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<>(resourceNodes.size());
         for (ResourceNode resourceNode : resourceNodes) {
             ResourceNodeDTO result=ResourceNodeConverter.toResourceNodeDTO(resourceNode);
             //TODO use in to find all
@@ -93,54 +87,74 @@ public class ResourceNodeAdminFacadeService implements ResourceNodeAdminFacade {
             return PageListUtil.convert(paginator, new ArrayList<ResourceNodeDTO>());
         }
 
-        List<Permission> allPermissions = new ArrayList<Permission>();
-        for (String roleId : roleIds) {
-            List<Permission> permissions = permissionRepoService.findByRoleId(roleId);
-            if (!permissions.isEmpty()) {
-                allPermissions.addAll(permissions);
-            }
-        }
-        Set<String> resourceIds = new HashSet<String>();
+        List<Permission> allPermissions = new ArrayList<>();
+        List<Permission> byRoleIdIn = permissionRepoService.findByRoleIdIn(roleIds);
+        allPermissions.addAll(byRoleIdIn);
+        Set<String> resourceIds = new HashSet<>();
         for (Permission permission : allPermissions) {
             resourceIds.add(permission.getResourceId());
         }
 
         log.debug("查询出所有的资源数:" + resourceIds.size());
-        List<ResourceNode> resourceNodes = new ArrayList<ResourceNode>();
-        for (String resourceId : resourceIds) {
-            log.debug("资源标识为：" + resourceId);
-            List<ResourceNode> tempNodes = resourceNodeRepoService.findByResourceId(resourceId);
-            resourceNodes.addAll(tempNodes);
+        List<ResourceNode> resourceNodes = new ArrayList<>();
+        if( resourceIds.isEmpty()){
+            return PageListUtil.convert(paginator, new ArrayList<ResourceNodeDTO>());
         }
+        List<ResourceNode> byResourceIdIn = resourceNodeRepoService.findByResourceIdIn(new ArrayList<>(resourceIds));
+        resourceNodes.addAll(byResourceIdIn);
         log.debug("查询出所有的资源Node数:" + resourceNodes.size());
         List<ResourceNodeDTO> result=new ArrayList<>();
         for (ResourceNode resourceNode : resourceNodes) {
             ResourceNodeDTO node=ResourceNodeConverter.toResourceNodeDTO(resourceNode);
-            Resource resource = resourceRepoService.findById(resourceNode.getResourceId());
-            if (resource == null) {
-                throw new RuntimeException("没有该资源：" + resourceNode.getResourceId());
-            }
-            node.setIsEnabled(resource.isEnabled());
-            node.setUri(resource.getUri());
+           // Resource resource = resourceRepoService.findById(resourceNode.getResourceId());
+//            if (resource == null) {
+//                throw new RuntimeException("没有该资源：" + resourceNode.getResourceId());
+//                log.error("没有该resource ，resourceid："+resourceNode.getResourceId());
+//            }else{
+//            }
+            node.setIsEnabled("1".equals(resourceNode.getEnabled()));
+            node.setUri(resourceNode.getUri());
             result.add(node);
         }
         log.debug("查询的节点总数为：" + result.size());
         return PageListUtil.convert(paginator, result);
     }
 
-
-    public List<ResourceNodeDTO> getSubResourcesByParentResourcesName(String modelName) throws Exception{
-        List<ResourceNode> byModuleName = resourceNodeRepoService.findByModuleName(modelName.trim());
-        if(byModuleName==null||byModuleName.isEmpty()){
-            throw new Exception("根据name："+modelName+"查询resourceNode查不到任何资源");
+    /**
+     * 根据节点名称获取所有的子节点
+     * @param modelName 节点名
+     * @throws Exception
+     */
+    public List<ResourceNodeDTO> getSubResourcesByParentResourcesName(String modelName) {
+        List<ResourceNode> byModuleName;
+        if(StringUtils.isBlank(modelName)){
+            byModuleName = resourceNodeRepoService.findByParentResourceId("1");
+        }else{
+            byModuleName = resourceNodeRepoService.findByModuleName(modelName.trim());
         }
-        String parentId = byModuleName.get(0).getId();
-        List<ResourceNode> byParentResourceId = resourceNodeRepoService.findByParentResourceId(parentId);
+        if(byModuleName==null||byModuleName.isEmpty()){
+            log.info("根据name："+modelName+"查询resourceNode查不到任何资源");
+            return new ArrayList<>();
+        }
         List<ResourceNodeDTO> result = new ArrayList<>();
+        for (ResourceNode node : byModuleName) {
+            List<ResourceNode> resourceNodes = getAllChildResourceNode(node, new ArrayList<ResourceNode>());
+            for (ResourceNode resourceNode : resourceNodes) {
+                Resource byId = resourceRepoService.findById(resourceNode.getResourceId());
+                if(byId!=null){
+                    resourceNode.setEnabled(byId.getId());
+                    resourceNode.setUri(byId.getUri());
+                }
+                result.add(ResourceNodeConverter.toResourceNodeDTO(resourceNode));
+            }
+        }
+        /*String parentId = byModuleName.get(0).getId();
+        List<ResourceNode> byParentResourceId = resourceNodeRepoService.findByParentResourceId(parentId);
+
         for (ResourceNode node : byParentResourceId) {
             ResourceNodeDTO resourceNodeDTO = ResourceNodeConverter.toResourceNodeDTO(node);
             result.add(resourceNodeDTO);
-        }
+        }*/
         return result;
 
     }
@@ -227,5 +241,18 @@ public class ResourceNodeAdminFacadeService implements ResourceNodeAdminFacade {
         if(insert2!=1){
             throw new Exception("插入资源Node失败。resourceNodeId："+node.getId());
         }
+    }
+
+
+    public List<ResourceNode> getAllChildResourceNode(ResourceNode resourceNode,List<ResourceNode> nodes){
+        nodes.add(resourceNode);
+        //获取所有的子节点
+        List<ResourceNode> resourceNodes = resourceNodeRepoService.findByParentResourceId(resourceNode.getId());
+        if(!resourceNodes.isEmpty()){
+            for (ResourceNode node : resourceNodes) {
+                getAllChildResourceNode(node,nodes);
+            }
+        }
+        return nodes;
     }
 }

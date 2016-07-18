@@ -153,7 +153,7 @@
                 var uri = $scope.resourceURI;
                 var resourceDTO = {
                     name : name,
-                    isEnabled : (state == 1 ? true : false),
+                    isEnabled : (state == 1),
                     type : type ,
                     uri : uri ,
                     parentId : pid,
@@ -165,23 +165,21 @@
                     var confirm = window.confirm("顶级模块类型只能是页面类型，确认添加该权限或默认修改为页面类型？");
                     if (confirm) {
                         resourceDTO.type = "PAGE";
-                        var insert = resourceapi.createResource(resourceDTO);
-                        if(insert==null){
-                            alert("添加失败");
-                        }else{
-                            //location.reload();
+                        var data = resourceapi.createResource(resourceDTO);
+                        if( data =="success"){
                             alert("添加成功");
                             history.go(-1);
+                        }else{
+                            alert(data);
                         }
                     }
                 } else {
-                    var insert = resourceapi.createResource(resourceDTO);
-                    if(insert==null){
-                        alert("添加失败");
-                    }else{
-                        //location.reload();
+                    var data = resourceapi.createResource(resourceDTO);
+                    if(data=="success"){
                         alert("添加成功");
                         history.go(-1);
+                    }else{
+                        alert(data);
                     }
                 }
 
@@ -220,7 +218,7 @@
                 var resourceDTO = {
                     id : res.id,
                     name : $scope.resourceName,
-                    isEnabled : ($scope.resourceState == 1 ? true : false),
+                    isEnabled : ($scope.resourceState == 1),
                     //type : $scope.resourceType.name || "BUTTON",
                     type : $scope.resourceType || "BUTTON",
                     uri : $scope.resourceURI,
@@ -234,14 +232,22 @@
                     var confirm = window.confirm("顶级模块类型只能是页面类型，确认添加该权限或默认修改为页面类型？");
                     if (confirm) {
                         resourceDTO.type = "PAGE";
-                        resourceapi.modifyResource(resourceDTO);
-                        alert("修改成功");
-                        location.reload();
+                        var data = resourceapi.modifyResource(resourceDTO);
+                        if( data =="success"){
+                            alert("修改成功");
+                            location.reload();
+                        }else{
+                            alert(data);
+                        }
                     }
                 } else {
-                    resourceapi.modifyResource(resourceDTO);
-                    alert("修改成功");
-                    location.reload();
+                    var data = resourceapi.modifyResource(resourceDTO);
+                    if( data =="success"){
+                        alert("修改成功");
+                        location.reload();
+                    }else{
+                        alert(data);
+                    }
                 }
             }
         })
@@ -279,7 +285,7 @@ function resourceCellDetailHandler(row){
     ]
 }
 function modifyResState(id , state){
-    state = state == "true" ? false : true;
+    state = state != "true";
     resourceapi.modifyEnable(id , state);
     alert("修改成功");
     location.reload(true);

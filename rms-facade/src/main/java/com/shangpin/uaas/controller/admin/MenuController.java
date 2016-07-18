@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,31 +38,25 @@ class MenuController {
     private String[] columns = {"appCode","id","name","sort","uri","url"};
     /**
      * 导出
-     * @param request
-     * @param response
-     * @return
+     * @param request request
+     * @param response response
      * @throws Exception
      */
     @RequestMapping("/export")
     public String export(HttpServletRequest request, HttpServletResponse response)throws Exception{
-        List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
-        String appCode=request.getParameter("appCode");
-        List<MenuDTO> menus=new ArrayList<MenuDTO>();
-        if(StringUtils.isEmpty(appCode)){
-            menus = menuAdminFacadeService.getAllMenus();
-        }else{
-            menus = menuAdminFacadeService.getAllMenusByAppCode(appCode);
-        }
+        List<HashMap<String, Object>> result = new ArrayList<>();
+        String menuName=request.getParameter("appCode");
+        List<MenuDTO> menus = menuAdminFacadeService.findMenusByMenuName(menuName);
         if (menus!=null && menus.size()>0) {
             //活动导出的值
-            for(int i=0;i<menus.size();i++){
-                HashMap<String, Object> menusMap=new HashMap<String, Object>();
-                menusMap.put("appCode", menus.get(i).getAppCode());
-                menusMap.put("id", menus.get(i).getId());
-                menusMap.put("name", menus.get(i).getName());
-                menusMap.put("sort", menus.get(i).getSort());
-                menusMap.put("uri",menus.get(i).getUri());
-                menusMap.put("url",menus.get(i).getUrl());
+            for (MenuDTO menuDto : menus) {
+                HashMap<String, Object> menusMap=new HashMap<>();
+                menusMap.put("appCode", menuDto.getAppCode());
+                menusMap.put("id", menuDto.getId());
+                menusMap.put("name", menuDto.getName());
+                menusMap.put("sort", menuDto.getSort());
+                menusMap.put("uri",menuDto.getUri());
+                menusMap.put("url",menuDto.getUrl());
                 result.add(menusMap);
             }
             response.setContentType("application/x-download");// 设置为下载application/x-download
@@ -77,16 +72,13 @@ class MenuController {
 
     /**
      * 导入
-     * @param menu
-     * @param request
-     * @param response
-     * @return
+     * @param menu 菜单对象
      * @throws Exception
      */
     @RequestMapping("/upload")
-    public HashMap<String, Object> upload (@RequestParam(value = "menu", required = true) MultipartFile menu, HttpServletRequest request,
-                                           HttpServletResponse response)throws Exception {
-        HashMap<String, Object> menusMap=new HashMap<String, Object>();
+    @ResponseBody
+    public HashMap<String, Object> upload (@RequestParam(value = "menu", required = true) MultipartFile menu)throws Exception {
+        HashMap<String, Object> menusMap=new HashMap<>();
         if (menu==null) {
             menusMap.put("msg", "file cannot be empty");
             return menusMap;
@@ -115,7 +107,12 @@ class MenuController {
                 mDto.setUrl(hssfRow.getCell(6).getStringCellValue());
                 rList.add(mDto);
             }
-            batchMenusHandler(rList);
+            try{
+                batchMenusHandler(rList);
+            }catch (Exception e){
+                menusMap.put("msg", e.getMessage());
+                return menusMap;
+            }
             menusMap.put("msg", "操作成功");
             menusMap.put("data", rList);
             return menusMap;
@@ -126,11 +123,11 @@ class MenuController {
 
     /**
      * 保存数据
-     * @param MenuDTOList
+     * @param MenuDTOList menu包装类集合
      * @throws AlreadyBoundException
      * @throws NotFoundException
      */
-    private void batchMenusHandler(List<MenuDTO> MenuDTOList) throws AlreadyBoundException, NotFoundException{
+    private void batchMenusHandler(List<MenuDTO> MenuDTOList) throws Exception{
         int initSize = MenuDTOList.size();
         int prevPosition = initSize;
         int nextPosition = initSize;
@@ -140,13 +137,9 @@ class MenuController {
             Iterator<MenuDTO> it = MenuDTOList.iterator();
             while(it.hasNext()) {
                 MenuDTO menuDTO = it.next();
-                if (!StringUtils.isEmpty(menuDTO.getUri())) {
-                    try {
-                        menuAdminFacadeService.createMenu(menuDTO);
-                        it.remove();
-                    } catch(RuntimeException e){
-                        log.debug("======================校验错误信息 ： ${e.getMessage()}=====================================");
-                    }
+                if (StringUtils.isNoneBlank(menuDTO.getUri())) {
+                    menuAdminFacadeService.createMenu(menuDTO);
+                    it.remove();
                 }
             }
             nextPosition = MenuDTOList.size();

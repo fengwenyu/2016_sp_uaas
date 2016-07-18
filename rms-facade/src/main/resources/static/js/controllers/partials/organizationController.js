@@ -182,9 +182,13 @@
             $scope.moveOrganization = function () {
                 try {
                     $scope.organization.parentId = organization.parentId = $scope.pid || "1";
-                    organizationapi.moveOrganization(organization.id, $scope.organization.parentId);
-                    alert("修改成功");
-                    location.reload(true);
+                    var data = organizationapi.moveOrganization(organization.id, $scope.organization.parentId);
+                    if(data=="success"){
+                        alert("修改成功");
+                        location.reload(true);
+                    }else{
+                        alert(data);
+                    }
                 } catch (e) {
                     alert("修改失败：" + e);
                 }
@@ -230,7 +234,6 @@
 
             $scope.addOrganization = function () {
                 var organization = $scope.organization;
-
                 if ($scope.responserId != "") {
                     var user = {
                         "id": $scope.responserId,
@@ -260,10 +263,13 @@
 
                     var ldapOrganization = organizationapi.findOrganizationByCode(organization.code);
                     if (null == ldapOrganization) {
-                        organizationapi.createOrganization(organization);
-                        alert("创建成功");
-                        //location.reload(true);
-                        history.go(-1);
+                        var data = organizationapi.createOrganization(organization);
+                        if(data=="success"){
+                            alert("创建成功");
+                            history.go(-1);
+                        }else{
+                            alert(data);
+                        }
                     } else {
                         alert("该部门编号已存在！");
                     }

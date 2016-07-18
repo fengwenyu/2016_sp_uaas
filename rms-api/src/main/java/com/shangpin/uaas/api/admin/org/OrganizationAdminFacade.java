@@ -78,7 +78,7 @@ public interface OrganizationAdminFacade {
      * @param organizationId       要移动的部门 必填
      * @param parentOrganizationId 移到的目标部门 必填
      */
-    public void moveOrganization(String organizationId, String parentOrganizationId);
+    public String moveOrganization(String organizationId, String parentOrganizationId);
 
     /**
      * 获取所有的部门节点

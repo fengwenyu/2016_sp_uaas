@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,23 +41,24 @@ public class ResourceController {
     public String export(HttpServletRequest request, HttpServletResponse response)throws Exception{
         List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
         String resourceName=request.getParameter("resourceName");
-        List<ResourceNodeDTO> resources=new ArrayList<ResourceNodeDTO>();
-        if(StringUtils.isEmpty(resourceName)){
-            resources = resourceAdminFacadeService.findResourceNodesByCriteria(new ResourceNodeCriteriaDTO());
+        List<ResourceNodeDTO> resources;
+        if(StringUtils.isBlank(resourceName)){
+            resources = resourceAdminFacadeService.getSubResourcesByParentResourcesName(null);
+                    //.findResourceNodesByCriteria(new ResourceNodeCriteriaDTO());
         }else{
             resources = resourceAdminFacadeService.getSubResourcesByParentResourcesName(resourceName);
         }
         if (resources!=null && resources.size()>0) {
-            for(int i=0;i<resources.size();i++){
+            for (ResourceNodeDTO resource : resources) {
                 HashMap<String, Object> menusMap=new HashMap<String, Object>();
-                menusMap.put("description", resources.get(i).getDescription());
-                menusMap.put("id", resources.get(i).getId());
-                menusMap.put("isEnabled", resources.get(i).getIsEnabled());
-                menusMap.put("name", resources.get(i).getName());
-                menusMap.put("parentId", resources.get(i).getParentId());
-                menusMap.put("resourceId",resources.get(i).getResourceId());
-                menusMap.put("type",resources.get(i).getType());
-                menusMap.put("uri",resources.get(i).getUri());
+                menusMap.put("description", resource.getDescription());
+                menusMap.put("id", resource.getId());
+                menusMap.put("isEnabled", resource.getIsEnabled());
+                menusMap.put("name",resource.getName());
+                menusMap.put("parentId",resource.getParentId());
+                menusMap.put("resourceId",resource.getResourceId());
+                menusMap.put("type",resource.getType());
+                menusMap.put("uri",resource.getUri());
                 result.add(menusMap);
             }
             response.setContentType("application/x-download");// 设置为下载application/x-download
@@ -72,6 +74,7 @@ public class ResourceController {
         return null;
     }
     @RequestMapping("/upload")
+    @ResponseBody
     public HashMap<String, Object> upload (@RequestParam(value = "resource", required = true) MultipartFile resource, HttpServletRequest request,
                                            HttpServletResponse response)throws Exception {
         HashMap<String, Object> menusMap=new HashMap<String, Object>();

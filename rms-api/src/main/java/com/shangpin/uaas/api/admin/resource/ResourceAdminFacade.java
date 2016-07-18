@@ -32,7 +32,7 @@ public interface ResourceAdminFacade {
      * @param resourceDTO 参考DTO
      */
     @FacadeApi(params = {"resourceDTO"})
-    public void modifyResource(ResourceNodeDTO resourceDTO);
+    public String modifyResource(ResourceNodeDTO resourceDTO);
 
     /**
      * 删除资源

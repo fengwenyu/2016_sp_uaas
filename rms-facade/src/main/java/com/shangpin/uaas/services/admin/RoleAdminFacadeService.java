@@ -1,22 +1,5 @@
 package com.shangpin.uaas.services.admin;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
-import com.shangpin.uaas.entity.*;
-import com.shangpin.uaas.services.api.MemcachedUtilService;
-import com.shangpin.uaas.services.dao.*;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.shangpin.uaas.api.admin.role.RoleAdminFacade;
 import com.shangpin.uaas.api.admin.role.RoleCriteria;
 import com.shangpin.uaas.api.admin.role.RoleDTO;
@@ -28,8 +11,23 @@ import com.shangpin.uaas.api.common.PagedList;
 import com.shangpin.uaas.api.common.Paginator;
 import com.shangpin.uaas.convert.RoleConverter;
 import com.shangpin.uaas.convert.RoleDTOConverter;
+import com.shangpin.uaas.entity.*;
+import com.shangpin.uaas.services.api.MemcachedUtilService;
+import com.shangpin.uaas.services.dao.*;
 import com.shangpin.uaas.sort.RoleComparator;
 import com.shangpin.uaas.util.PageListUtil;
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  */
@@ -64,21 +62,22 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	 *
 	 * @param role
 	 *            参考DTO
-	 * @return
 	 */
 	@Override
 	public String createRole(RoleDTO role) {
 		List<Role> ldapRoles = roleRepoService.findByName(role.getCode());
 		if (!ldapRoles.isEmpty()) {
-			throw new RuntimeException("角色不能重复" + role.getCode());
+			return "角色名称重复";
+			//throw new RuntimeException("角色不能重复" + role.getCode());
 		}
 		Role entity = RoleDTOConverter.toCreateEntity(role);
 		int insert = roleRepoService.insert(entity);
 		if(insert!=1){
+			//return "角色创建时系统出错";
 			throw new RuntimeException("角色创建失败，id:" + entity.getId());
 		}
 		memcachedUtilService.updateRoleToCacheByRoleId(entity.getId(),CREAT_ROLE_CACHE);
-		return entity.getId();
+		return "success";
 	}
 
 	@Override
@@ -156,15 +155,14 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	public PagedList<RoleDTO> findAllRolesByCriteria(RoleCriteria roleCriteria, Paginator paginator) {
 		// TODO page find
 		List<Role> result = roleRepoService.findByCriteriaDto(roleCriteria,paginator);
-		List<RoleDTO> roleResultDTOs = new ArrayList<RoleDTO>();
+		List<RoleDTO> roleResultDTOs = new ArrayList<>();
 		for (Role role : result) {
 			roleResultDTOs.add(RoleConverter.toRoleDTO(role));
 		}
 		RoleComparator roleComparator = new RoleComparator();
 		Collections.sort(roleResultDTOs, roleComparator);
 		long totalCount = roleRepoService.findCountByCriteriaDto(roleCriteria);
-		PagedList<RoleDTO> pagedList = new PagedList<RoleDTO>(totalCount, paginator, roleResultDTOs);
-		return pagedList;
+		return new PagedList<>(totalCount, paginator, roleResultDTOs);
 	}
 
 	/**
@@ -232,7 +230,7 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	public PagedList<RoleDTO> findAllRoles(Paginator paginator) {
 		// TODO 分页
 		List<Role> roles = roleRepoService.findAll();
-		List<RoleDTO> result = new ArrayList<RoleDTO>(roles.size());
+		List<RoleDTO> result = new ArrayList<>(roles.size());
 		for (Role role : roles) {
 			result.add(RoleConverter.toRoleDTO(role));
 		}
@@ -249,7 +247,7 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 
 		log.debug("查询该人员的所有角色：" + userId);
 		List<UserRole> userRoles = userRoleRepoService.findByUserId(userId);
-		List<RoleDTO> result = new ArrayList<RoleDTO>();
+		List<RoleDTO> result = new ArrayList<>();
 		for (UserRole userRole : userRoles) {
 			Role role = roleRepoService.findById(userRole.getRoleId());
 			if (role == null) {
@@ -265,9 +263,8 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 		try {
 			UserCriteriaDTO userCriteriaDTO = new UserCriteriaDTO();
 			BeanUtils.copyProperties(userCriteriaDTO, criteria);
-			List<UserWithRoleDTO> returnList = new ArrayList<UserWithRoleDTO>();
+			List<UserWithRoleDTO> returnList = new ArrayList<>();
 			PagedList<UserDTO> result;
-			String hasThisRole;
 			if(criteria.getHasThisRole()==null){
 				result = userAdminFacadeService.findAllUsersWithRoleByCriteriaAndStatusNull(userCriteriaDTO,roleId,paginator);
 			}else if("true".equals(criteria.getHasThisRole().toString())){
@@ -281,30 +278,17 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 				user.setHasThisRole(roleId.equals(udto.getRoleId()));
 				returnList.add(user);
 			}
-			return  new PagedList<UserWithRoleDTO>(result.getTotalCount(), paginator, returnList);
+			return  new PagedList<>(result.getTotalCount(), paginator, returnList);
 			//return PageListUtil.convert(paginator, returnList);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-			return new PagedList<UserWithRoleDTO>();
+			return new PagedList<>();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
-			return new PagedList<UserWithRoleDTO>();
+			return new PagedList<>();
 		}
 	}
 
-	/*
-	 * @Override PagedList<UserWithRoleDTO>
-	 * findAllUsersWithRoleByCriteria(UserCriteriaWithRoleDTO criteria, String
-	 * roleId, Paginator paginator) { PageListUtil.convert(paginator,
-	 * userAdminFacadeService.findAllUsersByCriteria(new UserCriteriaDTO(
-	 * criteria.properties.subMap(criteria.properties.keySet() - ['hasThisRole',
-	 * 'class'])), Paginator.page(1, Integer.MAX_VALUE)) .list .collect { def
-	 * user = new UserWithRoleDTO(it.properties.subMap(it.properties.keySet() -
-	 * ['class'])) user.hasThisRole = findRolesByUserId(user.id,
-	 * Paginator.page(1, Integer.MAX_VALUE)).list.collect { it.id
-	 * }.contains(roleId) if (criteria.hasThisRole == null) { user } else {
-	 * criteria.hasThisRole == user.hasThisRole ? user : null } }.findAll()) }
-	 */
 
 	@Override
 	public void assignRoleToUser(String roleId, String userId) {
@@ -322,32 +306,20 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	/**
 	 * 请出角色
 	 * 
-	 * @param roleId
-	 * @param userId
+	 * @param roleId 角色id
+	 * @param userId 用户id
 	 */
 	@Override
 	public boolean revokeRoleFromUser(String roleId, String userId) {
 		flushCacheService.modify++;
-		int delete = userRoleRepoService.deleteByUserIdAndRoleId(roleId, userId);
-		if(delete!=1){
-			return false;
-		}else{
-			return true;
-		}
-		/*List<UserRole> userRoles = userRoleRepoService.findUserRoleByUser(userId);
-		for (UserRole userRole : userRoles) {
-			if (userRole.getRoleId().equals(roleId)) {
-				userRoleRepoService.delete(userRole);
-				break;
-			}
-		}*/
+		return userRoleRepoService.deleteByUserIdAndRoleId(roleId, userId)==1;
 	}
 
 	/**
 	 * 使用该方法前保证User和Role都是存在的
 	 *
-	 * @param user
-	 * @param role
+	 * @param user 用户对象
+	 * @param role 角色对象
 	 */
 	public void createUserRole(User user, Role role) {
 		List<UserRole> userRoles = userRoleRepoService.findByUserIdAndRoleId(user.getId(),role.getId());
@@ -358,11 +330,9 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 				if (user.isStatus() && role.isStatus()) {
 					userRole.setStatus(true);
 					userRoleRepoService.update(userRole);
-					return;
 				} else {
 					userRole.setStatus(false);
 					userRoleRepoService.update(userRole);
-					return;
 				}
 			}
 		}else{
@@ -384,8 +354,8 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 	 *
 	 * 在调用该方法前保证role和resource都是存在的
 	 *
-	 * @param role
-	 * @param resource
+	 * @param role 角色
+	 * @param resource 资源
 	 */
 	public void registerPermission(Role role, Resource resource) {
 		flushCacheService.modify++;
@@ -396,14 +366,8 @@ public class RoleAdminFacadeService implements RoleAdminFacade {
 		Permission permission = permissionList.get(0);
 		if (permission == null) {
 			permission = new Permission();
-			if (role.isStatus() && resource.isEnabled()) {
-				permission.setStatus(true);
-			} else {
-				permission.setStatus(false);
-			}
-
+			permission.setStatus(role.isStatus() && resource.isEnabled());
 			permission.setId(UUID.randomUUID().toString());
-			
 			permission.setResourceId(resource.getId());
 			permission.setRoleId(role.getId());
 			permission.setUri(resource.getUri());

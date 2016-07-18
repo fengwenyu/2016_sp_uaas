@@ -48,6 +48,12 @@ public class MenuRepoService{
         criteria.andParentidEqualTo(parentId);
         return menuMapper.selectByExample(example);
     }
+    public List<Menu> findByMenuName(String menuName) {
+        MenuExample example = new MenuExample();
+        MenuExample.Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo(menuName);
+        return menuMapper.selectByExample(example);
+    }
 
     /**
      * 查询所有子级的菜单项
@@ -61,6 +67,19 @@ public class MenuRepoService{
         MenuExample example = new MenuExample();
         MenuExample.Criteria criteria = example.createCriteria();
         criteria.andAppcodeEqualTo(appCode);
+        criteria.andParentidEqualTo(parentId);
+        return menuMapper.selectByExample(example);
+    }
+
+    /**
+     * 根据菜单名和父id获取菜单
+     * @param menuName 菜单名
+     * @param parentId 父id
+     */
+    public  List<Menu> findByMenuNameAndParentId(String menuName, String parentId){
+        MenuExample example = new MenuExample();
+        MenuExample.Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo(menuName);
         criteria.andParentidEqualTo(parentId);
         return menuMapper.selectByExample(example);
     }
@@ -81,6 +100,12 @@ public class MenuRepoService{
         MenuExample example = new MenuExample();
         MenuExample.Criteria criteria = example.createCriteria();
         criteria.andAppcodeEqualTo(appCode);
+        return menuMapper.selectByExample(example);
+    }
+    public  List<Menu> findByUri(String uri) {
+        MenuExample example = new MenuExample();
+        MenuExample.Criteria criteria = example.createCriteria();
+        criteria.andUriEqualTo(uri);
         return menuMapper.selectByExample(example);
     }
 }

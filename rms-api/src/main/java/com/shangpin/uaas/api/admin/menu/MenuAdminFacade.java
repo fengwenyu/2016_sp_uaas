@@ -16,14 +16,14 @@ public interface MenuAdminFacade {
      * @param menuDTO 详细查看DTO
      * @return 主键
      */
-    public String createMenu(MenuDTO menuDTO);
+    public String createMenu (MenuDTO menuDTO) throws Exception;
 
     /**
      * 修改菜单
      *
      * @param menuDTO 详细查看DTO
      */
-    public void modifyMenu(MenuDTO menuDTO);
+    public String modifyMenu(MenuDTO menuDTO);
 
     /**
      * 移动菜单

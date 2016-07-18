@@ -80,6 +80,9 @@
   <sql id="Base_Column_List" >
     id, moduleName, type, parentResourceId, description, resourceId
   </sql>
+  <sql id="Base_Column_List_UNION" >
+    resourceNode.`id` id, moduleName, resourceNode.`type` type, parentResourceId, description, resourceId ,resource.`enabled` enabled,resource.`uri` uri
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.shangpin.uaas.entity.example.ResourceNodeExample" >
     select
     <if test="distinct" >

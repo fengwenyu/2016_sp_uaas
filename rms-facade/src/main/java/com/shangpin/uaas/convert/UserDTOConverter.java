@@ -175,127 +175,125 @@ public class UserDTOConverter {
      * @return
      */
     public static User toUpdateEntity(User user,UserDTO userDTO) {
-        if (StringUtils.isNotEmpty(userDTO.getUserCode())) {
+        if (StringUtils.isNotBlank(userDTO.getUserCode())) {
             user.setUserCode(userDTO.getUserCode());
         }
-        if (StringUtils.isNotEmpty(userDTO.getRealName())) {
+        if (StringUtils.isNotBlank(userDTO.getRealName())) {
             user.setRealName(userDTO.getRealName());
         }
-        if (StringUtils.isNotEmpty(userDTO.getMobile())) {
+        if (StringUtils.isNotBlank(userDTO.getMobile())) {
             user.setMobile(userDTO.getMobile());
         } else {
             user.setMobile(null);
         }
-        if (StringUtils.isNotEmpty(userDTO.getTelephone())) {
+        if (StringUtils.isNotBlank(userDTO.getTelephone())) {
             user.setTelephone(userDTO.getTelephone());
         } else {
             user.setTelephone(null);
         }
         user.setUpdatedTime(new Date());
-        if (StringUtils.isNotEmpty(userDTO.getDirectLeaderId())) {
+        if (StringUtils.isNotBlank(userDTO.getDirectLeaderId())) {
             user.setDirectLeaderId(userDTO.getDirectLeaderId());
         } else {
             user.setDirectLeaderId(null);
         }
-        if (StringUtils.isNotEmpty(userDTO.getEmail())) {
+        if (StringUtils.isNotBlank(userDTO.getEmail())) {
             user.setEmail(userDTO.getEmail());
         } else {
             user.setEmail(null);
         }
         user.setGender(userDTO.getGender());
 
-        if (StringUtils.isNotEmpty(userDTO.getJobLevel())) {
+        if (StringUtils.isNotBlank(userDTO.getJobLevel())) {
             user.setJobLevel(userDTO.getJobLevel());
         }
-        if (StringUtils.isNotEmpty(userDTO.getUsername())) {
+        if (StringUtils.isNotBlank(userDTO.getUsername())) {
             user.setUsername(userDTO.getUsername());
         }
-        if (StringUtils.isNotEmpty(userDTO.getBirth())) {
+        if (StringUtils.isNotBlank(userDTO.getBirth())) {
             user.setBirth(DateUtil.parseDate10(userDTO.getBirth()));
         } else {
             user.setBirth(null);
         }
-        if (StringUtils.isNotEmpty(userDTO.getWorkPlace())) {
+        if (StringUtils.isNotBlank(userDTO.getWorkPlace())) {
             user.setWorkplace(userDTO.getWorkPlace());
         } else {
             user.setWorkplace(null);
         }
-        if(StringUtils.isNotEmpty(userDTO.getPassword())){
+        if(StringUtils.isNotBlank(userDTO.getPassword())){
             user.setPassword(DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()));
-        }else{
-            user.setPassword(null);
         }
 
 
-        if (StringUtils.isNotEmpty(userDTO.getJobTitle())) {
+        if (StringUtils.isNotBlank(userDTO.getJobTitle())) {
             user.setJobTitle(userDTO.getJobTitle());
         }
-        if (StringUtils.isNotEmpty(userDTO.getCompany())) {
+        if (StringUtils.isNotBlank(userDTO.getCompany())) {
             user.setCompany(userDTO.getCompany());
         }
-        if (StringUtils.isNotEmpty(userDTO.getEntryDate())) {
+        if (StringUtils.isNotBlank(userDTO.getEntryDate())) {
             user.setEntryDate(userDTO.getEntryDate());
         }
-        if (StringUtils.isNotEmpty(userDTO.getJobTitleDate())) {
+        if (StringUtils.isNotBlank(userDTO.getJobTitleDate())) {
             user.setJobTitleDate(userDTO.getJobTitleDate());
         }
-        if (StringUtils.isNotEmpty(userDTO.getContractStartDate())) {
+        if (StringUtils.isNotBlank(userDTO.getContractStartDate())) {
             user.setContractStartDate(DateUtil.parseDate10(userDTO.getContractStartDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getProbationEndDate())) {
+        if (StringUtils.isNotBlank(userDTO.getProbationEndDate())) {
             user.setProbationEndDate(DateUtil.parseDate10(userDTO.getProbationEndDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getPositiveDate())) {
+        if (StringUtils.isNotBlank(userDTO.getPositiveDate())) {
             user.setPositiveDate(DateUtil.parseDate10(userDTO.getPositiveDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getFirstContractEndDate())) {
+        if (StringUtils.isNotBlank(userDTO.getFirstContractEndDate())) {
             user.setFirstContractEndDate(DateUtil.parseDate10(userDTO.getFirstContractEndDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getSecondContractEndDate())) {
+        if (StringUtils.isNotBlank(userDTO.getSecondContractEndDate())) {
             user.setSecondContractEndDate(DateUtil.parseDate10(userDTO.getSecondContractEndDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getTurnoverDate())) {
+        if (StringUtils.isNotBlank(userDTO.getTurnoverDate())) {
             user.setTurnoverDate(DateUtil.parseDate10(userDTO.getTurnoverDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getEmployeeStatus())) {
+        if (StringUtils.isNotBlank(userDTO.getEmployeeStatus())) {
             user.setEmployeeStatus(userDTO.getEmployeeStatus());
         }
 
 
-        if (StringUtils.isNotEmpty(userDTO.getIdentity())) {
+        if (StringUtils.isNotBlank(userDTO.getIdentity())) {
             user.setIdentity(userDTO.getIdentity());
         }
-        if (StringUtils.isNotEmpty(userDTO.getIdentityNumber())) {
+        if (StringUtils.isNotBlank(userDTO.getIdentityNumber())) {
             user.setIdentityNumber(userDTO.getIdentityNumber());
         }
-        if (StringUtils.isNotEmpty(userDTO.getAge())) {
+        if (StringUtils.isNotBlank(userDTO.getAge())) {
             user.setAge(userDTO.getAge());
         }
-        if (StringUtils.isNotEmpty(userDTO.getNation())) {
+        if (StringUtils.isNotBlank(userDTO.getNation())) {
             user.setNation(userDTO.getNation());
         }
-        if (StringUtils.isNotEmpty(userDTO.getNationality())) {
+        if (StringUtils.isNotBlank(userDTO.getNationality())) {
             user.setNationality( userDTO.getNationality());
         }
-        if (StringUtils.isNotEmpty(userDTO.getEducation())) {
+        if (StringUtils.isNotBlank(userDTO.getEducation())) {
             user.setEducation(userDTO.getEducation());
         }
-        if (StringUtils.isNotEmpty(userDTO.getDegree())) {
+        if (StringUtils.isNotBlank(userDTO.getDegree())) {
             user.setDegree(userDTO.getDegree());
         }
-        if (StringUtils.isNotEmpty(userDTO.getLearningType())) {
+        if (StringUtils.isNotBlank(userDTO.getLearningType())) {
             user.setLearningType(userDTO.getLearningType());
         }
-        if (StringUtils.isNotEmpty(userDTO.getPoliticalAffiliation())) {
+        if (StringUtils.isNotBlank(userDTO.getPoliticalAffiliation())) {
             user.setPoliticalAffiliation(userDTO.getPoliticalAffiliation());
         }
-        if (StringUtils.isNotEmpty(userDTO.getWorkStartDate())) {
+        if (StringUtils.isNotBlank(userDTO.getWorkStartDate())) {
             user.setWorkStartDate(DateUtil.parseDate10(userDTO.getWorkStartDate()));
         }
-        if (StringUtils.isNotEmpty(userDTO.getGraduationTime())) {
+        if (StringUtils.isNotBlank(userDTO.getGraduationTime())) {
             user.setGraduationTime(userDTO.getGraduationTime());
         }
-        if (StringUtils.isNotEmpty(userDTO.getFamilyRegister())) {
+        if (StringUtils.isNotBlank(userDTO.getFamilyRegister())) {
             user.setFamilyRegister(userDTO.getFamilyRegister());
         }
         if (userDTO.getForeignEnglish()!=null) {

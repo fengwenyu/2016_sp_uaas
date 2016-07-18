@@ -52,6 +52,13 @@ public class ResourceNodeRepoService {
         criteria.andParentresourceidEqualTo(parentResourceNodeId);
         return resourceNodeMapper.selectByExample(example);
     }
+    public List<ResourceNode> findByModuleNameAndParentId(String moduleName,String parentResourceNodeId){
+        ResourceNodeExample example = new ResourceNodeExample();
+        ResourceNodeExample.Criteria criteria = example.createCriteria();
+        criteria.andParentresourceidEqualTo(parentResourceNodeId);
+        criteria.andModulenameEqualTo(moduleName);
+        return resourceNodeMapper.selectByExample(example);
+    }
 
 
     /**

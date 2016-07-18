@@ -5,6 +5,8 @@ import java.util.concurrent.ExecutionException;
 
 import com.shangpin.uaas.entity.Role;
 import com.shangpin.uaas.services.dao.RoleRepoService;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.server.UserIdentity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +74,7 @@ public class AuthenticateFacadeService implements AuthenticationFacade {
         log.debug("用户" + userLogin + "登录成功！");
         log.debug("超时时间：${config.get('timeout')}");
         memcachedClient.set(token, 60*60*30, subject);
+        memcachedClient.set(user.getId(), 60*60*30, token);//便于检索token
         //将用户的授权信息存入缓存
         String resourceKey = "resource:uri:"+token;
         List<Role> roles = roleRepoService.findByUserId(user.getId());
@@ -94,13 +97,20 @@ public class AuthenticateFacadeService implements AuthenticationFacade {
 			if (!result.get()) {
 			    throw new RuntimeException("延长时效没有成功！");
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    }
+
+    /**
+     * 对用户id和token进行延时
+     * @param token
+     * @param userId
+     */
+    public void touchTokenAndUserId(String token,String userId) {
+        log.info("重新计时：" + token+" <--> "+userId);
+        touch(token);
+        touch(userId);
     }
 
     public Boolean isValid(String token) {
@@ -112,10 +122,12 @@ public class AuthenticateFacadeService implements AuthenticationFacade {
             return false;
         }
         log.debug("验证有效：" + token);
+        touchTokenAndUserId(token,subject.getUserId());
         return true;
     }
 
     public void logout(String token) {
         memcachedClient.delete(token);
     }
+
 }

@@ -24,7 +24,7 @@ import net.spy.memcached.MemcachedClient;
 @Service
 public class AuthorizationFacadeService implements AuthorizationFacade {
 	protected static Logger log = LoggerFactory.getLogger(AuthorizationFacadeService.class);
-    private static final String NAMESPACE = "uaas";
+//    private static final String NAMESPACE = "uaas";
     @Autowired
     MemcachedClient memcachedClient;
     @Autowired
@@ -48,7 +48,7 @@ public class AuthorizationFacadeService implements AuthorizationFacade {
     }
 
     public List<Boolean> isPermitted(String token, List<String> resourceUris) {
-        List<Boolean> isPermitteds = new ArrayList<Boolean>();
+        List<Boolean> isPermitteds = new ArrayList<>();
         for (String uri : resourceUris) {
             isPermitteds.add(isPermitted(token, uri));
         }

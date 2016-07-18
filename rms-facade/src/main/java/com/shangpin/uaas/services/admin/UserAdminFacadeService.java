@@ -1,15 +1,5 @@
 package com.shangpin.uaas.services.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import com.shangpin.common.utils.DateUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.shangpin.uaas.api.admin.user.Status;
 import com.shangpin.uaas.api.admin.user.UserAdminFacade;
 import com.shangpin.uaas.api.admin.user.UserCriteriaDTO;
@@ -26,8 +16,15 @@ import com.shangpin.uaas.services.dao.OrganizationRepoService;
 import com.shangpin.uaas.services.dao.RoleRepoService;
 import com.shangpin.uaas.services.dao.UserRepoService;
 import com.shangpin.uaas.services.dao.UserRoleRepoService;
-import com.shangpin.uaas.sort.UserComparator;
 import com.shangpin.uaas.util.PageListUtil;
+import net.spy.memcached.MemcachedClient;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * 用户服务
@@ -37,7 +34,7 @@ import com.shangpin.uaas.util.PageListUtil;
 @Service
 public class UserAdminFacadeService implements UserAdminFacade {
 	protected static Logger log = LoggerFactory.getLogger(UserAdminFacadeService.class);
-	final String LEAVE = "ou=离职人员";
+//	final String LEAVE = "ou=离职人员";
 	@Autowired
 	UserRepoService userRepoService;
 	@Autowired
@@ -48,7 +45,8 @@ public class UserAdminFacadeService implements UserAdminFacade {
 	RoleRepoService roleRepoService;
 	@Autowired
 	FlushCacheService flushCacheService;
-
+	@Autowired
+	MemcachedClient memcachedClient;
 	//	@Override
 	public String createUser(UserDTO user) {
 		User entity = UserDTOConverter.toUserEntity(user);
@@ -57,14 +55,16 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		if (StringUtils.isNotEmpty(leaderId)) {
 			User leaderResult = userRepoService.findById(leaderId);
 			if (leaderResult==null) {
-				throw new RuntimeException("该人员的直属领导不存在:" + leaderId);
+				return "该人员的直属领导不存在";
+				//throw new RuntimeException("该人员的直属领导不存在:" + leaderId);
 			}
 		}
 
 		String organizationId = entity.getOrganizationId();
 		Organization organization = organizationRepoService.findById(organizationId);
 		if (organization ==null) {
-			throw new RuntimeException("该人员的所在机构不存在:" + organizationId);
+			return "该人员的所在部门不存在";
+			//throw new RuntimeException("该人员的所在机构不存在:" + organizationId);
 		}
 		String id = UUID.randomUUID().toString();
 		entity.setId(id);
@@ -72,7 +72,7 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		if(insert!=1){
 			throw new RuntimeException("创建用户失败，用户id：" + id);
 		}
-		return id;
+		return "success";
 	}
 
 	//	@Override
@@ -126,20 +126,20 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		if(StringUtils.isNotBlank(userCriteriaDTO.getOrganizationId())){
 			Set<String> organizationIds= getAllChildOrgidByNowOriId(userCriteriaDTO.getOrganizationId(), new HashSet<String>());
 			if(!organizationIds.isEmpty()){
-				userCriteriaDTO.setOrganizationIds(new ArrayList<String>(organizationIds));
+				userCriteriaDTO.setOrganizationIds(new ArrayList<>(organizationIds));
 			}
 		}
 		//查询树 人员结束
 
 		List<User> userList = userRepoService.findByCriteriaDto(userCriteriaDTO,paginator);
 		log.debug("result.size:" + userList.size());
-		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+		List<UserDTO> userDTOs = new ArrayList<>();
 		for (User user : userList) {
 			userDTOs.add(UserConverter.toUserDTO(user));
 		}
 		log.debug("userDTOs size" + userDTOs.size());
 		long totalCount = userRepoService.findCountByCriteriaDto(userCriteriaDTO);
-		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
+		return new PagedList<>(totalCount, paginator, userDTOs);
 //		UserComparator userComparator = new UserComparator();
 //		Arrays.sort(userDTOs., userComparator);
 //		PagedList<UserDTO> pagedList = PageListUtil.convert(paginator, userDTOs);
@@ -160,15 +160,13 @@ public class UserAdminFacadeService implements UserAdminFacade {
 				userDTO.setOrganizationName(name.subSequence(0, name.length() - 1).toString());
 			}
 		}*/
-		return pagedList;
 	}
 
 	/**
 	 * 查询role下的用户
-	 * @param userCriteriaDTO
-	 * @param roleId
-	 * @param paginator
-     * @return
+	 * @param userCriteriaDTO 用户条件查询对象
+	 * @param roleId 角色id
+	 * @param paginator 分页对象
      */
 	public PagedList<UserDTO> findAllUsersWithRoleByCriteria(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator) {
 		if (null == paginator) {
@@ -178,14 +176,13 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		}
 		List<User> userList = userRepoService.findAllUsersWithRoleByCriteria(userCriteriaDTO,roleId,paginator);
 		log.debug("result.size:" + userList.size());
-		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+		List<UserDTO> userDTOs = new ArrayList<>();
 		for (User user : userList) {
 			userDTOs.add(UserConverter.toUserDTO(user));
 		}
 		log.debug("userDTOs size" + userDTOs.size());
 		long totalCount = userRepoService.findCountAllUsersWithRoleByCriteria(userCriteriaDTO,roleId);
-		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
-		return pagedList;
+		return new PagedList<>(totalCount, paginator, userDTOs);
 	}
 	public PagedList<UserDTO> findAllUsersWithRoleByCriteriaAndStatusNull(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator) {
 		if (null == paginator) {
@@ -195,14 +192,13 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		}
 		List<User> userList = userRepoService.findAllUsersWithRoleByCriteriaAndStatusNull(userCriteriaDTO,roleId,paginator);
 		log.debug("result.size:" + userList.size());
-		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+		List<UserDTO> userDTOs = new ArrayList<>();
 		for (User user : userList) {
 			userDTOs.add(UserConverter.toUserDTO(user));
 		}
 		log.debug("userDTOs size" + userDTOs.size());
 		long totalCount = userRepoService.findCountAllUsersWithRoleByCriteria(userCriteriaDTO,null);
-		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
-		return pagedList;
+		return new PagedList<>(totalCount, paginator, userDTOs);
 	}
 	public PagedList<UserDTO> findAllUsersWithNotHaveRoleByCriteria(UserCriteriaDTO userCriteriaDTO,String roleId, Paginator paginator) {
 		if (null == paginator) {
@@ -212,14 +208,13 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		}
 		List<User> userList = userRepoService.findAllUsersWithNotHaveRoleByCriteria(userCriteriaDTO,roleId,paginator);
 		log.debug("result.size:" + userList.size());
-		List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+		List<UserDTO> userDTOs = new ArrayList<>();
 		for (User user : userList) {
 			userDTOs.add(UserConverter.toUserDTO(user));
 		}
 		log.debug("userDTOs size" + userDTOs.size());
 		long totalCount = userRepoService.findCountAllUsersWithNotHaveRoleByCriteria(userCriteriaDTO,roleId);
-		PagedList<UserDTO> pagedList = new PagedList<UserDTO>(totalCount, paginator, userDTOs);
-		return pagedList;
+		return new PagedList<>(totalCount, paginator, userDTOs);
 	}
 
 	//	@Override
@@ -232,7 +227,14 @@ public class UserAdminFacadeService implements UserAdminFacade {
 
 		user.setStatus(Status.ENABLED.equals(status));
 		userRepoService.update(user);
-
+		//如果用户禁用，那么就清除掉用户的token
+		if(!user.isStatus()) {
+			String token = (String) memcachedClient.get(userId);
+			if(StringUtils.isNotBlank(token)){
+				memcachedClient.delete(token);
+				memcachedClient.delete(userId);
+			}
+		}
 		List<UserRole> userRoles = userRoleRepoService.findByRoleId(userId);
 		for (UserRole userRole : userRoles) {
 			Role role = roleRepoService.findById(userRole.getRoleId());
@@ -268,8 +270,7 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		}
 
 		User user = users.get(0);
-		UserDTO result = UserConverter.toUserDTO(user);
-		return result;
+		return UserConverter.toUserDTO(user);
 	}
 
 	//	@Override
@@ -281,19 +282,18 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		}
 
 		User user = users.get(0);
-		UserDTO result = UserConverter.toUserDTO(user);
-		return result;
+		return UserConverter.toUserDTO(user);
 	}
 
 	//	@Override
 	public PagedList<UserDTO> findAllTreeUsersByOrganizationId(String organizationId, Paginator paginator) {
 		Organization organization = organizationRepoService.findById(organizationId);
 		if (organization == null) {
-			PageListUtil.convert(paginator, new ArrayList<UserDTO>());
+			return PageListUtil.convert(paginator, new ArrayList<UserDTO>());
 		}
 
 		List<User> users = userRepoService.findByOrganizationId(organization.getId());
-		List<UserDTO> result = new ArrayList<UserDTO>();
+		List<UserDTO> result = new ArrayList<>();
 		for (User user : users) {
 			result.add(UserConverter.toUserDTO(user));
 		}
@@ -303,8 +303,8 @@ public class UserAdminFacadeService implements UserAdminFacade {
 	/**
 	 * 使用该方法前保证User和Role都是存在的
 	 *
-	 * @param user
-	 * @param role
+	 * @param user 用户
+	 * @param role 角色
 	 */
 	private void createUserRole(User user, Role role) {
 		log.debug("========user.status" + user.isStatus() + "========role.status" + role.isStatus());
@@ -353,7 +353,6 @@ public class UserAdminFacadeService implements UserAdminFacade {
 	/**
 	 * 根据生日获取年龄
 	 * @param date 生日 yyyy-MM-dd
-	 * @return
      */
 	public String getUserAge(String date) {
 		String[] split = date.split("-");
@@ -368,10 +367,10 @@ public class UserAdminFacadeService implements UserAdminFacade {
 		if(day<0){
 			month -= 1;
 			now.add(Calendar.MONTH, -1);//得到上一个月，用来得到上个月的天数。
-			day = day + now.getActualMaximum(Calendar.DAY_OF_MONTH);
+			//day = day + now.getActualMaximum(Calendar.DAY_OF_MONTH);
 		}
 		if(month<0){
-			month = (month+12)%12;
+			//month = (month+12)%12;
 			year--;
 		}
 		return year+"";

@@ -42,9 +42,9 @@ public class ResourceNodeDTOConverter {
         if (null != resourceNodeDTO.getIsEnabled()) {
             resource.setEnabled(resourceNodeDTO.getIsEnabled());
         }
-//        if (StringUtils.isNotEmpty(uri)) {
-//            resource.uri = uri
-//        }
+        if (StringUtils.isNotEmpty(resourceNodeDTO.getUri())) {
+            resource.setUri(resourceNodeDTO.getUri());
+        }
 
         return resource;
     }

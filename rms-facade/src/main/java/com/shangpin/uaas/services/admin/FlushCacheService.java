@@ -34,9 +34,9 @@ public class FlushCacheService {
         log.debug("初始化缓存。。。");
     }
 
-    void serviceMethod() {
+    /*void serviceMethod() {
 
-    }
+    }*/
 
     synchronized void flushCache() {
         log.debug("调用刷新缓存。。。");

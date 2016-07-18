@@ -59,9 +59,8 @@ public class MemcachedUtilService {
 
     /**
      * 更新对应角色的uri
-     * @param roleId
+     * @param roleId 角色id
      * @param type 1:add or update，2.delete
-     * @return
      */
     public boolean updateRoleToCacheByRoleId(String roleId,String type){//type: 1:add or update，2.delete
         try {

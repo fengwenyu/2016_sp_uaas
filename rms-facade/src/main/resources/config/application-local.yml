@@ -1,5 +1,8 @@
 shangpin: 
-  uaas: 
+  uaas:
+    cache:
+      memcached:
+        host: "192.168.20.218:11211"
     dataSource: 
       hikari: 
         driverClassName: com.mysql.jdbc.Driver

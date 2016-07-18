@@ -1,9 +1,8 @@
 package com.shangpin.uaas.services.admin;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
+import com.shangpin.uaas.api.facade.auth.dto.MenuDTO;
+import com.shangpin.uaas.convert.api.MenuConverter;
+import com.shangpin.uaas.entity.*;
 import com.shangpin.uaas.services.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.shangpin.uaas.api.facade.auth.dto.MenuDTO;
-import com.shangpin.uaas.api.facade.e.APPCode;
-import com.shangpin.uaas.convert.api.MenuConverter;
-import com.shangpin.uaas.entity.Menu;
-import com.shangpin.uaas.entity.Permission;
-import com.shangpin.uaas.entity.RoleGroup;
-import com.shangpin.uaas.entity.UserGroup;
-import com.shangpin.uaas.entity.UserRole;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 //@Repository
 @Service
@@ -37,29 +31,29 @@ public class PermissionApiFacadeService {
 
     @Autowired
     private RoleGroupRepoService roleGroupRepoService;
-    @Autowired
-    private GroupRepoService groupRepoService;
+//    @Autowired
+//    private GroupRepoService groupRepoService;
 
-    void serviceMethod() {
-
-    }
-  //@TODO
-  // @Cacheable(value = "defaultCache" , key = "'UAAS-TOKEN:' + #userId")
+//    void serviceMethod() {
+//
+//    }
     public List<Permission> getAllPermissionByUserId(String userId) {
-        List<Permission> permissions = permissionRepoService.findByUserId(userId);
-        return permissions;
-
+        return permissionRepoService.findByUserId(userId);
     }
 
-   // @Cacheable(value = "defaultCache" , key = "'UAAS-MENU:' + #userId + '-' + #appCode")
+    /**
+     * 根据用户id和appCode获取用户的菜单
+     * @param userId 用户id
+     * @param appCode 哪个系统
+     */
     public List<MenuDTO> findMenusByUserIdAndAppCode(String userId, String appCode) {
 
-        List<MenuDTO> menuDTOs = new ArrayList<MenuDTO>();
+        List<MenuDTO> menuDTOs = new ArrayList<>();
         List<Menu> menus = menuRepoService.findByAppCode(appCode);
         for (Menu menu : menus) {
             menuDTOs.add(MenuConverter.convert(menu));
         }
-        List<MenuDTO> results = new ArrayList<MenuDTO>();
+        List<MenuDTO> results = new ArrayList<>();
         log.debug("最终需要认证的菜单数为："+menuDTOs.size());
         List<Permission> permissionDTOs = getAllPermissionByUserId(userId);
         for (MenuDTO menu : menuDTOs) {
@@ -74,16 +68,19 @@ public class PermissionApiFacadeService {
     
     /**
      * 去重
-     * @param results
-     * @return
+     * @param results MenuDto的List集合
      */
     public static List<MenuDTO>  removeDuplicate(List<MenuDTO> results)  {
-        HashSet<MenuDTO> result =new  HashSet<MenuDTO>(results);
+        HashSet<MenuDTO> result =new HashSet<>(results);
         results.clear();
         results.addAll(result);
         return results;
-     } 
+     }
 
+    /**
+     * 根据用户id获取用户角色
+     * @param userId 用户id
+     */
 	private List<String> getUserRolesByUserId(String userId) {
 		List<UserRole> userRoles = userRoleRepoService.findUserRoles(userId);
 		if (CollectionUtils.isEmpty(userRoles)) {
@@ -108,8 +105,11 @@ public class PermissionApiFacadeService {
 		return roleIds;
 	}
 
+    /**
+     * 根据角色id获取资源
+     * @param roleId 角色id
+     */
     private List<Permission> getResourceByRole(String roleId) {
-        List<Permission> perms = permissionRepoService.findByRoleId(roleId);
-        return perms;
+        return permissionRepoService.findByRoleId(roleId);
     }
 }

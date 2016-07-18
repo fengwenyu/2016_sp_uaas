@@ -26,7 +26,7 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 	
     <bean id="memcachedClient" class="net.spy.memcached.spring.MemcachedClientFactoryBean">
-        <property name="servers" value="192.168.20.218:11211"/>
+        <property name="servers" value="${shangpin.uaas.cache.memcached.host}"/>
         <!--<property name="servers" value="192.168.247.129:11211"/>-->
         <property name="protocol" value="BINARY"/>
         <property name="transcoder">

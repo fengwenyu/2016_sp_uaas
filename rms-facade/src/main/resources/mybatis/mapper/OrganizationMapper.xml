@@ -171,7 +171,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <select id="selectByUnionName"  resultMap="UnionMap" >
+  <select id="findByUnionName"  resultMap="UnionMap" >
      SELECT o1.`id` id ,o1.`name` name1 ,o2.`name` name2,o3.`name` name3 ,o4.`name` name4 FROM
       organization o1 LEFT JOIN organization o2 ON o2.`parentId` = o1.`id`
       LEFT JOIN organization o3 ON o3.`parentId` = o2.`id`
@@ -181,19 +181,18 @@
         o1.`name`=#{union.name1}
       </if>
       <if test="union.name2!=null">
-        o1.`name`=#{union.name2}
+        and o2.`name`=#{union.name2}
       </if>
       <if test="union.name3!=null">
-        o1.`name`=#{union.name3}
+        and o3.`name`=#{union.name3}
       </if>
       <if test="union.name4!=null">
-        o1.`name`=#{union.name3}
+        and o4.`name`=#{union.name4}
       </if>
     </where>
-    union
-    <if test="record.id != null" >
-      id = #{record.id,jdbcType=VARCHAR},
-    </if>
+    <!--<if test="union.id != null" >
+      id = #{union.id,jdbcType=VARCHAR},
+    </if>-->
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update organization

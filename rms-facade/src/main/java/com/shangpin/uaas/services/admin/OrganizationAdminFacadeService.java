@@ -43,22 +43,16 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
         if (StringUtils.isEmpty(parentId) || "0".equals(parentId)) {
             parentId = "1";
         }
-        //TODO use while
         List<Organization> organizations = organizationRepoService.findByParentId(parentId);
-//        log.debug("根据父级机构ID查询结果:" + organizations.size() + organizations.get(0).id.toString())
-        List<OrganizationDTO> result=new ArrayList<OrganizationDTO>();
+        log.debug("根据父级机构ID查询结果:" + organizations.size() + organizations.get(0).getId());
+        List<OrganizationDTO> result=new ArrayList<>();
        for (Organization organization : organizations) {
     	   log.debug("是否空指针:" + (organization == null));
     	   result.add(OrganizationConverter.toOrganizationDTO(organization));
 	   }
        for (OrganizationDTO orgDTO : result) {
-    	   //TODO use while
     	   List<Organization> organizations1 = organizationRepoService.findByParentId(orgDTO.getId());
-		   if (organizations1.size() > 0) {
-                orgDTO.setIsLeaf(false);
-            } else {
-                orgDTO.setIsLeaf( true);
-            }
+		   orgDTO.setIsLeaf(!(organizations1.size()>0));
 		   for (UserDTO user : orgDTO.getOrganizationLeaders()) {
 			   if (StringUtils.isEmpty(user.getId())) {
                    User  u = userRepoService.findById(user.getId());
@@ -81,10 +75,9 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
     	if (StringUtils.isEmpty(parentId) || "0".equals(parentId)) {
 		    parentId = "1";
 		}
-		//TODO 只查询一级的
 		List<Organization> organizations = organizationRepoService.findByParentId(parentId);
 //        log.debug("根据父级机构ID查询结果:" + organizations.size() + organizations.get(0).id.toString())
-		List<OrganizationDTO> result=new ArrayList<OrganizationDTO>();
+		List<OrganizationDTO> result=new ArrayList<>();
 		for (Organization organization : organizations) {
 			log.debug("是否空指针:" + (organization == null));
 			  result.add(OrganizationConverter.toOrganizationDTO(organization));
@@ -97,7 +90,7 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
 		     } else {
 		         orgDTO.setIsLeaf( true);
 		     }
-			 List<UserDTO> users = new ArrayList<UserDTO>();
+			 List<UserDTO> users = new ArrayList<>();
 			 for (UserDTO user : orgDTO.getOrganizationLeaders()) {
 				 if (StringUtils.isNotEmpty(user.getId())) {
 		             log.debug("**********************:" + user.getId());
@@ -128,30 +121,45 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
      * @param parentOrganizationId 移到的目标部门 必填
      */
     @Override
-    public void moveOrganization(String organizationId, String parentOrganizationId) {
+    public String moveOrganization(String organizationId, String parentOrganizationId) {
     	log.debug("当前部门的Id:${organizationId},移动到的部门Id: ${parentOrganizationId}");
 		if (organizationId.equals(parentOrganizationId)) {
-		    return;
+		    return "success";
 		}
 
 		Organization organization = organizationRepoService.findById(organizationId);
 		if (organization == null) {
-		    throw new RuntimeException("---没有该机构:" + organizationId);
+			return "当前部门不存在！";
+//		    throw new RuntimeException("---没有该机构:" + organizationId);
 		}
 		Organization descOrganization = organizationRepoService.findById(parentOrganizationId);
 		if (descOrganization == null) {
-			throw new RuntimeException("===没有该机构:" + parentOrganizationId);
+			return "目标部门不存在！";
+//			throw new RuntimeException("===没有该机构:" + parentOrganizationId);
 		}
 
 		organization.setParentId( parentOrganizationId);
-		organizationRepoService.update(organization);
+		//判断父部门下有没有该名称的部门
+		List<Organization> byNameAndParentId = organizationRepoService.findByNameAndParentId(organization.getName(), organization.getParentId());
+		if(byNameAndParentId!=null&&byNameAndParentId.size()>0){
+			for (Organization organization1 : byNameAndParentId) {
+				if(!organization1.getId().equals(organization.getId())){
+					return "该部门下已经有名字为 "+organization1.getName()+" 的部门了！";
+				}
+			}
+		}
+		int update = organizationRepoService.update(organization);
+		if(update!=1){
+			throw new RuntimeException("移动部门失败，部门id:" + organization.getId());
+		}
+		return "success";
 		//organizationRepoService.moveOrganization(organization.getId(), parentOrganizationId);
     }
 
     @Override
     public List<OrganizationDTO> getAllOrganizations() {
     	List<Organization> organizations = organizationRepoService.findAll();
-		List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>(organizations.size());
+		List<OrganizationDTO> organizationDTOs = new ArrayList<>(organizations.size());
 		for (Organization organization : organizations) {
 			OrganizationDTO organizationDTO=OrganizationConverter.toOrganizationDTO(organization);
 		organizationDTOs.add(organizationDTO);
@@ -166,43 +174,47 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
 
 		List<Organization> checkNameResult = organizationRepoService.findByName(organization.getName());
 		if (!checkNameResult.isEmpty()) {
-		    throw new RuntimeException("机构名称不能重复" + organization.getName());
+			return "部门名称"+organization.getName()+"重复";
+		   // throw new RuntimeException("机构名称不能重复" + organization.getName());
 		}
 
 		log.debug("==================:Organization.name Entity:" + organization.getName());
 
-		if (StringUtils.isNotEmpty(entity.getParentId()) && !"0".equals(entity.getParentId()) && !"1".equals(entity.getParentId())) {
-		    log.debug("查询父级机构" + entity.getParentId());
-
-		    Organization organization1 = organizationRepoService.findById(entity.getParentId());
-		    if (organization1 == null) {
-		        throw new RuntimeException("父类机构不存在");
-		    }
-
-		} else {
-			//TODO 这里做什么
-		    //entity.setId( dn);
+		if (StringUtils.isNotBlank(entity.getParentId())) {
+			if(!"0".equals(entity.getParentId())&& !"1".equals(entity.getParentId())){
+				log.debug("查询父级机构" + entity.getParentId());
+				Organization organization1 = organizationRepoService.findById(entity.getParentId());
+				if (organization1 == null) {
+//					throw new RuntimeException("父类机构不存在");
+					return "\"父类机构不存在\"";
+				}
+			}
+		}else{
+//			throw new RuntimeException("该部门没有设置父节点,organizationId:"+entity.getId());
+			return "该部门没有设置父节点";
 		}
 		String[] leaderIds=entity.getLeaderIds().split(",");
 		for (String leadId : leaderIds) {
 			log.debug("查询负责人：" + leadId);
-		    if (StringUtils.isNotEmpty(leadId) && "null".equals(leadId)) {
+		    if (StringUtils.isNotEmpty(leadId) && !"null".equals(leadId)) {
 		        User user = userRepoService.findById(leadId);
 		        if (user == null) {
-		            throw new RuntimeException("用户不存在:" + leadId);
+//		            throw new RuntimeException("用户不存在:" + leadId);
+					return "该负责人不存在";
 		        }
 		    }
 		}
 
 		List<Organization> organziations = organizationRepoService.findByCode(entity.getCode());
 		if (!organziations.isEmpty()) {
-		    throw new RuntimeException("部门编号不能重复！");
+			return "部门编号不能重复";
+//		    throw new RuntimeException("部门编号不能重复！");
 		}
 		int insert = organizationRepoService.save(entity);
 		if(insert!=1){
-			throw new RuntimeException("创建Organization异常，返回值：" +insert);
+			throw new RuntimeException("创建部门出错，部门id：" +entity.getId());
 		}
-		return entity.getId();
+		return "success";
     }
 
     @Override
@@ -251,14 +263,6 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
 		} else {
 			result.setIsLeaf(true);
 		}
-        /*for (UserDTO user : result.getOrganizationLeaders()) {
-        	User u = userRepoService.findById(user.getId());
-            if (u == null) {
-                log.warn("没有该用户：" + user.getId());
-            } else {
-                user=UserConverter.toUserDTO(u);
-            }
-		}*/
         log.debug("############" + result.getName());
 
         return result;
@@ -275,157 +279,6 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
         if (leaderName.contains("*") || orgName.contains("?")) {
             throw new RuntimeException("输入中带有非法字符：如*?");
         }
-/*
-        log.debug("orgName:" + orgName + "; leaderName:" + leaderName);
-        if (StringUtils.isEmpty(orgName) && StringUtils.isEmpty(leaderName)) { // 两者都为空时候没有任何筛选条件
-            log.debug("查询条件两者都为空");
-            Name base = new LdapName(BASE_DN);
-            List<Organization> organizations = organizationRepoService.getAllOrganizations(base);
-            log.debug("查询条件两者都为空：" + organizations.size());
-            List<OrganizationDTO> result=new ArrayList<>();
-            for (Organization org : organizations) {
-            	 log.debug("==========org.name" + org.getName());
-            	result.add(OrganizationConverter.toOrganizationDTO(org));
-			}*/
-
-/*
-            List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>();
-
-            for (OrganizationDTO organizationDTO : result) {
-
-
-                List<UserDTO> userDTOList = new ArrayList<UserDTO>();
-                for (UserDTO userDTO : organizationDTO.getOrganizationLeaders()) {
-                	List<User> user = userRepoService.findUserByUUID(userDTO.getId());
-                    if (null == user) {
-                        throw new RuntimeException("没有该人员:" + userDTO.getId());
-                    } else {
-                    	
-                        use(UserConverter) {
-                            log.debug("user.get(0)" + UserConverter.toUserDTO(user).realName);
-                            userDTO = user.get(0).toUserDTO();
-                            log.debug("添加前：" + userDTO.realName);
-                            userDTOList.add(userDTO);
-                        }
-                    }
-                }
-                organizationDTO.organizationLeaders = userDTOList
-                organizationDTOs.add(organizationDTO)
-            }
-
-            def pageResult = PageListUtil.convert(paginator, organizationDTOs)
-            return pageResult
-        } else if (StringUtils.isNotEmpty(orgName) && StringUtils.isNotEmpty(leaderName)) { // 两者都不为空时候，同时满足两个筛选条件
-            List<User> users = userRepoService.findLikeRealname(leaderName)
-            Set<Organization> organizations = new HashSet<Organization>()
-            log.debug("users.size" + users.size())
-            def likeOrgNameresult = organizationRepoService.findLikeOrganizationName(orgName)
-            organizations.addAll(likeOrgNameresult)
-            def result = organizations.collect { org ->
-                log.debug("==========org.name" + org.name)
-                use(OrganizationConverter) {
-                    org.toOrganizationDTO()
-                }
-            }
-
-            List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>();
-
-            for (OrganizationDTO organizationDTO : result) {
-                List<UserDTO> userDTOList = new ArrayList<UserDTO>()
-                for (UserDTO userDTO : organizationDTO.organizationLeaders) {
-                    def user = userRepoService.findUserByUUID(userDTO.id)
-                    if (null == user) {
-                        throw new RuntimeException("没有该人员:" + user.uuid)
-                    } else {
-                        use(UserConverter) {
-                            log.debug("user.get(0)" + user.get(0).toUserDTO().realName)
-                            userDTO = user.get(0).toUserDTO();
-                            log.debug("添加前：" + userDTO.realName)
-                            userDTOList.add(userDTO)
-                        }
-                    }
-                }
-                organizationDTO.organizationLeaders = userDTOList
-                organizationDTOs.add(organizationDTO)
-            }
-
-            def pageResult = PageListUtil.convert(paginator, organizationDTOs)
-            return pageResult
-        } else if (StringUtils.isEmpty(orgName) && StringUtils.isNotEmpty(leaderName)) { // 筛选负责人
-            List<User> users = userRepoService.findLikeRealname(leaderName)
-            log.debug("查询出：" + users.size())
-            List<Organization> organizations = new ArrayList<Organization>()
-            users.each { user ->
-                def result = organizationRepoService.findByLeaderID(user.uuid)
-                organizations.addAll(result)
-            }
-
-            def result = organizations.collect { org ->
-                log.debug("==========org.name" + org.name)
-                use(OrganizationConverter) {
-                    org.toOrganizationDTO()
-                }
-            }
-
-            List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>();
-
-            for (OrganizationDTO organizationDTO : result) {
-                List<UserDTO> userDTOList = new ArrayList<UserDTO>()
-                for (UserDTO userDTO : organizationDTO.organizationLeaders) {
-                    def user = userRepoService.findUserByUUID(userDTO.id)
-                    if (null == user) {
-                        throw new RuntimeException("没有该人员:" + user.uuid)
-                    } else {
-                        use(UserConverter) {
-                            log.debug("user.get(0)" + user.get(0).toUserDTO().realName)
-                            userDTO = user.get(0).toUserDTO();
-                            log.debug("添加前：" + userDTO.realName)
-                            userDTOList.add(userDTO)
-                        }
-                    }
-                }
-                organizationDTO.organizationLeaders = userDTOList
-                organizationDTOs.add(organizationDTO)
-            }
-
-            def pageResult = PageListUtil.convert(paginator, organizationDTOs)
-            return pageResult
-        } else if (StringUtils.isNotEmpty(orgName) && StringUtils.isEmpty(leaderName)) { // 筛选部门
-            log.debug("orgName:" + orgName + "; leaderName:" + leaderName)
-            List<Organization> organizations = organizationRepoService.findLikeOrganizationName(orgName)
-            def result = organizations.collect { org ->
-                log.debug("==========org.name" + org.name)
-                use(OrganizationConverter) {
-                    org.toOrganizationDTO()
-                }
-            }
-
-            List<OrganizationDTO> organizationDTOs = new ArrayList<OrganizationDTO>();
-
-            for (OrganizationDTO organizationDTO : result) {
-                List<UserDTO> userDTOList = new ArrayList<UserDTO>()
-                for (UserDTO userDTO : organizationDTO.organizationLeaders) {
-                    def user = userRepoService.findUserByUUID(userDTO.id)
-                    if (null == user) {
-                        throw new RuntimeException("没有该人员:" + user.uuid)
-                    } else {
-                        use(UserConverter) {
-                            log.debug("user.get(0)" + user.get(0).toUserDTO().realName)
-                            userDTO = user.get(0).toUserDTO();
-                            log.debug("添加前：" + userDTO.realName)
-                            userDTOList.add(userDTO)
-                        }
-                    }
-                }
-                organizationDTO.organizationLeaders = userDTOList
-                organizationDTOs.add(organizationDTO)
-            }
-
-            def pageResult = PageListUtil.convert(paginator, organizationDTOs)
-            return pageResult
-        } else {
-            return new PagedList<OrganizationDTO>()
-        }*/
 
         return null;
     }
@@ -436,8 +289,7 @@ public class OrganizationAdminFacadeService implements OrganizationAdminFacade {
             return null;
         }
         Organization organization = organizations.get(0);
-        OrganizationDTO result = OrganizationConverter.toOrganizationDTO(organization);
-        return result;
+        return OrganizationConverter.toOrganizationDTO(organization);
     }
 
 

@@ -37,8 +37,13 @@ public class RoleDTOConverter {
         } else {
             role.setDescription("");
         }
-        if (StringUtils.isNotEmpty(roleDTO.getId())) {
+        /*if (StringUtils.isNotEmpty(roleDTO.getId())) {
             role.setId(roleDTO.getId());
+        }*/
+        if(StringUtils.isNotBlank(roleDTO.getCode())){
+            role.setName(roleDTO.getCode());
+        }else{
+            role.setName("");
         }
         role.setType(roleDTO.getType());
         role.setUpdatedTime(new Date());

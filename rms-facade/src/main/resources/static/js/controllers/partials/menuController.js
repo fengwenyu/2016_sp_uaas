@@ -93,17 +93,23 @@ angular.module("app.index.Menu", []).config(['$routeProvider', function ($routeP
             var menuUri = $scope.menuUri;
             var menuSort = $scope.menuSort;
             var pid = $scope.pid;
+            if(null ==pid || undefined == pid ||  "" == pid){
+                alert("请选择父菜单！");
+                return;
+            }
             var url = $scope.url;
             if($scope.menu_form.$valid){
-                var menuDTO = {id: "",name : menuName , url:url, uri : menuUri , parentId : pid, appCode:$scope.appCode, sort:menuSort}
+                var menuDTO = {id: "",name : menuName , url:url, uri : menuUri , parentId : pid, appCode:$scope.appCode, sort:menuSort};
                 try {
                     if ((undefined == menuDTO.parentId || "1" == menuDTO.parentId) && (null == menuDTO.appCode || undefined == menuDTO.appCode ||  "" == menuDTO.appCode)) {
                         alert("顶级模块必须添加应用编码");
                     }else {
-                        var menuId = menuapi.createMenu(menuDTO);
-                        if(menuId != null){
+                        var data = menuapi.createMenu(menuDTO);
+                        if(data =="success"){
                             alert("添加成功");
-                            location.reload(true);
+                            history.go(-1);
+                        }else{
+                            alert(data);
                         }
                     }
                 } catch (e) {
@@ -154,9 +160,13 @@ angular.module("app.index.Menu", []).config(['$routeProvider', function ($routeP
                     if ((undefined == menuDTO.parentId || "1" == menuDTO.parentId) && (null == menuDTO.appCode || undefined == menuDTO.appCode ||  "" == menuDTO.appCode)) {
                         alert("顶级模块必须添加应用编码");
                     }else {
-                        var menuId = menuapi.modifyMenu(menuDTO);
-                        alert("修改成功");
-                        location.reload(true);
+                        var data = menuapi.modifyMenu(menuDTO);
+                        if(data =="success"){
+                            alert("修改成功");
+                            location.reload(true);
+                        }else{
+                            alert(data);
+                        }
                     }
                 } catch (e) {
                     alert("修改失败：" + e)

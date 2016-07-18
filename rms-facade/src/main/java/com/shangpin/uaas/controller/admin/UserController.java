@@ -265,7 +265,7 @@ public class UserController {
 						sb.append(string).append("|");
 					}
 				}
-				List<OrganizationUnion> byUnionName = organizationRepoService.findByUnionName(sb.toString(), "|");
+				List<OrganizationUnion> byUnionName = organizationRepoService.findByUnionName(sb.toString(), "\\|");
 				if (byUnionName == null || byUnionName.isEmpty()) {
 					log.info("=========${userDTO.username}=失败，部门不存在==========");
 					result.add(userDTO.getUsername() + "失败，部门不存在");

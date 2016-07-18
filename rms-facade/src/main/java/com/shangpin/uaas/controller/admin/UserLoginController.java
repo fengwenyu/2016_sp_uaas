@@ -79,7 +79,7 @@ public class UserLoginController {
             cookieToken.setPath("/");
             //cookieToken.setDomain("shangpin.com");
             userToken.setPath("/");
-            cookieToken.setMaxAge(300 * 600);
+            cookieToken.setMaxAge(30*60*60);
            // userToken.setDomain("shangpin.com");
             response.addCookie(cookieToken);
             response.addCookie(userToken);

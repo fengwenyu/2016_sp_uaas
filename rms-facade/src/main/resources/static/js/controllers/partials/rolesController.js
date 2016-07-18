@@ -32,7 +32,7 @@ angular.module("app.index.Roles", []).config(['$routeProvider', function ($route
         currentResources = _.map(currentResources.list, function (obj) {
             return obj.id
         });
-        console.log(currentResources);
+        /*console.log(currentResources);*/
 
         var getChildrenPermissions = function (permissionNodeId) {
             permissionNodeId = permissionNodeId || "1";
@@ -44,7 +44,7 @@ angular.module("app.index.Roles", []).config(['$routeProvider', function ($route
         var grantCurrentFunc = function (allResources) {
             _.each(allResources, function (obj) {
                 _.each(obj.functions, function (it) {
-                    console.log(it.resourceId);
+                    /*console.log(it.resourceId);*/
                     if (_.contains(currentResources, it.id)) {
                         it.granted = true;
                     }
@@ -60,12 +60,12 @@ angular.module("app.index.Roles", []).config(['$routeProvider', function ($route
                 currentResources = _.reject(currentResources, function (obj) {
                     return obj == func.id;
                 });
-                console.log(currentResources);
+               /* console.log(currentResources);*/
             } else {
                 func.granted = true;
                 currentResources.push(func.id);
                 currentResources = _.uniq(currentResources);
-                console.log(currentResources);
+               /* console.log(currentResources);*/
             }
         };
 
@@ -167,9 +167,13 @@ angular.module("app.index.Roles", []).config(['$routeProvider', function ($route
                 var result = checkRoleCode($scope.role.code);
                 if (result) {
                     try {
-                        roleapi.createRole($scope.role);
-                        alert("创建成功");
-                        history.go(-1);
+                       var data =  roleapi.createRole($scope.role);
+                        if(data=="success"){
+                            alert("创建成功");
+                            history.go(-1);
+                        }else{
+                            alert(data);
+                        }
                     } catch (e) {
                         alert("创建失败：" + e);
                     }
@@ -192,10 +196,10 @@ angular.module("app.index.Roles", []).config(['$routeProvider', function ($route
             if (state) {
                 try {
                     roleapi.modifyRole(result);
-                    alert("创建成功");
+                    alert("修改成功");
                     history.go(-1);
                 } catch (e) {
-                    alert("创建失败：" + e);
+                    alert("修改失败：" + e);
                 }
             }else{
                 alert("该角色已存在");

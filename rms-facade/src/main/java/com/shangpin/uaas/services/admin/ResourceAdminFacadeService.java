@@ -1,17 +1,5 @@
 package com.shangpin.uaas.services.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import com.shangpin.uaas.services.api.MemcachedUtilService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.shangpin.uaas.api.admin.resource.ResourceAdminFacade;
 import com.shangpin.uaas.api.admin.resource.ResourceNodeDTO;
 import com.shangpin.uaas.convert.ResourceDTOConverter;
@@ -21,12 +9,22 @@ import com.shangpin.uaas.entity.Permission;
 import com.shangpin.uaas.entity.Resource;
 import com.shangpin.uaas.entity.ResourceNode;
 import com.shangpin.uaas.entity.Role;
+import com.shangpin.uaas.services.api.MemcachedUtilService;
 import com.shangpin.uaas.services.dao.PermissionRepoService;
 import com.shangpin.uaas.services.dao.ResourceNodeRepoService;
 import com.shangpin.uaas.services.dao.ResourceRepoService;
 import com.shangpin.uaas.services.dao.RoleRepoService;
-
 import javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 资源管理服务
@@ -36,6 +34,7 @@ import javassist.NotFoundException;
 @Service
 class ResourceAdminFacadeService implements ResourceAdminFacade {
 	protected static Logger log = LoggerFactory.getLogger(ResourceAdminFacadeService.class);
+	//private static final String URI_HEAD="mvc-action://";  //uri判断逻辑用，由于后台数据问题，暂时屏蔽
 	@Autowired
 	private ResourceRepoService resourceRepoService;
 
@@ -56,20 +55,19 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 	/**
 	 * 创建资源（权限）
 	 *
-	 * @return
 	 */
 	@Override
 	public String createResource(ResourceNodeDTO resourceNodeDTO) {
 		try {
-			String resourceNodeId = resourceNodeDTO.getId();
+			String resourceNodeId ;
 			// 校验参数中的ID是否有效，若有效则使用，否则由系统自动生成
 			if (!StringUtils.isEmpty(resourceNodeDTO.getId())) {
 				if ("1".equals(resourceNodeDTO.getId())) {
-					throw new java.rmi.AlreadyBoundException("该资源索引错误！");
+					return "该资源索引错误！";
 				}
 				ResourceNode resourceNodes = resourceNodeRepoService.findById(resourceNodeDTO.getId());
 				if (null == resourceNodes) {
-					throw new RuntimeException("该资源索引已存在！");
+					return "该资源索引已存在";
 				}
 			} else {
 				resourceNodeId = UUID.randomUUID().toString();
@@ -77,49 +75,71 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 			}
 
 			Resource entity = ResourceDTOConverter.toCreateResource(resourceNodeDTO);
-
 			ResourceNode entityNode = ResourceDTOConverter.toCreateResourceNode(resourceNodeDTO);
-
 			String uri = resourceNodeDTO.getUri();
 			if(org.apache.commons.lang3.StringUtils.isBlank(uri)){
-				throw new RuntimeException("资源的url不能为空，resource id："+entity.getId());
+				return "资源的url不能为空";
 			}
+			List<ResourceNode> byModuleNameAndParentId = resourceNodeRepoService.findByModuleNameAndParentId(resourceNodeDTO.getName(), resourceNodeDTO.getParentId());
+			if(byModuleNameAndParentId!=null && byModuleNameAndParentId.size()>0){
+				return "该位置已经有相同名字的资源了";
+			}
+			//检测url是否符合要求
+			String parentId = resourceNodeDTO.getParentId();
+			if(org.apache.commons.lang3.StringUtils.isBlank(parentId)){
+				return "父资源不能为空！";
+			}
+			//uri判断逻辑，由于后台数据问题，暂时屏蔽
+			/*if("1".equals(parentId)||"0".equals(parentId)){
+				if(!uri.startsWith(URI_HEAD)){
+					return "URI必须以 mvc-action://  开头！";
+				}
+			}else{
+				ResourceNode resourceNode = resourceNodeRepoService.findById(resourceNodeDTO.getParentId());
+				if (resourceNode == null) {
+					return "父资源节点不存在！";
+				}
+				Resource ParentResource = resourceRepoService.findById(resourceNode.getResourceId());
+				String parentUri = ParentResource.getUri();
+				//如果父resource的rui不合法
+				if(!parentUri.startsWith(URI_HEAD)){
+					return "父资源   "+resourceNode.getModuleName()+"  的URI没有以  mvc-action://  开头！";
+				}
+				parentUri = parentUri.replace(URI_HEAD, "");
+				int end = parentUri.indexOf("/");
+				if(end<=0){
+					return "父资源  "+resourceNode.getModuleName()+"  的URI "+ParentResource.getUri()+" 不规范，请修改！";
+				}
+				String appCode = parentUri.substring(0,end);
+				String resourceUri = URI_HEAD+appCode+"/";
+				if(!uri.startsWith(resourceUri)){
+					return "URI应该以 "+resourceUri+"  开头";
+				}
+			}*/
+			entityNode.setParentResourceId(resourceNodeDTO.getParentId());
 			List<Resource> resources = resourceRepoService.findResourcesByUri(uri);
-
-			String resourceId ;
-			if (resources.isEmpty()) {
+			if(resources==null ||resources.isEmpty()){
 				int insert = resourceRepoService.createResource(entity);
 				if(insert!=1){
 					throw new RuntimeException("创建资源失败，id："+entity.getId());
 				}
-				resourceId = entity.getId();
-				entityNode.setResourceId(resourceId);
-			} else {
-				resourceId = resources.get(0).getId();
-				entityNode.setResourceId(resourceId);
+				entityNode.setResourceId(entity.getId());
+			}else {
+				List<ResourceNode> byResourceId = resourceNodeRepoService.findByResourceId(resources.get(0).getId());
+				return "该URI已经被"+byResourceId.get(0).getModuleName()+"使用";
 			}
 
-			if (!StringUtils.isEmpty(resourceNodeDTO.getParentId()) && !"0".equals(resourceNodeDTO.getParentId()) && !"1".equals(resourceNodeDTO.getParentId())) {
-				log.debug("查询父节点:" + resourceNodeDTO.getParentId());
-
-				ResourceNode resourceNode = resourceNodeRepoService.findById(resourceNodeDTO.getParentId());
-				if (resourceNode == null) {
-					throw new NotFoundException("没有该父资源组：" + resourceNodeDTO.getParentId());
-				}
-				// TODO set what resource
-				entityNode.setParentResourceId(resourceNodeDTO.getParentId());
-			}
 			if(org.apache.commons.lang3.StringUtils.isBlank(entityNode.getId())){
 				entityNode.setId(UUID.randomUUID().toString());
 			}
 			int insert = resourceNodeRepoService.insert(entityNode);
 			if(insert!=1){
-				throw new NotFoundException("创建资源失败，资源Id：" + resourceNodeId);
+				throw new NotFoundException("创建资源Node失败，资源名：" + entityNode.getModuleName());
 			}
-			return resourceNodeId;
+			return "success";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return e.getMessage();
 		}
 
 	}
@@ -129,7 +149,6 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 	 *
 	 * @param resourceId
 	 *            资源Node标识 必填
-	 * @return
 	 */
 	@Override
 	public ResourceNodeDTO getResourceNode(String resourceId) {
@@ -148,58 +167,94 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 	}
 
 	@Override
-	public void modifyResource(ResourceNodeDTO resourceNodeDTO) {
+	public String modifyResource(ResourceNodeDTO resourceNodeDTO) {
 		try {
 			log.debug("resourceNodeDTO :" + resourceNodeDTO.getIsEnabled());
-			ResourceNode resourceNode = resourceNodeRepoService.findById(resourceNodeDTO.getId());
-			if (resourceNode == null) {
-				throw new RuntimeException("没有相关资源");
+			ResourceNode resourceNodeNow = resourceNodeRepoService.findById(resourceNodeDTO.getId());
+			if (resourceNodeNow == null) {
+				return "当前资源节点不存在！";
 			}
-			Resource resource = resourceRepoService.findById(resourceNode.getResourceId());
+			Resource resource = resourceRepoService.findById(resourceNodeNow.getResourceId());
 			if (resource == null) {
-				throw new RuntimeException("没有相关资源");
+				return "当前权限节点不存在！";
+			}
+			String parentId = resourceNodeDTO.getParentId();
+			if(org.apache.commons.lang3.StringUtils.isBlank(parentId)){
+				return "父资源不能为空！";
+			}
+			List<ResourceNode> byModuleNameAndParentId = resourceNodeRepoService.findByModuleNameAndParentId(resourceNodeDTO.getName(), parentId);
+			if(byModuleNameAndParentId!=null && byModuleNameAndParentId.size()>0){
+				for (ResourceNode node : byModuleNameAndParentId) {
+					if(!node.getId().equals(resourceNodeDTO.getId())){
+						return "该位置已经有相同名字的权限存在！";
+					}
+				}
 			}
 
-			ResourceNode resourceNodeResult = ResourceNodeDTOConverter.toResourceNode(resourceNode, resourceNodeDTO);
+			String uri = resourceNodeDTO.getUri();
+			if(org.apache.commons.lang3.StringUtils.isBlank(uri)){
+				return "资源的url不能为空";
+			}
+			//uri判断逻辑，由于后台数据问题，暂时屏蔽
+			/*//检测url是否符合要求
+			if("1".equals(parentId)||"0".equals(parentId)){
+				if(!uri.startsWith(URI_HEAD)){
+					return "URI必须以 mvc-action://  开头！";
+				}
+			}else{
+				ResourceNode resourceNode = resourceNodeRepoService.findById(resourceNodeDTO.getParentId());
+				if (resourceNode == null) {
+					return "父资源节点不存在！";
+				}
+				Resource ParentResource = resourceRepoService.findById(resourceNode.getResourceId());
+				String parentUri = ParentResource.getUri();
+				//如果父resource的rui不合法
+				if(!parentUri.startsWith(URI_HEAD)){
+					return "父资源   "+resourceNode.getModuleName()+"  的URI没有以  mvc-action://  开头！";
+				}
+				parentUri = parentUri.replace(URI_HEAD, "");
+				int end = parentUri.indexOf("/");
+				if(end<=0){
+					return "父资源  "+resourceNode.getModuleName()+"  的URI "+ParentResource.getUri()+" 不规范，请修改！";
+				}
+				String appCode = parentUri.substring(0,end);
+				String resourceUri = URI_HEAD+appCode+"/";
+				if(!uri.startsWith(resourceUri)){
+					return "URI应该以 "+resourceUri+"  开头";
+				}
+			}*/
+
+			if(!resource.getUri().equals(resourceNodeDTO.getUri())){
+				List<Resource> resourcesByUri = resourceRepoService.findResourcesByUri(resourceNodeDTO.getUri());
+				if(resourcesByUri!=null &&resourcesByUri.size()>0){
+					for (Resource resource1 : resourcesByUri) {
+						if(!resource1.getId().equals(resourceNodeDTO.getResourceId())){
+							List<ResourceNode> byResourceId = resourceNodeRepoService.findByResourceId(resource1.getId());
+							return "该uri已被权限 "+byResourceId.get(0).getModuleName() +" 占用！";
+						}
+					}
+				}
+			}
+
+			ResourceNode resourceNodeResult = ResourceNodeDTOConverter.toResourceNode(resourceNodeNow, resourceNodeDTO);
 
 			Resource resourceResult = ResourceNodeDTOConverter.toResource(resource, resourceNodeDTO);
 
 			log.debug("资源状态为：" + resourceResult.isEnabled());
-			resourceRepoService.updateResource(resourceResult);
+			int updateResource = resourceRepoService.updateResource(resourceResult);
+			if(updateResource!=1){
+				throw new RuntimeException("更新资源失败，资源id："+resourceNodeResult.getId());
+			}
 			log.debug("DN~~~~~~~~~~~~~~$resourceNodeResult.dn");
 			int update = resourceNodeRepoService.updateResource(resourceNodeResult);
 			if(update!=1){
-				throw new RuntimeException("更新资源节点失败，资源几点id："+resourceNodeResult.getId());
+				throw new RuntimeException("更新资源Node失败，资源Node Id："+resourceNodeResult.getId());
 			}
-
-			// 移动资源节点 TODO move resourceNode
-			/*
-			 * if (!resourceNodeResult.getId().equals(resourceNodeResult.
-			 * getParentResourceId())) { log.debug("移动资源几点");
-			 *
-			 * Name name = null; if
-			 * ("1".equals(resourceNodeResult.getParentResourceId())) { name =
-			 * new LdapName("uid=" + resourceNodeResult.getId() + "," +
-			 * RESOURCE_NODE_BASE_DN); } else { log.debug(
-			 * "=========resourceDTOResult.uuid : ${resourceNodeResult.uuid}; resourceDTOResult.parentResourceId:${resourceNodeResult.parentResourceId}"
-			 * ); List<ResourceNode> parentResourceNodes =
-			 * resourceNodeRepoService.findByParentResourceId(resourceNodeResult
-			 * .getParentResourceId());
-			 *
-			 * if (parentResourceNodes.isEmpty()) { throw new
-			 * RuntimeException("没有该父节点:" +
-			 * resourceNodeResult.getParentResourceId()); }
-			 * log.debug("当前目录size：" + parentResourceNodes.size()); ResourceNode
-			 * parentResourceNode = parentResourceNodes.get(0); //String
-			 * parentDn = parentResourceNode.getDn().toString(); //name = new
-			 * LdapName("uid=" + resourceNodeResult.getId() + "," + parentDn);
-			 * }
-			 * resourceNodeRepoService.moveResourceNode(resourceNodeResult.getDn
-			 * ().toString(), name.toString()); }
-			 */
-			modifyUri(resourceNodeDTO);
+			return "success";
+			//modifyUri(resourceNodeDTO);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
@@ -295,7 +350,7 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 	public List<ResourceNodeDTO> getAllResources() {
 		try {
 			List<ResourceNode> resourceNodes = resourceNodeRepoService.findAll();
-			List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<ResourceNodeDTO>(resourceNodes.size());
+			List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<>(resourceNodes.size());
 			for (ResourceNode resourceNode : resourceNodes) {
 				//TODO use in to find resource
 				ResourceNodeDTO result = ResourceNodeConverter.toResourceNodeDTO(resourceNode);
@@ -315,7 +370,7 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 			return resourceNodeDTOs;
 
 		} catch (Exception e) {
-			return new ArrayList<ResourceNodeDTO>();
+			return new ArrayList<>();
 		}
 	}
 
@@ -374,11 +429,11 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 		try {
 			List<ResourceNode> resourceNodes1 = resourceNodeRepoService.findByModuleNameLike(parentResourceName);
 			if (resourceNodes1.isEmpty() || resourceNodes1.size() > 1) {
-				return new ArrayList<ResourceNodeDTO>();
+				return new ArrayList<>();
 			}
 			//TODO find all sub resource node use while
 			List<ResourceNode> resourceNodes = resourceNodeRepoService.findByParentResourceId(resourceNodes1.get(0).getResourceId());
-			List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<ResourceNodeDTO>(resourceNodes.size());
+			List<ResourceNodeDTO> resourceNodeDTOs = new ArrayList<>(resourceNodes.size());
 			for (ResourceNode resourceNode : resourceNodes) {
 				//TODO use in to find resource 
 				ResourceNodeDTO result = ResourceNodeConverter.toResourceNodeDTO(resourceNode);
@@ -394,8 +449,7 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 			return resourceNodeDTOs;
 
 		} catch (Exception e) {
-			return new ArrayList<ResourceNodeDTO>();
+			return new ArrayList<>();
 		}
 	}
-
 }

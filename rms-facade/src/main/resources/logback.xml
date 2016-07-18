@@ -1,5 +1,5 @@
 <configuration>
-    <property name="LOG_HOME" value="/data/logs/uaas/" />
+    <property name="LOG_HOME" value="/home/dev/uaas/logs" />
     <property name="fileName" value="uaas" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
