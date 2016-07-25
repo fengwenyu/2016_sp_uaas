@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 //@Repository
 @Service
@@ -31,6 +29,9 @@ public class PermissionApiFacadeService {
 
     @Autowired
     private RoleGroupRepoService roleGroupRepoService;
+    @Autowired
+    ResourceRepoService resourceRepoService;
+
 //    @Autowired
 //    private GroupRepoService groupRepoService;
 
@@ -48,22 +49,33 @@ public class PermissionApiFacadeService {
      */
     public List<MenuDTO> findMenusByUserIdAndAppCode(String userId, String appCode) {
 
-        List<MenuDTO> menuDTOs = new ArrayList<>();
+        Set<MenuDTO> menuDTOs = new HashSet<>();
         List<Menu> menus = menuRepoService.findByAppCode(appCode);
+        List<Menu> topMenu = menuRepoService.findByParentId("1");
+        menus.addAll(topMenu);
         for (Menu menu : menus) {
             menuDTOs.add(MenuConverter.convert(menu));
         }
         List<MenuDTO> results = new ArrayList<>();
         log.debug("最终需要认证的菜单数为："+menuDTOs.size());
         List<Permission> permissionDTOs = getAllPermissionByUserId(userId);
-        for (MenuDTO menu : menuDTOs) {
-            for (Permission permissionDTO : permissionDTOs) {
-                if (menu.getUri().equals(permissionDTO.getUri())) {
+        List<String> resourceIds = new ArrayList<>();
+        for (Permission permission : permissionDTOs) {
+            resourceIds.add(permission.getResourceId());
+        }
+        List<Resource> resources = resourceRepoService.findCanuseByIdIn(resourceIds);
+        List<String> uris = new ArrayList<>();
+        for (Resource resource : resources) {
+            uris.add(resource.getUri());
+        }
+        if(uris.size()>0){
+            for (MenuDTO menu : menuDTOs) {
+                if(uris.contains(menu.getUri())){
                     results.add(menu);
                 }
             }
-	    }
-        return removeDuplicate(results);
+        }
+        return results;
     }
     
     /**

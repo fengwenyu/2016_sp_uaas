@@ -4,6 +4,7 @@ import com.shangpin.uaas.entity.Resource;
 import com.shangpin.uaas.entity.example.ResourceExample;
 import com.shangpin.uaas.services.dao.mapper.ResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.ByteArrayPropertyEditor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,6 +71,13 @@ public class ResourceRepoService {
         ResourceExample example = new ResourceExample();
         ResourceExample.Criteria criteria = example.createCriteria();
         criteria.andIdIn(resourceIds);
+        return resourceMapper.selectByExample(example);
+    }
+    public List<Resource> findCanuseByIdIn(List<String> resourceIds){
+        ResourceExample example = new ResourceExample();
+        ResourceExample.Criteria criteria = example.createCriteria();
+        criteria.andIdIn(resourceIds);
+        criteria.andEnabledEqualTo(Byte.parseByte("1"));
         return resourceMapper.selectByExample(example);
     }
 

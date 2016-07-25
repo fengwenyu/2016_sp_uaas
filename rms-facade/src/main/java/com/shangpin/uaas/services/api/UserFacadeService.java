@@ -51,6 +51,8 @@ public class UserFacadeService implements UserFacade {
     UserGroupRepoService userGroupRepoService;
     @Autowired
     ResourceRepoService resourceRepoService;
+    @Autowired
+    private PermissionRepoService permissionRepoService;
 
     @Override
    public UserDTO getUser(String token) {
@@ -106,17 +108,17 @@ public class UserFacadeService implements UserFacade {
             throw new RuntimeException("该访问令牌过期或无效！");
         }
         Subject subject = (Subject) memcachedClient.get(token);
-        List<Resource> resources = resourceRepoService.findResourcesByUserId(subject.getUserId());
+        List<Permission> permissions = permissionRepoService.findByUserId(subject.getUserId());
+        List<String> resourceIds = new ArrayList<>();
+        for (Permission permission : permissions) {
+            resourceIds.add(permission.getResourceId());
+        }
         List<String> urls = new ArrayList<>();
-        for (Resource resource : resources) {
-            String uri = resource.getUri();
-            if(StringUtils.isNotBlank(uri)){
-                if(uri.startsWith("mvc-action://")){
-                    String replace = uri.replace("mvc-action://", "/");
-                    urls.add(replace);
-                }else{
-                    urls.add(uri);
-                }
+        if(resourceIds.size()>0){
+            List<Resource> resources = resourceRepoService.findCanuseByIdIn(resourceIds);
+            for (Resource resource : resources) {
+                String uri = resource.getUri();
+                urls.add(uri);
             }
         }
         return urls;
@@ -142,15 +144,13 @@ public class UserFacadeService implements UserFacade {
         for (Menu subMenu : topMenus) {
         	 menuDTOs.add(MenuConverter.convert(subMenu));
 		}
-
-        List<MenuDTO> results = new ArrayList<>();
-        for (MenuDTO menu : menuDTOs) {
-        	 log.debug("菜单认证权限的URI:" + menu.getUri());
-            //校验该用户是否有首页menu的权限
-             if (authorizationFacadeService.isPermitted(token, menu.getUri())) {
-                 results.add(menu);
-             }
-		}
+        List<MenuDTO> results = getAllMenuBytoken(token, menuDTOs);
+        Collections.sort(results, new Comparator<MenuDTO>() {
+            @Override
+            public int compare(MenuDTO o1, MenuDTO o2) {
+                return o2.getAppCode().compareTo(o1.getAppCode());
+            }
+        });
         return results;
     }
 
@@ -319,16 +319,7 @@ public class UserFacadeService implements UserFacade {
              }
 		}
 
-        List<MenuDTO> results = new ArrayList<>();
-
-        log.debug("最终需要认证的菜单数为：${menuDTOs.size()}");
-        for (MenuDTO menu : menuDTOs) {
-        	log.debug("菜单认证权限的URI:" + menu.getUri());
-            if (authorizationFacadeService.isPermitted(token, menu.getUri())) {
-                results.add(menu);
-            }
-		}
-        return results;
+       return getAllMenuBytoken(token, menuDTOs);
     }
 
     private UserDTO convert(User user) {
@@ -390,4 +381,26 @@ public class UserFacadeService implements UserFacade {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+    public String getUserIDByToken(String token){
+        Subject subject = (Subject) memcachedClient.get(token);
+        return subject.getUserId();
+    }
+
+
+    public List<MenuDTO> getAllMenuBytoken(String token,List<MenuDTO> menuDTOs){
+        List<MenuDTO> results = new ArrayList<>();
+        List<String> uriList = findAllResourcesByToken(token);
+        if(uriList.size()>0){
+            log.debug("最终需要认证的菜单数为：${menuDTOs.size()}");
+            for (MenuDTO menu : menuDTOs) {
+                log.debug("菜单认证权限的URI:" + menu.getUri());
+                if(uriList.contains(menu.getUri())){
+                    results.add(menu);
+                }
+            }
+        }
+        return PermissionApiFacadeService.removeDuplicate(results);
+    }
 }

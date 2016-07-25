@@ -1,18 +1,13 @@
 package com.shangpin.uaas.services.dao;
 
-import java.util.List;
-
-import javax.naming.Name;
-
+import com.shangpin.uaas.entity.Menu;
 import com.shangpin.uaas.entity.example.MenuExample;
 import com.shangpin.uaas.services.dao.mapper.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import com.shangpin.uaas.api.facade.e.APPCode;
-import com.shangpin.uaas.entity.Menu;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 //???
 //@Repository
@@ -26,7 +21,6 @@ public class MenuRepoService{
      * 根据id查找订单
      *
      * @param id 订单标识
-     * @return
      */
     public Menu findById(String id) {
         return menuMapper.selectByPrimaryKey(id);
@@ -35,7 +29,7 @@ public class MenuRepoService{
     /**
      * 移动菜单项
      *
-     * @param parentId
+     * @param parentId 父id
      */
     /*@Modifying
     @Query("update #{#entityName} set parentId=?2 where uuid=?1")*/
@@ -58,7 +52,6 @@ public class MenuRepoService{
     /**
      * 查询所有子级的菜单项
      *
-     * @return
      */
   //  public List<Menu> findAllMenuTreeByParentId(Name base) {return null;}
 

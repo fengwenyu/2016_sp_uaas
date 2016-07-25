@@ -132,6 +132,9 @@
     foreignRussian, foreignFrench, foreignKorean, foreignJapanese, maritalStatus, birthPlace,
     salaryBank, salaryBankNumber,o.`name` organizationName
   </sql>
+  <sql id="user_name_like">
+    and  u.`realName` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`username` LIKE CONCAT('%',#{userDto.realNameLike},'%')
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.shangpin.uaas.entity.example.UserExample" >
     select
     <if test="distinct" >
@@ -168,7 +171,7 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`username` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`email` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`telephone` LIKE CONCAT('%',#{userDto.realNameLike},'%')
+        <include refid="user_name_like"/> OR u.`email` LIKE CONCAT('%',#{userDto.realNameLike},'%') OR u.`telephone` LIKE CONCAT('%',#{userDto.realNameLike},'%')
       </if>
     </where>
     ORDER BY u.`createdTime` DESC
@@ -204,7 +207,7 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        <include refid="user_name_like"/>
       </if>
     </where>
     LIMIT #{start},#{size}
@@ -236,15 +239,18 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')</if>
+        <include refid="user_name_like"/>
+      </if>
     </where>
     ORDER BY ur.`roleId` DESC, u.`createdTime` DESC
     LIMIT #{start},#{size}
   </select>
   <select id="findCountAllUsersWithRoleByCriteria" resultType="java.lang.Long" >
     SELECT count(u.`id`)
-    FROM user u LEFT JOIN userRole ur
-    ON ur.`userId`=u.`id`
+    FROM userRole  ur
+    RIGHT JOIN `user` u
+    ON ur.`userId` = u.`id`
+    AND ur.`roleId` = #{roleId}
     INNER JOIN organization o
     on u.`organizationId`=o.`id`
     <where>
@@ -267,7 +273,7 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        <include refid="user_name_like"/>
       </if>
     </where>
   </select>
@@ -275,8 +281,10 @@
     SELECT
     <include refid="Base_Column_List_New" />
     ,ur.`roleId` roleId
-    FROM user u LEFT JOIN userRole ur
-    ON ur.`userId`=u.`id`
+    FROM userRole  ur
+    RIGHT JOIN `user` u
+    ON ur.`userId` = u.`id`
+    AND ur.`roleId` = #{roleId}
     INNER JOIN organization o
     on u.`organizationId`=o.`id`
     <where>
@@ -299,15 +307,17 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        <include refid="user_name_like"/>
       </if>
     </where>
     LIMIT #{start},#{size}
   </select>
   <select id="findCountAllUsersWithNotHaveRoleByCriteria" resultType="java.lang.Long" >
     SELECT count(u.`id`)
-    FROM user u LEFT JOIN userRole ur
-    ON ur.`userId`=u.`id`
+    FROM userRole  ur
+    RIGHT JOIN `user` u
+    ON ur.`userId` = u.`id`
+    AND ur.`roleId` = #{roleId}
     INNER JOIN organization o
     on u.`organizationId`=o.`id`
     <where>
@@ -330,7 +340,7 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        <include refid="user_name_like"/>
       </if>
     </where>
   </select>
@@ -354,7 +364,7 @@
         and o.`name`like CONCAT('%', #{userDto.organizationNameLike},'%')
       </if>
       <if test="userDto.realNameLike!=null">
-        and u.`realName` like CONCAT('%', #{userDto.realNameLike},'%')
+        <include refid="user_name_like"/>
       </if>
     </where>
   </select>

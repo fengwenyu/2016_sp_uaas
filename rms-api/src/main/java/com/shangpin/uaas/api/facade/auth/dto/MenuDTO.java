@@ -1,12 +1,10 @@
 package com.shangpin.uaas.api.facade.auth.dto;
 
-import java.io.Serializable;
-
-import com.shangpin.uaas.api.facade.e.APPCode;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * 菜单
@@ -42,7 +40,7 @@ public class MenuDTO implements Serializable {
     /**
      * 应用编码
      */
-    private APPCode appCode;
+    private String appCode;
 
     /**
      * 菜单要跳转的目标地址

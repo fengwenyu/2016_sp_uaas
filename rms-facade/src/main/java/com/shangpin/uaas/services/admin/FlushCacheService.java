@@ -1,20 +1,16 @@
 package com.shangpin.uaas.services.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.shangpin.uaas.entity.Menu;
+import com.shangpin.uaas.entity.User;
+import com.shangpin.uaas.services.dao.MenuRepoService;
+import com.shangpin.uaas.services.dao.UserRepoService;
+import net.spy.memcached.MemcachedClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shangpin.uaas.api.facade.e.APPCode;
-import com.shangpin.uaas.entity.Menu;
-import com.shangpin.uaas.entity.User;
-import com.shangpin.uaas.services.dao.MenuRepoService;
-import com.shangpin.uaas.services.dao.UserRepoService;
-
-import net.spy.memcached.MemcachedClient;
+import java.util.List;
 
 @Service
 public class FlushCacheService {

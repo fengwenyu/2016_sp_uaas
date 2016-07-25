@@ -234,7 +234,19 @@ class ResourceAdminFacadeService implements ResourceAdminFacade {
 						}
 					}
 				}
+				//更新授权
+				List<Permission> byResourceId = permissionRepoService.findByResourceId(resource.getId());
+				if(byResourceId!=null && byResourceId.size()>0){
+					for (Permission permission : byResourceId) {
+						permission.setUri(resourceNodeDTO.getUri());
+						int update = permissionRepoService.update(permission);
+						if(update!=1){
+							throw new RuntimeException("更新授权失败，授权uri："+resourceNodeDTO.getUri());
+						}
+					}
+				}
 			}
+
 
 			ResourceNode resourceNodeResult = ResourceNodeDTOConverter.toResourceNode(resourceNodeNow, resourceNodeDTO);
 

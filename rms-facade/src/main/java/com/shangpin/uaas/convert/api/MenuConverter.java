@@ -1,7 +1,6 @@
 package com.shangpin.uaas.convert.api;
 
 import com.shangpin.uaas.api.facade.auth.dto.MenuDTO;
-import com.shangpin.uaas.api.facade.e.APPCode;
 import com.shangpin.uaas.entity.Menu;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,9 +17,10 @@ public class MenuConverter {
         result.setParentId(menu.getParentId());
         result.setSort(menu.getSort());
         String appCode = menu.getAppCode();
-            APPCode code;
+        String code;
         if(StringUtils.isNotBlank(appCode)){
-            switch (appCode){
+            code=appCode;
+           /* switch (appCode){
                 case "PMS":
                     code=APPCode.PMS;
                     break;
@@ -52,7 +52,7 @@ public class MenuConverter {
                         code=null;
                         break;
 
-                }
+                }*/
         }else{
                 code=null;
         }

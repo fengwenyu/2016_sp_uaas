@@ -1,12 +1,10 @@
 package com.shangpin.uaas.convert;
 
-import java.util.UUID;
-
+import com.shangpin.uaas.api.admin.menu.MenuDTO;
+import com.shangpin.uaas.entity.Menu;
 import org.apache.commons.lang3.StringUtils;
 
-import com.shangpin.uaas.api.admin.menu.MenuDTO;
-import com.shangpin.uaas.api.facade.e.APPCode;
-import com.shangpin.uaas.entity.Menu;
+import java.util.UUID;
 
 /**
  *
